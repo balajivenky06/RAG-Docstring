@@ -1,0 +1,113 @@
+{
+  "benchmark_config": {
+    "description": "Standardized configuration for fair benchmarking of all RAG methods",
+    "version": "1.0",
+    "common_parameters": {
+      "top_k": 3,
+      "use_rewrite": true,
+      "rewrite_temperature": 0.3,
+      "generation_temperature": 0.5,
+      "max_context_length": 4000,
+      "similarity_threshold": 0.7,
+      "web_search_enabled": true,
+      "web_search_max_results": 3,
+      "web_search_timeout": 15,
+      "min_chunk_length": 10,
+      "chunk_and_regrade": true,
+      "evaluation_enabled": true
+    },
+    "model_config": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "generator_model": "deepseek-coder:6.7b",
+      "helper_model": "deepseek-r1:1.5b",
+      "temperature": 0.5,
+      "max_tokens": 2048,
+      "top_p": 0.9
+    },
+    "retrieval_config": {
+      "top_k": 3,
+      "max_context_length": 4000,
+      "similarity_threshold": 0.7,
+      "rerank_top_k": 5,
+      "chunk_size": 1000,
+      "chunk_overlap": 200
+    },
+    "evaluation_config": {
+      "rouge_weights": [0.25, 0.25, 0.25, 0.25],
+      "bleu_weights": [0.25, 0.25, 0.25, 0.25],
+      "bert_model": "bert-base-uncased",
+      "bert_lang": "en",
+      "pydocstyle_enabled": true,
+      "faithfulness_threshold": 0.3
+    },
+    "method_specific": {
+      "simple_rag": {
+        "method_specific": "basic_semantic_search"
+      },
+      "code_aware_rag": {
+        "extract_entities": true,
+        "enrich_query": true,
+        "include_code_in_query": true,
+        "max_methods_in_query": 3
+      },
+      "corrective_rag": {
+        "initial_top_k": 3,
+        "web_search_fallback": true
+      },
+      "fusion_rag": {
+        "semantic_top_k": 3,
+        "keyword_top_k": 3,
+        "rrf_k": 60,
+        "bm25_enabled": true,
+        "bm25_corpus_urls": [
+          "https://peps.python.org/pep-0257/",
+          "https://google.github.io/styleguide/pyguide.html",
+          "https://www.programiz.com/python-programming/docstrings"
+        ]
+      },
+      "self_rag": {
+        "initial_generation_enabled": true,
+        "self_critique_enabled": true,
+        "adaptive_rag_enabled": true,
+        "critique_temperature": 0.0,
+        "web_search_fallback": true
+      }
+    },
+    "prompts": {
+      "system_prompts": {
+        "docstring_generator": "You are an expert Python programmer tasked with generating docstrings. You will receive context (if found) and the code to document. Use the context only if it is directly relevant to explaining the provided code. Return only the docstring content, starting with triple quotes. Do not include the given python code in the output.",
+        "critique": "You are an expert code reviewer specializing in Python docstring quality assessment. Your task is to evaluate the quality of generated docstrings based on the original code.",
+        "rewrite": "You are a helpful assistant that refines prompts. Your task is to optimize prompts for AI docstring generation by incorporating relevant context."
+      },
+      "templates": {
+        "context_query": "Provide clear, concise, informative, and accurate docstrings for the given python code following PEP 257 conventions and standards, to generate the content for a Python docstring based on the provided code snippet and relevant PEP contexts.",
+        "initial_generation": "Generate a concise and accurate Python docstring for the following code. Focus only on the code provided. Return only the docstring for the given code, dont give or return the code.",
+        "critique": "Task: Evaluate the quality of the generated Python Docstring based *only* on the original Python Code. Check if the docstring provides a reasonable summary and mentions key elements like parameters (if any). Answer ONLY with GOOD or NEEDS_IMPROVEMENT.",
+        "relevance_evaluation": "Task: Evaluate if the following Context is relevant for generating a Python docstring for the provided Code. Answer ONLY with YES or NO.",
+        "final_generation": "Based on any relevant context provided earlier, generate the Python docstring for the following code:"
+      }
+    },
+    "validation_rules": {
+      "all_methods_must_use": [
+        "same_top_k",
+        "same_temperature",
+        "same_context_length",
+        "same_prompts",
+        "same_evaluation_metrics"
+      ],
+      "method_specific_allowed": [
+        "entity_extraction",
+        "query_enrichment",
+        "fusion_parameters",
+        "critique_temperature",
+        "bm25_corpus"
+      ]
+    },
+    "benchmarking_notes": {
+      "fair_comparison": "All RAG methods use identical base parameters to ensure fair comparison",
+      "method_differences": "Only method-specific enhancements are allowed (e.g., code analysis, fusion, self-critique)",
+      "evaluation_consistency": "All methods evaluated using the same metrics and prompts",
+      "cost_analysis": "Computational costs tracked consistently across all methods"
+    }
+  }
+}

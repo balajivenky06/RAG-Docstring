@@ -1,0 +1,34 @@
+"""
+Requirements for RAG-based Docstring Generation System
+"""
+
+# Core dependencies
+pandas>=1.5.0
+numpy>=1.21.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+
+# RAG and ML dependencies
+sentence-transformers>=2.2.0
+pinecone-client>=2.2.0
+ollama>=0.1.0
+
+# Evaluation metrics
+rouge-score>=0.1.2
+nltk>=3.7
+bert-score>=0.3.13
+
+# Web scraping and search
+requests>=2.28.0
+beautifulsoup4>=4.11.0
+googlesearch-python>=1.2.3
+
+# Additional utilities
+rank-bm25>=0.2.2
+psutil>=5.9.0
+openpyxl>=3.0.0
+zlib-ng>=0.2.0
+
+# Optional: For better performance
+torch>=1.12.0
+transformers>=4.20.0

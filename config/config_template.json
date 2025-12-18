@@ -1,0 +1,147 @@
+{
+  "model": {
+    "embedding_model": "all-MiniLM-L6-v2",
+    "generator_model": "deepseek-coder:6.7b",
+    "helper_model": "deepseek-r1:1.5b",
+    "temperature": 0.5,
+    "max_tokens": 2048,
+    "top_p": 0.9
+  },
+  "pinecone": {
+    "api_key": "YOUR_PINECONE_API_KEY_HERE",
+    "environment": "us-east-1",
+    "vector_dimension": 384,
+    "metric": "cosine",
+    "cloud": "aws",
+    "region": "us-east-1",
+    "namespace": ""
+  },
+  "retrieval": {
+    "top_k": 3,
+    "max_context_length": 4000,
+    "similarity_threshold": 0.7,
+    "rerank_top_k": 5,
+    "chunk_size": 1000,
+    "chunk_overlap": 200
+  },
+  "evaluation": {
+    "rouge_weights": [0.25, 0.25, 0.25, 0.25],
+    "bleu_weights": [0.25, 0.25, 0.25, 0.25],
+    "bert_model": "bert-base-uncased",
+    "bert_lang": "en",
+    "pydocstyle_enabled": true,
+    "faithfulness_threshold": 0.3
+  },
+  "cost_analysis": {
+    "track_memory": true,
+    "track_cpu": true,
+    "track_api_calls": true,
+    "track_tokens": true,
+    "efficiency_weights": {
+      "execution_time": 0.4,
+      "memory_usage": 0.2,
+      "cpu_usage": 0.2,
+      "api_calls": 0.2
+    }
+  },
+  "paths": {
+    "results_dir": "results",
+    "evaluation_dir": "evaluation",
+    "visualization_dir": "visualizations",
+    "logs_dir": "logs",
+    "cache_dir": "cache",
+    "temp_dir": "temp"
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "file_logging": true,
+    "console_logging": true,
+    "log_file": "rag_system.log"
+  },
+  "web_search": {
+    "enabled": true,
+    "max_results": 3,
+    "timeout": 15,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "max_snippet_length": 4000,
+    "delay_between_requests": 1.5
+  },
+  "rag_methods": {
+    "common_config": {
+      "top_k": 3,
+      "use_rewrite": true,
+      "rewrite_temperature": 0.3,
+      "generation_temperature": 0.5,
+      "max_context_length": 4000,
+      "similarity_threshold": 0.7,
+      "web_search_enabled": true,
+      "web_search_max_results": 3,
+      "web_search_timeout": 15,
+      "min_chunk_length": 10,
+      "chunk_and_regrade": true,
+      "evaluation_enabled": true
+    },
+    "simple_rag": {
+      "method_specific": "basic_semantic_search"
+    },
+    "code_aware_rag": {
+      "extract_entities": true,
+      "enrich_query": true,
+      "include_code_in_query": true,
+      "max_methods_in_query": 3
+    },
+    "corrective_rag": {
+      "initial_top_k": 3,
+      "web_search_fallback": true
+    },
+    "fusion_rag": {
+      "semantic_top_k": 3,
+      "keyword_top_k": 3,
+      "rrf_k": 60,
+      "bm25_enabled": true,
+      "bm25_corpus_urls": [
+        "https://peps.python.org/pep-0257/",
+        "https://google.github.io/styleguide/pyguide.html",
+        "https://www.programiz.com/python-programming/docstrings"
+      ]
+    },
+    "self_rag": {
+      "initial_generation_enabled": true,
+      "self_critique_enabled": true,
+      "adaptive_rag_enabled": true,
+      "critique_temperature": 0.0,
+      "web_search_fallback": true
+    }
+  },
+  "knowledge_base_urls": [
+    "https://peps.python.org/pep-0257/",
+    "https://www.kaggle.com/code/hagzilla/what-are-docstrings",
+    "https://github.com/keleshev/pep257/blob/master/pep257.py",
+    "https://github.com/chadrik/doc484",
+    "https://zerotomastery.io/blog/python-docstring/",
+    "https://google.github.io/styleguide/pyguide.html",
+    "https://www.geeksforgeeks.org/python-docstrings/",
+    "https://pandas.pydata.org/docs/development/contributing_docstring.html",
+    "https://www.coding-guidelines.lftechnology.com/docs/python/docstrings/",
+    "https://realpython.com/python-pep8/",
+    "https://pypi.org/project/AIDocStringGenerator/",
+    "https://www.geeksforgeeks.org/pep-8-coding-style-guide-python/",
+    "https://llego.dev/posts/write-python-docstrings-guide-documenting-functions/",
+    "https://www.datacamp.com/tutorial/pep8-tutorial-python-code",
+    "https://www.programiz.com/python-programming/docstrings",
+    "https://marketplace.visualstudio.com/items?itemName=ShanthoshS.docstring-generator-ext",
+    "https://stackoverflow.com/questions/3898572/what-are-the-most-common-python-docstring-formats",
+    "https://stackoverflow.com/questions/78753860/what-is-the-proper-way-of-including-examples-in-python-docstrings",
+    "https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html",
+    "https://www.dataquest.io/blog/documenting-in-python-with-docstrings/",
+    "https://www.tutorialspoint.com/python/python_docstrings.htm"
+  ],
+  "index_names": {
+    "simple": "simple-rag-docstring",
+    "code_aware": "code-aware-rag-docstring",
+    "corrective": "corrective-rag-docstring",
+    "fusion": "fusion-rag-docstring",
+    "self": "self-rag-docstring"
+  }
+}
