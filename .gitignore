@@ -1,5 +1,5 @@
 # User requested ignores
-models/
+# models/ (User requested to track this)
 .mplcache/
 *.log
 
