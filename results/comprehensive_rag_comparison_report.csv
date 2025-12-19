@@ -1,0 +1,5 @@
+Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
+SimpleRAG,396.4,5.92,67,0.1999,0.006,0.5977,0.7313,2.0
+CoTRAG,583.18,8.7,67,0.1755,0.0085,0.5742,0.7015,2.0
+ToTRAG,5998.75,89.53,67,0.205,0.0118,0.5862,0.6343,2.0
+GoTRAG,1658.83,24.76,67,0.2047,0.0076,0.5789,0.5955,2.0
