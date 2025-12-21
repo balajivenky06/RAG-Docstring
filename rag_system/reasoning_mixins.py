@@ -79,7 +79,7 @@ class ToTMixin:
         collected_thoughts = []
         
         # Step 2: Generation & Evaluation for each subtask
-        current_context = context 
+        current_context = context if context is not None else "" 
         
         for task in subtasks:
             # Generate K candidates
