@@ -37,3 +37,17 @@ wheels/
 
 # VS Code
 .vscode/
+
+# User requested additions
+.npm-cache/
+Association_for_Computational_Linguistics__ACL__conference.pdf
+Docstring_Paper.pdf
+Docstring_using_RAG___Elsevier.pdf
+Images/
+Papers/
+check_data.py
+corpus_composition_table.md
+docs/.DS_Store
+results/
+evaluation/
+retrieval_evidence_audit.csv

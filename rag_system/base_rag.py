@@ -73,6 +73,7 @@ class BaseRAG(ABC):
         
         # Cost tracking
         self.cost_metrics = []
+        self.api_call_count = 0  # Initialize dynamic API call counter
         
         # Initialize logging
         self.logger = self._setup_logging()
@@ -277,6 +278,7 @@ class BaseRAG(ABC):
                 prompt=rewrite_prompt,
                 options={'temperature': self.model_config.temperature * 0.6}  # Lower temperature for rewriting
             )
+            self.api_call_count += 1  # Increment API call counter
             
             return response.get('response', '').strip()
             
@@ -306,6 +308,7 @@ class BaseRAG(ABC):
                 messages=messages,
                 options={'temperature': self.model_config.temperature}
             )
+            self.api_call_count += 1  # Increment API call counter
             
             generated_docstring = response.get('message', {}).get('content', '').strip()
             
@@ -399,10 +402,14 @@ class BaseRAG(ABC):
         return final_text_to_clean
     
     def _track_cost_metrics(self, start_time: float, retrieval_time: float, generation_time: float, 
-                           api_calls: int = 1, tokens_used: int = 0) -> CostMetrics:
+                           api_calls: int = None, tokens_used: int = 0) -> CostMetrics:
         """Track computational cost metrics."""
         end_time = time.time()
         execution_time = end_time - start_time
+        
+        # Use accumulated API calls if not explicitly provided
+        if api_calls is None:
+            api_calls = self.api_call_count
         
         # Get memory/CPU usage (robust to env-specific issues)
         try:
@@ -474,6 +481,9 @@ class BaseRAG(ABC):
             self.logger.info(f"Processing sample {i+1}/{len(df)}")
             
             user_code = row["Code_without_comments"]
+            
+            # Reset API call counter for each sample
+            self.api_call_count = 0
             
             # Generate docstring
             docstring, cost_metrics = self.generate_docstring(user_code)

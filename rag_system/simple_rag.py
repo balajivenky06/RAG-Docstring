@@ -114,7 +114,7 @@ class SimpleRAG(BaseRAG):
             start_time=start_time,
             retrieval_time=retrieval_time,
             generation_time=generation_time,
-            api_calls=2 if self.use_rewrite else 1,  # Helper + Generator or just Generator
+            # api_calls is now automatically tracked via self.api_call_count in BaseRAG
             tokens_used=0  # Placeholder - would need actual token counting
         )
         

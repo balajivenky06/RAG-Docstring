@@ -43,9 +43,9 @@ class CoTRAG(SimpleRAG):
         try:
             response = self.ollama_client.chat(
                 model=self.model_config.generator_model,
-                messages=messages,
                 options={'temperature': self.model_config.temperature}
             )
+            self.api_call_count += 1
             
             full_response = response.get('message', {}).get('content', '').strip()
             
@@ -122,6 +122,7 @@ class ToTRAG(SimpleRAG):
                 model=self.model_config.generator_model,
                 prompt=final_prompt
             )
+            self.api_call_count += 1
             return self._clean_docstring_output(response.get('response', ''))
             
         except Exception as e:
@@ -136,6 +137,7 @@ class ToTRAG(SimpleRAG):
                 model=self.model_config.helper_model, # Use helper for planning
                 prompt=prompt
             )
+            self.api_call_count += 1
             text = response.get('response', '')
             # Simple parsing: split by newlines and looking for list items
             tasks = [line.strip().lstrip('- 1234567890.').strip() for line in text.split('\n') if line.strip()]
@@ -155,6 +157,7 @@ class ToTRAG(SimpleRAG):
                     prompt=prompt,
                     options={'temperature': 0.7} # Higher temp for diversity
                 )
+                self.api_call_count += 1
                 candidates.append(response.get('response', '').strip())
             except Exception:
                 pass
@@ -175,6 +178,7 @@ class ToTRAG(SimpleRAG):
                     model=self.model_config.helper_model,
                     prompt=eval_prompt
                 )
+                self.api_call_count += 1
                 # Parse numeric score
                 score_match = re.search(r"(\d+(\.\d+)?)", response.get('response', '0'))
                 score = float(score_match.group(1)) if score_match else 0
@@ -221,6 +225,7 @@ class GoTRAG(SimpleRAG):
                 model=self.model_config.generator_model,
                 prompt=prompt
             )
+            self.api_call_count += 1
             docstring = response.get('response', '').strip()
             
             return self._clean_docstring_output(docstring)
@@ -237,6 +242,7 @@ class GoTRAG(SimpleRAG):
                 model=self.model_config.helper_model, # Helper model is sufficient for analysis
                 prompt=prompt
             )
+            self.api_call_count += 1
             return response.get('response', '').strip()
         except Exception:
             return f"Analysis for {axis} failed."
