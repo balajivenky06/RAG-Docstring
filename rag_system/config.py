@@ -242,17 +242,38 @@ class SystemConfig:
     def load_from_file(self, file_path: str) -> None:
         """Load configuration from a file."""
         import json
+        from dataclasses import is_dataclass
+
         with open(file_path, 'r') as f:
             config_dict = json.load(f)
             # Update current configuration
             for key, value in config_dict.items():
                 if hasattr(self, key):
-                    setattr(self, key, value)
+                    current_attr = getattr(self, key)
+                    # If it's a nested dataclass and value is a dict, update fields
+                    if is_dataclass(current_attr) and isinstance(value, dict):
+                        for sub_key, sub_value in value.items():
+                            if hasattr(current_attr, sub_key):
+                                setattr(current_attr, sub_key, sub_value)
+                    else:
+                        # Simple value or non-dataclass, just set it
+                        setattr(self, key, value)
 
 # Global configuration instance
 config = SystemConfig()
 
-# Load from environment variables
+# 1. Load from config file if exists (Project-level defaults)
+config_path = BASE_DIR.parent / "config" / "config.json"
+if config_path.exists():
+    try:
+        config.load_from_file(str(config_path))
+        print(f"Loaded configuration from {config_path}")
+    except Exception as e:
+        print(f"Warning: Failed to load config file: {e}")
+else:
+    print(f"No config file found at {config_path}, using defaults")
+
+# 2. Load from environment variables (Overrides config file)
 config.load_from_env()
 
 # Configuration validation
