@@ -17,9 +17,9 @@ BASE_DIR = Path(__file__).parent
 @dataclass
 class ModelConfig:
     """Configuration for LLM models."""
-    embedding_model: str = 'all-MiniLM-L6-v2'
-    generator_model: str = 'llama3.1:8b'
-    helper_model: str = 'llama3.2:latest'
+    embedding_model: str = ""  # Loaded from template
+    generator_model: str = ""  # Loaded from template
+    helper_model: str = ""     # Loaded from template
     temperature: float = 0.5
     max_tokens: int = 2048
     top_p: float = 0.9
@@ -261,6 +261,15 @@ class SystemConfig:
 
 # Global configuration instance
 config = SystemConfig()
+
+# 0. Load defaults from template (Factory Defaults)
+template_path = BASE_DIR.parent / "config" / "config_template.json"
+if template_path.exists():
+    try:
+        config.load_from_file(str(template_path))
+        print(f"Loaded factory defaults from {template_path}")
+    except Exception as e:
+        print(f"Warning: Failed to load template defaults: {e}")
 
 # 1. Load from config file if exists (Project-level defaults)
 config_path = BASE_DIR.parent / "config" / "config.json"

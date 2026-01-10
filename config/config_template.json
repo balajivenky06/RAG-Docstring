@@ -1,7 +1,7 @@
 {
   "model": {
     "embedding_model": "all-MiniLM-L6-v2",
-    "generator_model": "deepseek-coder:6.7b",
+    "generator_model": "llama3.2:latest",
     "helper_model": "deepseek-r1:1.5b",
     "temperature": 0.5,
     "max_tokens": 2048,
@@ -25,8 +25,18 @@
     "chunk_overlap": 200
   },
   "evaluation": {
-    "rouge_weights": [0.25, 0.25, 0.25, 0.25],
-    "bleu_weights": [0.25, 0.25, 0.25, 0.25],
+    "rouge_weights": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "bleu_weights": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
     "bert_model": "bert-base-uncased",
     "bert_lang": "en",
     "pydocstyle_enabled": true,

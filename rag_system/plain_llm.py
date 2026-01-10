@@ -36,6 +36,14 @@ class PlainLLM(BaseRAG):
         
         self.logger.info("Plain LLM initialized (Retrieval Disabled)")
     
+    def _initialize_pinecone_index(self):
+        """Override BaseRAG method to do nothing for PlainLLM."""
+        pass
+        
+    def _load_data_into_pinecone(self):
+        """Override BaseRAG method to do nothing for PlainLLM."""
+        pass
+    
     def generate_docstring(self, user_code: str) -> Tuple[str, CostMetrics]:
         """
         Generate docstring using only the LLM.
