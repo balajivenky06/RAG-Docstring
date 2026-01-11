@@ -8,7 +8,7 @@
     "top_p": 0.9
   },
   "pinecone": {
-    "api_key": "YOUR_PINECONE_API_KEY_HERE",
+    "api_key": "pcsk_6ANe1A_MLMTTBTSwTqW3Xjg29bHkW7Awoatq763adHsqvbwWfxuPXYvg2TVr13jnRi2ake",
     "environment": "us-east-1",
     "vector_dimension": 384,
     "metric": "cosine",
