@@ -48,6 +48,7 @@ class PlainLLM(BaseRAG):
         """
         Generate docstring using only the LLM.
         """
+        self.api_call_count = 0  # Reset counter for this run
         start_time = time.time()
         
         # No retrieval step
@@ -65,7 +66,7 @@ class PlainLLM(BaseRAG):
             start_time=start_time,
             retrieval_time=retrieval_time,
             generation_time=generation_time,
-            api_calls=1,
+            api_calls=self.api_call_count,
             tokens_used=0
         )
         
@@ -81,6 +82,7 @@ class PlainLLM(BaseRAG):
         ]
         
         try:
+            self.api_call_count += 1
             response = self.ollama_client.chat(
                 model=self.model_config.generator_model,
                 messages=messages,
