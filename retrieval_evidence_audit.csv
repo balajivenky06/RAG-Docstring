@@ -1,0 +1,16 @@
+Query,Retrieved Source,Category,Score
+How to document a class?,https://www.geeksforgeeks.org/python-docstrings/,API Reference,0.3433
+How to document a class?,https://zerotomastery.io/blog/python-docstring/,Tutorial/Blog,0.3353
+How to document a class?,https://www.coding-guidelines.lftechnology.com/docs/python/docstrings/,Tutorial/Blog,0.3323
+What is the numpy docstring format?,https://www.geeksforgeeks.org/python-docstrings/,API Reference,0.5875
+What is the numpy docstring format?,https://peps.python.org/pep-0257/,Style Guide (PEP),0.5588
+What is the numpy docstring format?,https://pandas.pydata.org/docs/development/contributing_docstring.html,API Reference,0.5351
+python docstrings for exceptions,https://www.geeksforgeeks.org/python-docstrings/,API Reference,0.6462
+python docstrings for exceptions,https://peps.python.org/pep-0257/,Style Guide (PEP),0.6371
+python docstrings for exceptions,https://zerotomastery.io/blog/python-docstring/,Tutorial/Blog,0.5321
+example of a function docstring,https://www.geeksforgeeks.org/python-docstrings/,API Reference,0.5754
+example of a function docstring,https://pandas.pydata.org/docs/development/contributing_docstring.html,API Reference,0.4912
+example of a function docstring,https://www.coding-guidelines.lftechnology.com/docs/python/docstrings/,Tutorial/Blog,0.4833
+PEP 257 summary,https://peps.python.org/pep-0257/,Style Guide (PEP),0.3612
+PEP 257 summary,https://github.com/chadrik/doc484,Other,0.3464
+PEP 257 summary,https://github.com/keleshev/pep257/blob/master/pep257.py,Style Guide (PEP),0.3345

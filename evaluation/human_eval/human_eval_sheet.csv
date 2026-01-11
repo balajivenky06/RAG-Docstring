@@ -1,0 +1,7015 @@
+Sample_ID,Code_Snippet,Generated_Docstring,Retrieved_Context_Snippet,Faithfulness_Label (Supported/Unsupported),Hallucination_Type (Parameter/Return/Logic/None),Comments
+1,"class LogisticRegression(_BaseModel, _IterativeModel, _Classifier):
+    
+
+    def __init__(self, eta=0.01, epochs=50, l2_lambda=0.0, minibatches=1, random_seed=None, print_progress=0):
+        _BaseModel.__init__(self)
+        _IterativeModel.__init__(self)
+        _Classifier.__init__(self)
+        self.eta = eta
+        self.epochs = epochs
+        self.l2_lambda = l2_lambda
+        self.minibatches = minibatches
+        self.random_seed = random_seed
+        self.print_progress = print_progress
+        self._is_fitted = False
+
+    def _forward(self, X):
+        z = self._net_input(X)
+        a = self._sigmoid_activation(z)
+        return a
+
+    def _backward(self, X, y_true, y_probas):
+        grad_loss_wrt_out = y_true - y_probas
+        grad_loss_wrt_w = -X.T @ grad_loss_wrt_out.reshape(-1, 1)
+        grad_loss_wrt_b = -np.sum(grad_loss_wrt_out)
+        return (grad_loss_wrt_w, grad_loss_wrt_b)
+
+    def _fit(self, X, y, init_params=True):
+        self._check_target_array(y, allowe
+...","LogisticRegression
+=====================
+
+A logistic regression classifier.
+
+This class implements a basic logistic regression model for binary classification.
+It uses gradient descent to optimize the weights and bias of the model.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.datasets import make_classification
+    >>> from sklearn.model_selection import train_test_split
+    >>> X, y = make_classification(n_samples=100, n_features=10)
+    >>> X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    >>> model = LogisticRegression()
+    >>> model.fit(X_train, y_train)
+    >>> y_pred = model.predict_proba(X_test)
+
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+2,"class DBSCAN(ClusterMixin, BaseEstimator):
+    
+    _parameter_constraints: dict = {'eps': [Interval(Real, 0.0, None, closed='neither')], 'min_samples': [Interval(Integral, 1, None, closed='left')], 'metric': [StrOptions(set(_VALID_METRICS) | {'precomputed'}), callable], 'metric_params': [dict, None], 'algorithm': [StrOptions({'auto', 'ball_tree', 'kd_tree', 'brute'})], 'leaf_size': [Interval(Integral, 1, None, closed='left')], 'p': [Interval(Real, 0.0, None, closed='left'), None], 'n_jobs': [Integral, None]}
+
+    def __init__(self, eps=0.5, *, min_samples=5, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None):
+        self.eps = eps
+        self.min_samples = min_samples
+        self.metric = metric
+        self.metric_params = metric_params
+        self.algorithm = algorithm
+        self.leaf_size = leaf_size
+        self.p = p
+        self.n_jobs = n_jobs
+
+    @_fit_context(prefer_skip_nested_validation=False)
+    def fit(self, X, y=None, sam
+...","DBSCAN (Density-Based Spatial Clustering of Applications with Noise) is a density-based clustering algorithm that groups data points into clusters based on their density.
+
+Parameters
+----------
+    The maximum distance between two samples for them to be considered as in the same neighborhood.
+    The number of samples required to form a dense region.
+    The metric to use when calculating distance between instances. If metric is a string, it must be one of the options specified in the documentation of sklearn.metrics.pairwise_distances.
+    Additional parameters to be passed to the chosen metric function.
+    The leaf size passed to BallTree or KDTree.
+    The power parameter of the Minkowski metric. If p is not None, use Minkowski metric with order p instead of Euclidean distance.
+    The number of parallel jobs to run for neighbors search.
+
+Returns
+-------
+    Fitted estimator.
+
+Raises
+------
+ValueError
+    If the input data X is not a valid representation of a feature matrix or if y is not None and it’s not an array-like of shape (n_samples,).
+
+Examples
+--------
+>>> from sklearn.datasets import make_blobs
+>>> from sklearn.cluster import DBSCAN
+>>> X, _ = make_bundles.make_blobs(n_samples=100, centers=5, cluster_std=[1.0, 2.0, 0.6, 2, 10], random_state=170)
+>>> clust = DBSCAN(eps=0.3, min_samples=10).fit(X)
+>>> print(clust.labels_)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+3,"class AveragePooling3D(Pooling3D):
+    
+
+    def __init__(self, pool_size=(2, 2, 2), strides=None, padding='valid', data_format=None, **kwargs):
+        super(AveragePooling3D, self).__init__(nn.avg_pool3d, pool_size=pool_size, strides=strides, padding=padding, data_format=data_format, **kwargs)","Initializes an AveragePooling3D layer.
+
+This class inherits from Pooling3D and implements average pooling for 3D data.
+It provides a convenient way to apply average pooling to input tensors,
+helping to reduce spatial dimensions while preserving feature information.
+
+Args:
+
+Returns:
+    An AveragePooling3D object with the specified parameters.
+
+Raises:
+
+Examples:
+    >>> avg_pool = AveragePooling3D(pool_size=(2, 2, 2), strides=None, padding='valid')
+    >>> print(avg_pool)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+4,"class Conv2D(Conv):
+    
+
+    def __init__(self, filters, kernel_size, strides=(1, 1), padding='valid', data_format=None, dilation_rate=(1, 1), groups=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, **kwargs):
+        super(Conv2D, self).__init__(rank=2, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, groups=groups, activation=activations.get(activation), use_bias=use_bias, kernel_initializer=initializers.get(kernel_initializer), bias_initializer=initializers.get(bias_initializer), kernel_regularizer=regularizers.get(kernel_regularizer), bias_regularizer=regularizers.get(bias_regularizer), activity_regularizer=regularizers.get(activity_regularizer), kernel_constraint=constraints.get(kernel_constraint), bias_constraint=constraints.get(bia
+...","Initializes a Conv2D layer.
+
+This class is a subclass of Conv, inheriting its properties and methods.
+It represents a 2D convolutional layer in a neural network architecture.
+
+Args:
+
+Returns:
+    A Conv2D object with the specified parameters.
+
+Raises:
+
+Examples:
+    >>> conv2d = Conv2D(32, (3, 3), strides=(2, 2))
+    >>> conv2d","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+5,"class OrdinalEncoder(OneToOneFeatureMixin, _BaseEncoder):
+    
+    _parameter_constraints: dict = {'categories': [StrOptions({'auto'}), list], 'dtype': 'no_validation', 'encoded_missing_value': [Integral, type(np.nan)], 'handle_unknown': [StrOptions({'error', 'use_encoded_value'})], 'unknown_value': [Integral, type(np.nan), None], 'max_categories': [Interval(Integral, 1, None, closed='left'), None], 'min_frequency': [Interval(Integral, 1, None, closed='left'), Interval(RealNotInt, 0, 1, closed='neither'), None]}
+
+    def __init__(self, *, categories='auto', dtype=np.float64, handle_unknown='error', unknown_value=None, encoded_missing_value=np.nan, min_frequency=None, max_categories=None):
+        self.categories = categories
+        self.dtype = dtype
+        self.handle_unknown = handle_unknown
+        self.unknown_value = unknown_value
+        self.encoded_missing_value = encoded_missing_value
+        self.min_frequency = min_frequency
+        self.max_categories = max_categories
+
+  
+...","OrdinalEncoder
+==============
+
+Encodes categorical variables as ordinal numbers.
+
+This encoder works on a per-categorical feature basis, meaning it will encode each feature separately.
+It first determines the number of categories for each feature by counting the unique values in that feature.
+If the number of categories is less than or equal to max_categories, all unique values are used as categories.
+Otherwise, the categories with the lowest frequency are ignored until the number of categories does not exceed max_categories.
+
+Parameters
+----------
+    If 'auto', determine categories automatically from the data.
+    Otherwise, if a list of arrays is given, it is assumed as the categories.
+    Data type to be used in the encoded feature. If object will be used and categorical features will be encoded as Python strings.
+    How to handle unknown categories.
+    Value to use for encoding unknown categories when handle_unknown is 'use_encoded_value'.
+    The value used to encode missing values. If set to np.nan and dtype is not a float type, the dtype will be changed to float.
+    Ignore features with less than this frequency of unique values.
+    Maximum number of categories in encoded feature.
+
+Raises
+------
+ValueError
+    If unknown_value is np.nan and dtype is not a float type.
+TypeError
+    If unknown_value is not an integer when handle_unknown is 'use_encoded_value'.
+TypeError
+    If unknown_value is set when handle_unknown is not 'use_encoded_value'.
+
+Examples
+--------
+>>> from sklearn.preprocessing import OrdinalEncoder
+>>> encoder = OrdinalEncoder()
+>>> X = [[1, 2, 3], [4, 5, 6]]
+>>> encoded_X = encoder.fit_transform(X)
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+6,"class MaxPooling3D(Pooling3D):
+    
+
+    def __init__(self, pool_size=(2, 2, 2), strides=None, padding='valid', data_format=None, **kwargs):
+        super(MaxPooling3D, self).__init__(nn.max_pool3d, pool_size=pool_size, strides=strides, padding=padding, data_format=data_format, **kwargs)","MaxPooling3D is a subclass of Pooling3D that applies 3D max pooling operation to input data.
+It inherits the functionality from its parent class and adds support for 3D max pooling.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> max_pooling = MaxPooling3D(pool_size=(2, 2, 2), strides=1)
+    >>> max_pooling.apply(input_data)  # Apply max pooling operation to input data","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+7,"class UpSampling2D(Layer):
+    
+
+    def __init__(self, size=(2, 2), data_format=None, interpolation='nearest', **kwargs):
+        super(UpSampling2D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.size = conv_utils.normalize_tuple(size, 2, 'size')
+        if interpolation not in {'nearest', 'bilinear'}:
+            raise ValueError('`interpolation` argument should be one of `""nearest""` or `""bilinear""`.')
+        self.interpolation = interpolation
+        self.input_spec = InputSpec(ndim=4)
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if self.data_format == 'channels_first':
+            height = self.size[0] * input_shape[2] if input_shape[2] is not None else None
+            width = self.size[1] * input_shape[3] if input_shape[3] is not None else None
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1], height, width
+...","Upsampling 2D Layer
+
+This layer upsamples the input tensor by a specified factor in both height and width.
+
+Args:
+        Defaults to (2, 2).
+        ""channels_last"". Defaults to None.
+        or ""bilinear"". Defaults to 'nearest'.
+
+Returns:
+
+Raises:
+        ""bilinear"".
+
+Examples:
+
+    >>> from keras.layers import UpSampling2D
+
+    >>> layer = UpSampling2D(size=(3, 3), data_format='channels_first')
+    >>> input_tensor = np.random.rand(1, 10, 20, 30)
+    >>> output_tensor = layer.call(input_tensor)
+
+""""""
+
+""""""
+Upsampling 2D Layer
+
+This layer upsamples the input tensor by a specified factor in both height and width.
+
+Args:
+        Defaults to (2, 2).
+        ""channels_last"". Defaults to None.
+        or ""bilinear"". Defaults to 'nearest'.
+
+Returns:
+
+Raises:
+        ""bilinear"".
+
+Examples:
+
+    >>> from keras.layers import UpSampling2D
+
+    >>> layer = UpSampling2D(size=(3, 3), data_format='channels_first')
+    >>> input_tensor = np.random.rand(1, 10, 20, 30)
+    >>> output_tensor = layer.call(input_tensor)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+8,"class BayesianGaussianMixture(BaseMixture):
+    
+    _parameter_constraints: dict = {**BaseMixture._parameter_constraints, 'covariance_type': [StrOptions({'spherical', 'tied', 'diag', 'full'})], 'weight_concentration_prior_type': [StrOptions({'dirichlet_process', 'dirichlet_distribution'})], 'weight_concentration_prior': [None, Interval(Real, 0.0, None, closed='neither')], 'mean_precision_prior': [None, Interval(Real, 0.0, None, closed='neither')], 'mean_prior': [None, 'array-like'], 'degrees_of_freedom_prior': [None, Interval(Real, 0.0, None, closed='neither')], 'covariance_prior': [None, 'array-like', Interval(Real, 0.0, None, closed='neither')]}
+
+    def __init__(self, *, n_components=1, covariance_type='full', tol=0.001, reg_covar=1e-06, max_iter=100, n_init=1, init_params='kmeans', weight_concentration_prior_type='dirichlet_process', weight_concentration_prior=None, mean_precision_prior=None, mean_prior=None, degrees_of_freedom_prior=None, covariance_prior=None, random_state=None,
+...","BayesianGaussianMixture class.
+
+This class implements a Bayesian Gaussian Mixture model, which is a probabilistic version of the standard Gaussian Mixture Model (GMM).
+It extends the BaseMixture class by adding prior distributions for the mixture weights and component parameters.
+The model assumes that the number of components is fixed and known in advance.
+
+Summary
+--------
+
+This class provides an implementation of the Bayesian Gaussian Mixture model, which can be used for clustering and density estimation tasks.
+It uses a Dirichlet process prior on the mixture weights and conjugate priors on the component parameters.
+
+Args
+----
+
+
+Returns
+-------
+
+The BayesianGaussianMixture object itself.
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+
+# Create an instance of the BayesianGaussianMixture class
+bgmm = BayesianGaussianMixture(n_components=3, covariance_type='full')
+
+# Fit the model to some data
+X = ...  # your data here
+bgmm.fit(X)
+
+# Get the cluster labels for the data
+labels = bgmm.predict(X)
+```","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+9,"class ZeroPadding2D(Layer):
+    
+
+    def __init__(self, padding=(1, 1), data_format=None, **kwargs):
+        super(ZeroPadding2D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        if isinstance(padding, int):
+            self.padding = ((padding, padding), (padding, padding))
+        elif hasattr(padding, '__len__'):
+            if len(padding) != 2:
+                raise ValueError('`padding` should have two elements. Found: ' + str(padding))
+            height_padding = conv_utils.normalize_tuple(padding[0], 2, '1st entry of padding')
+            width_padding = conv_utils.normalize_tuple(padding[1], 2, '2nd entry of padding')
+            self.padding = (height_padding, width_padding)
+        else:
+            raise ValueError('`padding` should be either an int, a tuple of 2 ints (symmetric_height_pad, symmetric_width_pad), or a tuple of 2 tuples of 2 ints ((top_pad, bottom_pad), (left_pad, right_pad)). Found: ' + str(padding))
+...","A layer that adds padding to the input.
+
+This layer is used for adding padding to the input of a convolutional or pooling layer.
+It can be used to add symmetric padding (the same amount of padding on all sides)
+or asymmetric padding (different amounts of padding on different sides).
+
+Args:
+        on each side. Can also be an integer, in which case it represents the
+        number of pixels to pad on both sides.
+        of dimensions in the input tensor.
+
+Returns:
+    A tuple containing the output shape of the layer. This will be a 4D tensor,
+    unless the input is 5D (with batch size and channels as separate axes).
+
+Raises:
+
+Examples:
+    >>> from keras.layers import ZeroPadding2D
+    >>> layer = ZeroPadding2D(padding=(1, 1))
+    >>> input_shape = (10, 10)
+    >>> output_shape = layer.compute_output_shape(input_shape)
+    >>> print(output_shape)
+    TensorShape([10, 12, 12, 1])
+""""""
+
+""""""
+This is the implementation of a Keras Layer that adds padding to the input.
+It can be used as a standalone layer or as part of a model.
+
+Args:
+        on each side. Can also be an integer, in which case it represents the
+        number of pixels to pad on both sides.
+        of dimensions in the input tensor.
+
+Returns:
+    None
+
+Raises:
+
+Examples:
+    >>> from keras.layers import ZeroPadding2D
+    >>> layer = ZeroPadding2D(padding=(1, 1))
+    >>> input_tensor = tf.constant([[[[1]]]], dtype=tf.float32)
+    >>> output_tensor = layer.call(input_tensor)
+    >>> print(output_tensor.shape)
+    (1, 3, 3, 1)
+
+Note:
+    This implementation follows the Keras Layer API and is designed to work
+    seamlessly with other Keras layers.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+10,"class Conv3DTranspose(Conv3D):
+    
+
+    def __init__(self, filters, kernel_size, strides=(1, 1, 1), padding='valid', output_padding=None, data_format=None, dilation_rate=(1, 1, 1), activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, **kwargs):
+        super(Conv3DTranspose, self).__init__(filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, activation=activations.get(activation), use_bias=use_bias, kernel_initializer=initializers.get(kernel_initializer), bias_initializer=initializers.get(bias_initializer), kernel_regularizer=regularizers.get(kernel_regularizer), bias_regularizer=regularizers.get(bias_regularizer), activity_regularizer=regularizers.get(activity_regularizer), kernel_constraint=constraints.get(kernel_constraint), bias_constraint=const
+...","""""""
+Transposed convolutional layer (also known as a deconvolutional layer).
+
+This layer creates a transposed convolution, also known as a deconvolution or fractionally strided convolution.
+
+The number of weights in the weights vector is equal to
+    - number of input channels * kernel size^3 * number of output filters
+
+The layer convolves the input with learned kernels on channel-wise spatial locations to produce multi-channel feature maps.
+On each step, it applies a transposed convolution operation which expands the spatial dimensions.
+
+This layer also supports masking for data augmentation, where the input is multiplied by binary mask variables.
+The mask variables are sampled from a Bernoulli distribution with probability 0.5 (for binarization).
+
+Note that because integer division in Python truncates towards zero, you need to use `tf.ceil` when computing output shape.
+
+#### Arguments
+    - For spatial dimensions, both `k_h` and `k_w` should be an odd integer. If one of them is even,
+      then it pads the last dimension with a 1s to make it odd.
+    - For spatial dimensions, both `s_h` and `s_w` should be an odd integer. If one of them is even,
+      then it pads the last dimension with a 1s to make it odd.
+    - Use `""valid""` if you don't want zero padding, and want the output size to be smaller than input size.
+    - Use `""same""` for spatial dimensions where the output size is the same as the input size, except
+      in cases with stride > 1 or when using `tf.pad` with a non-zero constant value.
+    - The number of zeros to add at the end of each dimension. If None, it is computed as
+      `output_shape[i] = (input_shape[i] - 1) * stride[i] + dilation_rate[i] * (kernel_size[i] - 1)` for each spatial dimension.
+    - Note that the value used here is specific to this layer. The `data_format` argument in the
+      `Keras` backend config is a generic key for all layers that are affected by format (e.g. convolutions,
+      max pooling).
+    - A factor for dilated convolution.
+
+#### Returns
+An output tensor.
+
+#### Raises
+
+#### Examples
+```python
+# Assuming x is your input array with shape (batch_size, height, width, channels)
+conv3d_transpose = Conv3DTranspose(
+    filters=32,
+    kernel_size=(2, 2, 2),
+    strides=(1, 2, 2),
+    padding='same',
+    data_format='channels_last'
+)
+output = conv3d_transpose.call(x)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+11,"class GlobalMaxPooling1D(GlobalPooling1D):
+    
+
+    def call(self, inputs):
+        steps_axis = 1 if self.data_format == 'channels_last' else 2
+        return backend.max(inputs, axis=steps_axis, keepdims=self.keepdims)","Max pooling operation for 1D inputs.
+
+This class extends GlobalPooling1D to provide global max pooling for 1D inputs.
+It uses the backend's max function to compute the maximum value along the specified axis.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from tensorflow.keras.layers import GlobalMaxPooling1D
+    >>> pooling = GlobalMaxPooling1D()
+    >>> inputs = tf.constant([[[1, 2], [3, 4]]])
+    >>> result = pooling.call(inputs)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+12,"class TransactionEncoder(BaseEstimator, TransformerMixin):
+    
+
+    def __init__(self):
+        return None
+
+    def fit(self, X):
+        
+        unique_items = set()
+        for transaction in X:
+            for item in transaction:
+                unique_items.add(item)
+        self.columns_ = sorted(unique_items)
+        columns_mapping = {}
+        for col_idx, item in enumerate(self.columns_):
+            columns_mapping[item] = col_idx
+        self.columns_mapping_ = columns_mapping
+        return self
+
+    def transform(self, X, sparse=False):
+        
+        if sparse:
+            indptr = [0]
+            indices = []
+            for transaction in X:
+                for item in set(transaction):
+                    col_idx = self.columns_mapping_[item]
+                    indices.append(col_idx)
+                indptr.append(len(indices))
+            non_sparse_values = [True] * len(indices)
+            array = csr_matrix((non_sparse_values, indices, indptr), dtype=bool)
+ 
+...","TransactionEncoder class
+==========================
+
+Encodes categorical variables in a dataset by creating a new feature for each unique item.
+
+Summary Line
+-------------
+
+The TransactionEncoder is a transformer that maps categorical data to numerical features, suitable for use with scikit-learn's pipeline API.
+
+Extended Description
+--------------------
+
+This encoder works by creating a mapping of unique items to numerical indices. It can be used in conjunction with other transformers and estimators to prepare data for modeling.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples
+--------
+
+```python
+
+# Create a pipeline with the TransactionEncoder and a classifier
+pipeline = Pipeline([
+    ('encoder', TransactionEncoder()),
+    ('classifier', LogisticRegression())
+])
+
+# Fit the pipeline to some sample data
+X, y = make_classification(n_samples=1000, n_features=10)
+pipeline.fit(X, y)
+
+# Use the pipeline to predict on new data
+new_X = make_classification(n_samples=500, n_features=10)
+y_pred = pipeline.predict(new_X)
+```
+
+Type Hints
+-----------
+
+
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+13,"class GlobalPooling1D(Layer):
+    
+
+    def __init__(self, data_format='channels_last', keepdims=False, **kwargs):
+        super(GlobalPooling1D, self).__init__(**kwargs)
+        self.input_spec = InputSpec(ndim=3)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.keepdims = keepdims
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if self.data_format == 'channels_first':
+            if self.keepdims:
+                return tensor_shape.TensorShape([input_shape[0], input_shape[1], 1])
+            else:
+                return tensor_shape.TensorShape([input_shape[0], input_shape[1]])
+        elif self.keepdims:
+            return tensor_shape.TensorShape([input_shape[0], 1, input_shape[2]])
+        else:
+            return tensor_shape.TensorShape([input_shape[0], input_shape[2]])
+
+    def call(self, inputs):
+        raise NotImplementedError
+
+    def get_config(self):
+    
+...","GlobalPooling1D Layer
+
+This layer performs global pooling on 1D input data.
+
+Args:
+        One of {'channels_last', 'channels_first'}.
+        Defaults to 'channels_last'.
+        Defaults to False.
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> layer = GlobalPooling1D(data_format='channels_first')
+    >>> input_shape = (10, 20)
+    >>> output_shape = layer.compute_output_shape(input_shape)
+""""""
+
+""""""
+GlobalPooling1D Layer
+
+This layer performs global pooling on 1D input data. It reduces the spatial dimensions of the input to a single value.
+
+The data format is specified by the `data_format` parameter. If set to 'channels_last', the input shape should be (batch_size, time_steps). If set to 'channels_first', the input shape should be (time_steps, batch_size).
+
+The `keepdims` parameter determines whether to keep the reduced dimension or not.
+
+Args:
+        One of {'channels_last', 'channels_first'}.
+        Defaults to 'channels_last'.
+        Defaults to False.
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> layer = GlobalPooling1D(data_format='channels_first')
+    >>> input_shape = (10, 20)
+    >>> output_shape = layer.compute_output_shape(input_shape)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+14,"class Adamax(optimizer_v2.OptimizerV2):
+    
+    _HAS_AGGREGATE_GRAD = True
+
+    def __init__(self, learning_rate=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-07, name='Adamax', **kwargs):
+        super(Adamax, self).__init__(name, **kwargs)
+        self._set_hyper('learning_rate', kwargs.get('lr', learning_rate))
+        self._set_hyper('decay', self._initial_decay)
+        self._set_hyper('beta_1', beta_1)
+        self._set_hyper('beta_2', beta_2)
+        self.epsilon = epsilon or backend_config.epsilon()
+
+    def _create_slots(self, var_list):
+        for var in var_list:
+            self.add_slot(var, 'm')
+        for var in var_list:
+            self.add_slot(var, 'v')
+
+    def _prepare_local(self, var_device, var_dtype, apply_state):
+        super(Adamax, self)._prepare_local(var_device, var_dtype, apply_state)
+        local_step = math_ops.cast(self.iterations + 1, var_dtype)
+        beta_1_t = array_ops.identity(self._get_hyper('beta_1', var_dtype))
+        beta_2_t = array_ops.
+...","Adamax Optimizer.
+
+An extension of the Adam optimizer that includes a different numerical stability fix from the default Adam optimizer. This optimization algorithm is a stochastic gradient descent procedure that is adapted for use in deep learning models.
+
+Args:
+
+Returns:
+    An Adamax optimizer object that can be used with a TensorFlow model.
+
+Raises:
+
+Examples:
+
+    ```
+    adam = tf.keras.optimizers.Adamax(learning_rate=0.001, beta_1=0.9, beta_2=0.999)
+    model.compile(optimizer=adam, loss='mean_squared_error')
+    ```
+
+Note:
+    This class extends the `optimizer_v2.OptimizerV2` class and inherits its methods.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+15,"class UpSampling3D(Layer):
+    
+
+    def __init__(self, size=(2, 2, 2), data_format=None, **kwargs):
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.size = conv_utils.normalize_tuple(size, 3, 'size')
+        self.input_spec = InputSpec(ndim=5)
+        super(UpSampling3D, self).__init__(**kwargs)
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if self.data_format == 'channels_first':
+            dim1 = self.size[0] * input_shape[2] if input_shape[2] is not None else None
+            dim2 = self.size[1] * input_shape[3] if input_shape[3] is not None else None
+            dim3 = self.size[2] * input_shape[4] if input_shape[4] is not None else None
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1], dim1, dim2, dim3])
+        else:
+            dim1 = self.size[0] * input_shape[1] if input_shape[1] is not None else None
+            dim2 = self.size[1
+...","""""""
+Upsampling 3D Layer
+=====================
+
+An upsampling layer for 3D tensors.
+
+Summary Line
+-------------
+
+This class is an implementation of the UpSampling3D layer, which is used to upsample 3D tensors by a specified factor.
+
+Extended Description
+--------------------
+
+The UpSampling3D layer uses the `backend.resize_volumes` function to resize the input tensor. The resizing is done based on the provided size and data format.
+
+Parameters
+----------
+
+
+Returns
+-------
+
+The output shape of the upsampling operation, which is a 5-dimensional tensor.
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+upsampling_layer = UpSampling3D(size=(2, 2, 2), data_format='channels_first')
+input_tensor = tf.constant([...])
+output_tensor = upsampling_layer.call(input_tensor)
+print(output_tensor.shape)  # Output shape will be (..., 2*2*2, ...)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+16,"class LabelEncoder(TransformerMixin, BaseEstimator, auto_wrap_output_keys=None):
+    
+
+    def fit(self, y):
+        
+        y = column_or_1d(y, warn=True)
+        self.classes_ = _unique(y)
+        return self
+
+    def fit_transform(self, y):
+        
+        y = column_or_1d(y, warn=True)
+        self.classes_, y = _unique(y, return_inverse=True)
+        return y
+
+    def transform(self, y):
+        
+        check_is_fitted(self)
+        y = column_or_1d(y, dtype=self.classes_.dtype, warn=True)
+        if _num_samples(y) == 0:
+            return np.array([])
+        return _encode(y, uniques=self.classes_)
+
+    def inverse_transform(self, y):
+        
+        check_is_fitted(self)
+        y = column_or_1d(y, warn=True)
+        if _num_samples(y) == 0:
+            return np.array([])
+        diff = np.setdiff1d(y, np.arange(len(self.classes_)))
+        if len(diff):
+            raise ValueError('y contains previously unseen labels: %s' % str(diff))
+        y = np.asarray(y)
+        r
+...","LabelEncoder
+================
+
+A transformer that converts categorical labels into numerical labels.
+
+This class is a wrapper around scikit-learn's LabelEncoder, providing a convenient interface for encoding categorical data.
+
+Summary
+--------
+
+Encodes categorical labels into numerical labels using a mapping from unique values to integers.
+
+Extended Description
+--------------------
+
+The LabelEncoder works by first finding the unique values in the input array. It then maps each value to an integer, starting from 0 and incrementing by 1 for each new value. This mapping is stored as an attribute of the encoder instance.
+
+Args
+-----
+
+
+Returns
+-------
+
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+
+# Create a sample dataset with categorical labels
+data = np.array(['A', 'B', 'C', 'D'])
+
+# Create an instance of the LabelEncoder
+encoder = LabelEncoder()
+
+# Fit and transform the data
+encoded_labels = encoder.fit_transform(data)
+
+print(encoded_labels)
+```
+
+Note: This docstring is inspired by scikit-learn's documentation style guide.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+17,"class Pooling3D(Layer):
+    
+
+    def __init__(self, pool_function, pool_size, strides, padding='valid', data_format='channels_last', name=None, **kwargs):
+        super(Pooling3D, self).__init__(name=name, **kwargs)
+        if data_format is None:
+            data_format = backend.image_data_format()
+        if strides is None:
+            strides = pool_size
+        self.pool_function = pool_function
+        self.pool_size = conv_utils.normalize_tuple(pool_size, 3, 'pool_size')
+        self.strides = conv_utils.normalize_tuple(strides, 3, 'strides')
+        self.padding = conv_utils.normalize_padding(padding)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.input_spec = InputSpec(ndim=5)
+
+    def call(self, inputs):
+        pool_shape = (1,) + self.pool_size + (1,)
+        strides = (1,) + self.strides + (1,)
+        if self.data_format == 'channels_first':
+            inputs = array_ops.transpose(inputs, (0, 2, 3, 4, 1))
+        outputs = self.po
+...","Pooling3D Layer
+
+Applies 3D pooling operation to inputs.
+
+This layer applies a 3D pooling operation along the spatial dimensions
+(channels_first or channels_last format) specified in the data_format argument.
+The output shape is calculated based on the input shape and the pool_size,
+padding, and strides arguments.
+
+Args:
+        It should take inputs, ksize, strides, padding as arguments.
+        of the pooling window along each spatial dimension.
+        of the pooling operation along each spatial dimension. If None,
+        it will be set to pool_size.
+        If 'same', then the output shape will be equal to the input shape.
+        The ordering of dimensions in the inputs. Defaults to channels_last.
+        this Layer.
+
+Returns:
+        It has shape (batch_size, ...).
+
+Raises:
+
+Examples:
+    ```python
+pooling_layer = Pooling3D(pool_function=tf.nn.max_pool3d,
+                          pool_size=(2, 2, 2),
+                          strides=None,
+                          padding='same',
+                          data_format='channels_last')
+```","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+18,"class Conv1D(Conv):
+    
+
+    def __init__(self, filters, kernel_size, strides=1, padding='valid', data_format='channels_last', dilation_rate=1, groups=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, **kwargs):
+        super(Conv1D, self).__init__(rank=1, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, groups=groups, activation=activations.get(activation), use_bias=use_bias, kernel_initializer=initializers.get(kernel_initializer), bias_initializer=initializers.get(bias_initializer), kernel_regularizer=regularizers.get(kernel_regularizer), bias_regularizer=regularizers.get(bias_regularizer), activity_regularizer=regularizers.get(activity_regularizer), kernel_constraint=constraints.get(kernel_constraint), bias_constraint=constraints.get(bi
+...","Initializes a Conv1D layer.
+
+Conv1D is a convolutional layer for 1D inputs, often used in sequence processing tasks such as time series forecasting or speech recognition.
+
+Args:
+
+Returns:
+    A Conv1D layer instance.
+
+Raises:
+
+Examples:
+    >>> conv = Conv1D(32, 3)
+    >>> conv.build((None, 10))","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+19,"@keras_export(['keras.Metric', 'keras.metrics.Metric'])
+class Metric(KerasSaveable):
+    
+
+    def __init__(self, dtype=None, name=None):
+        self.name = name or auto_name(self.__class__.__name__)
+        self._dtype_policy = dtype_policies.get(dtype or backend.floatx())
+        self._dtype = self._dtype_policy.compute_dtype
+        self._metrics = []
+        self._variables = []
+        self._tracker = Tracker({'variables': (lambda x: isinstance(x, backend.Variable), self._variables), 'metrics': (lambda x: isinstance(x, Metric), self._metrics)})
+
+    def reset_state(self):
+        
+        for v in self.variables:
+            v.assign(ops.zeros(v.shape, dtype=v.dtype))
+
+    def update_state(self, *args, **kwargs):
+        
+        raise NotImplementedError
+
+    def stateless_update_state(self, metric_variables, *args, **kwargs):
+        if len(metric_variables) != len(self.variables):
+            raise ValueError(f'Argument `metric_variables` must be a list of tensors correspondin
+...","Metric class for tracking and updating metrics in Keras models.
+
+This class is used to track and update various metrics, such as accuracy, loss, etc.
+It provides methods for resetting state, updating state, getting results,
+and adding variables or weights to the metric.
+
+Args:
+        the float precision determined by backend.floatx().
+        name based on the class name.
+
+Returns:
+    - An instance of Metric with initialized attributes.
+
+Raises:
+
+Examples:
+
+    ```python
+metric = Metric(name='accuracy')
+variable = metric.add_variable((1,), initializer=initializers.zeros())
+```
+
+""""""
+
+""""""
+Methods for updating and getting results of metrics.
+
+The `update_state` method updates the state of the metric based on the input data.
+The `result` method returns the result of the metric. The `stateless_update_state`
+method updates the state without tracking variables, and the `stateless_result`
+method gets the result without tracking variables.
+
+Args:
+
+Returns:
+    - The updated result of the metric.
+
+Raises:
+""""""
+
+""""""
+Methods for adding variables and weights to metrics.
+
+The `add_variable` method adds a variable to the metric, while the `add_weight`
+method is an alias for `add_variable`. Both methods add a new variable with
+the specified shape, initializer, dtype, aggregation, and name.
+
+Args:
+        the float precision determined by backend.floatx().
+
+Returns:
+    - The added variable.
+
+Raises:
+""""""
+
+""""""
+Properties and methods for getting metric attributes.
+
+The `variables` property returns a list of variables associated with this
+metric, including those from other metrics. The `dtype` property returns the
+data type of the metric. The `get_config` method returns a dictionary containing
+the configuration of the metric, which can be used to reconstruct it using
+`from_config`.
+
+Args:
+    - None
+
+Returns:
+    - A list of variables or a dictionary of configuration.
+""""""
+
+""""""
+Special methods for metric objects.
+
+The `__call__` method calls the `update_state` method with the input arguments,
+and then returns the result. The `__repr__` and `__str__` methods return string
+representations of the metric object.
+
+Args:
+
+Returns:
+    - A string representation of the metric object.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+20,"class GlobalPooling3D(Layer):
+    
+
+    def __init__(self, data_format=None, keepdims=False, **kwargs):
+        super(GlobalPooling3D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.input_spec = InputSpec(ndim=5)
+        self.keepdims = keepdims
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if self.data_format == 'channels_last':
+            if self.keepdims:
+                return tensor_shape.TensorShape([input_shape[0], 1, 1, 1, input_shape[4]])
+            else:
+                return tensor_shape.TensorShape([input_shape[0], input_shape[4]])
+        elif self.keepdims:
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1], 1, 1, 1])
+        else:
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1]])
+
+    def call(self, inputs):
+        raise NotImplementedError
+
+    def get_config(self):
+    
+...","This class represents a Global Pooling 3D layer, which is used in deep learning models for spatial pooling operations.
+It inherits from the Layer class and provides methods for computing output shapes, calling the layer, and getting its configuration.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> gp = GlobalPooling3D(data_format='channels_last', keepdims=True)
+    >>> gp.compute_output_shape((10, 20, 30, 40))
+    TensorShape([10, 1, 1, 1, 40])
+""""""
+
+""""""
+This class represents a Global Pooling 3D layer, which is used in deep learning models for spatial pooling operations.
+It inherits from the Layer class and provides methods for computing output shapes, calling the layer, and getting its configuration.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> gp = GlobalPooling3D(data_format='channels_last', keepdims=True)
+    >>> gp.compute_output_shape((10, 20, 30, 40))
+    TensorShape([10, 1, 1, 1, 40])","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+21,"class SeparableConv2D(SeparableConv):
+    
+
+    def __init__(self, filters, kernel_size, strides=(1, 1), padding='valid', data_format=None, dilation_rate=(1, 1), depth_multiplier=1, activation=None, use_bias=True, depthwise_initializer='glorot_uniform', pointwise_initializer='glorot_uniform', bias_initializer='zeros', depthwise_regularizer=None, pointwise_regularizer=None, bias_regularizer=None, activity_regularizer=None, depthwise_constraint=None, pointwise_constraint=None, bias_constraint=None, **kwargs):
+        super(SeparableConv2D, self).__init__(rank=2, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, depth_multiplier=depth_multiplier, activation=activations.get(activation), use_bias=use_bias, depthwise_initializer=initializers.get(depthwise_initializer), pointwise_initializer=initializers.get(pointwise_initializer), bias_initializer=initializers.get(bias_initializer), depthwise_regularizer=regulari
+...","SeparableConv2D is a class that extends SeparableConv, implementing a separable convolutional layer for 2D inputs.
+
+This layer applies depthwise separable convolutions to each spatial location separately, followed by pointwise convolution and activation.
+
+
+
+
+- A tensor of shape `(batch_size, height, width, filters)` representing the output of the convolution operation.
+
+
+- ValueError if invalid input shapes are provided.
+- TypeError if unsupported data types are used.
+
+
+```python
+# Create a SeparableConv2D instance with default parameters
+conv = SeparableConv2D(32, (3, 3))
+
+# Use the conv layer to process an input tensor
+input_tensor = tf.random.normal((1, 28, 28, 1))
+output = conv.call(input_tensor)
+```","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+22,"class Flask(App):
+    
+    default_config = ImmutableDict({'DEBUG': None, 'TESTING': False, 'PROPAGATE_EXCEPTIONS': None, 'SECRET_KEY': None, 'SECRET_KEY_FALLBACKS': None, 'PERMANENT_SESSION_LIFETIME': timedelta(days=31), 'USE_X_SENDFILE': False, 'TRUSTED_HOSTS': None, 'SERVER_NAME': None, 'APPLICATION_ROOT': '/', 'SESSION_COOKIE_NAME': 'session', 'SESSION_COOKIE_DOMAIN': None, 'SESSION_COOKIE_PATH': None, 'SESSION_COOKIE_HTTPONLY': True, 'SESSION_COOKIE_SECURE': False, 'SESSION_COOKIE_PARTITIONED': False, 'SESSION_COOKIE_SAMESITE': None, 'SESSION_REFRESH_EACH_REQUEST': True, 'MAX_CONTENT_LENGTH': None, 'MAX_FORM_MEMORY_SIZE': 500000, 'MAX_FORM_PARTS': 1000, 'SEND_FILE_MAX_AGE_DEFAULT': None, 'TRAP_BAD_REQUEST_ERRORS': None, 'TRAP_HTTP_EXCEPTIONS': False, 'EXPLAIN_TEMPLATE_LOADING': False, 'PREFERRED_URL_SCHEME': 'http', 'TEMPLATES_AUTO_RELOAD': None, 'MAX_COOKIE_SIZE': 4093, 'PROVIDE_AUTOMATIC_OPTIONS': True})
+    request_class: type[Request] = Request
+    response_class: type[Respons
+...","This is a Flask application class that handles various aspects of web development.
+It provides methods for creating routes, handling requests and responses,
+managing sessions, and more.
+
+Attributes:
+        of functions that will be called before each request in the corresponding scope.
+        of functions that will be called after each request in the corresponding scope.
+        of functions that will be called when a request is torn down in the corresponding scope.
+        of functions that will handle URL build errors in the corresponding scope.
+
+Methods:
+
+Other attributes and methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""
+
+""""""
+This class provides a way to create and configure routes for a Flask application.
+
+Attributes:
+
+Methods:
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+23,"class OPTICS(ClusterMixin, BaseEstimator):
+    
+    _parameter_constraints: dict = {'min_samples': [Interval(Integral, 2, None, closed='left'), Interval(RealNotInt, 0, 1, closed='both')], 'max_eps': [Interval(Real, 0, None, closed='both')], 'metric': [StrOptions(set(_VALID_METRICS) | {'precomputed'}), callable], 'p': [Interval(Real, 1, None, closed='left')], 'metric_params': [dict, None], 'cluster_method': [StrOptions({'dbscan', 'xi'})], 'eps': [Interval(Real, 0, None, closed='both'), None], 'xi': [Interval(Real, 0, 1, closed='both')], 'predecessor_correction': ['boolean'], 'min_cluster_size': [Interval(Integral, 2, None, closed='left'), Interval(RealNotInt, 0, 1, closed='right'), None], 'algorithm': [StrOptions({'auto', 'brute', 'ball_tree', 'kd_tree'})], 'leaf_size': [Interval(Integral, 1, None, closed='left')], 'memory': [str, HasMethods('cache'), None], 'n_jobs': [Integral, None]}
+
+    def __init__(self, *, min_samples=5, max_eps=np.inf, metric='minkowski', p=2, metric_params=None,
+...","""""""
+OPTICS (Order Points To Identify the Clustering Structure) is a density-based spatial clustering of applications with noise (DBSCAN) variant.
+
+Summary:
+
+Extended Description:
+
+OPTICS is particularly useful when dealing with datasets that have varying densities or when the number of clusters is unknown. The algorithm assigns a core-distance to each point, indicating its proximity to a core. Points with similar core-distances are grouped into clusters.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+
+```python
+
+# Create an instance of the OPTICS class
+optics = OPTICS(min_samples=5, max_eps=np.inf)
+
+# Fit the estimator to a sample dataset
+X = [[1, 2], [3, 4]]
+y = None  # No labels required for clustering
+optics.fit(X, y=y)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+24,"class MultiLabelBinarizer(TransformerMixin, BaseEstimator, auto_wrap_output_keys=None):
+    
+    _parameter_constraints: dict = {'classes': ['array-like', None], 'sparse_output': ['boolean']}
+
+    def __init__(self, *, classes=None, sparse_output=False):
+        self.classes = classes
+        self.sparse_output = sparse_output
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, y):
+        
+        self._cached_dict = None
+        if self.classes is None:
+            classes = sorted(set(itertools.chain.from_iterable(y)))
+        elif len(set(self.classes)) < len(self.classes):
+            raise ValueError('The classes argument contains duplicate classes. Remove these duplicates before passing them to MultiLabelBinarizer.')
+        else:
+            classes = self.classes
+        dtype = int if all((isinstance(c, int) for c in classes)) else object
+        self.classes_ = np.empty(len(classes), dtype=dtype)
+        self.classes_[:] = classes
+        return self
+
+  
+...","MultiLabelBinarizer
+=====================
+
+Transforms multi-label data into binary label format.
+
+This class is a transformer that binarizes multi-label data by mapping labels to indices.
+It supports both dense and sparse input formats.
+
+Parameters
+----------
+
+    If not provided, the class will automatically determine the unique classes from the input data.
+
+Returns
+-------
+
+*   A binary label format where each row represents a sample and each column represents a class.
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+
+    # ...
+
+        """"""
+        Fits to the training set and returns a transformed version of it.
+
+        Parameters
+        ----------
+            The input data to transform.
+
+        Returns
+        -------
+            The transformed data.
+        """"""
+        # ...
+
+        """"""
+        Transforms the data.
+
+        Parameters
+        ----------
+            The input data to transform.
+
+        Returns
+        -------
+            The transformed data.
+        """"""
+        # ...
+
+        """"""
+        Inverse transforms the data.
+
+        Parameters
+        ----------
+            The input data to transform back.
+
+        Returns
+        -------
+            The original data.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+25,"class GroupTimeSeriesSplit:
+    
+
+    def __init__(self, test_size, train_size=None, n_splits=None, gap_size=0, shift_size=1, window_type='rolling'):
+        if train_size is None and n_splits is None:
+            raise ValueError('Either train_size or n_splits should be defined')
+        if window_type not in ['rolling', 'expanding']:
+            raise ValueError('Window type can be either ""rolling"" or ""expanding""')
+        if train_size is not None and window_type == 'expanding':
+            raise ValueError('Train size can be specified only with rolling window')
+        self.test_size = test_size
+        self.train_size = train_size
+        self.n_splits = n_splits
+        self.gap_size = gap_size
+        self.shift_size = shift_size
+        self.window_type = window_type
+
+    def split(self, X, y=None, groups=None):
+        
+        test_size = self.test_size
+        gap = self.gap_size
+        shift_size = self.shift_size
+        X, y, groups = indexable(X, y, groups)
+        if g
+...","GroupTimeSeriesSplit
+=====================
+
+A class for generating time series splits based on group information.
+
+This class provides a way to split time series data into training and testing sets,
+taking into account the group structure of the data. It allows for flexible
+specification of train size, number of splits, gap size, and shift size.
+
+Parameters
+----------
+    The proportion or number of samples to use as test set.
+    The proportion or number of samples to use as training set. If not specified,
+    it will be calculated based on the number of splits and other parameters.
+    The number of splits to generate. If not specified, it will be calculated
+    based on the train size and other parameters.
+    The gap between training and testing sets in terms of group indices.
+    The shift applied to the training set after each split.
+    The type of window to use. Can be either 'rolling' or 'expanding'.
+
+Returns
+-------
+train_idx, test_idx
+    A tuple containing the indices for the training and testing sets.
+
+Raises
+------
+ValueError
+    If invalid parameters are specified.
+
+Examples
+--------
+>>> from group_time_series_split import GroupTimeSeriesSplit
+
+# Create a GroupTimeSeriesSplit instance with default parameters
+gts = GroupTimeSeriesSplit(test_size=0.2)
+
+# Split the data into training and testing sets
+train_idx, test_idx = gts.split(X, y)
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+26,"class Pooling1D(Layer):
+    
+
+    def __init__(self, pool_function, pool_size, strides, padding='valid', data_format='channels_last', name=None, **kwargs):
+        super(Pooling1D, self).__init__(name=name, **kwargs)
+        if data_format is None:
+            data_format = backend.image_data_format()
+        if strides is None:
+            strides = pool_size
+        self.pool_function = pool_function
+        self.pool_size = conv_utils.normalize_tuple(pool_size, 1, 'pool_size')
+        self.strides = conv_utils.normalize_tuple(strides, 1, 'strides')
+        self.padding = conv_utils.normalize_padding(padding)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.input_spec = InputSpec(ndim=3)
+
+    def call(self, inputs):
+        pad_axis = 2 if self.data_format == 'channels_last' else 3
+        inputs = array_ops.expand_dims(inputs, pad_axis)
+        outputs = self.pool_function(inputs, self.pool_size + (1,), strides=self.strides + (1,), padding=self.p
+...","Pooling1D Layer
+
+A 1D pooling layer.
+
+This layer performs a downsampling operation on the input data, reducing its spatial dimensions.
+It is commonly used in convolutional neural networks (CNNs) to reduce the number of parameters and
+improve the robustness of the model.
+
+Args:
+
+Returns:
+    The output of the pooling operation, with reduced spatial dimensions.
+
+Raises:
+
+Examples:
+    >>> from tensorflow.keras.layers import Pooling1D
+    >>> layer = Pooling1D(pool_function='max', pool_size=2, strides=2)
+    >>> outputs = layer(inputs)
+
+Note:
+    This layer inherits from the Layer class and is part of the Keras API.
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+27,"class Cropping1D(Layer):
+    
+
+    def __init__(self, cropping=(1, 1), **kwargs):
+        super(Cropping1D, self).__init__(**kwargs)
+        self.cropping = conv_utils.normalize_tuple(cropping, 2, 'cropping')
+        self.input_spec = InputSpec(ndim=3)
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if input_shape[1] is not None:
+            length = input_shape[1] - self.cropping[0] - self.cropping[1]
+        else:
+            length = None
+        return tensor_shape.TensorShape([input_shape[0], length, input_shape[2]])
+
+    def call(self, inputs):
+        if self.cropping[1] == 0:
+            return inputs[:, self.cropping[0]:, :]
+        else:
+            return inputs[:, self.cropping[0]:-self.cropping[1], :]
+
+    def get_config(self):
+        config = {'cropping': self.cropping}
+        base_config = super(Cropping1D, self).get_config()
+        return dict(list(base_config.items()) + list(config.items
+...","""""""
+Cropping1D Layer
+=====================
+
+This layer is used for 1D cropping operations on input tensors.
+
+Summary
+--------
+
+The Cropping1D layer crops the input tensor along a specified axis, removing a certain number of elements from both ends.
+
+Extended Description
+--------------------
+
+
+Args
+----
+
+
+Returns
+-------
+
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+
+# Create a Cropping1D layer with default cropping parameters
+cropping_layer = Cropping1D(cropping=(1, 1))
+
+# Input tensor with shape (10, 20, 3)
+input_tensor = np.random.rand(10, 20, 3)
+
+# Crop the input tensor using the Cropping1D layer
+output_tensor = cropping_layer.call(input_tensor)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+28,"class SeparableConv1D(SeparableConv):
+    
+
+    def __init__(self, filters, kernel_size, strides=1, padding='valid', data_format=None, dilation_rate=1, depth_multiplier=1, activation=None, use_bias=True, depthwise_initializer='glorot_uniform', pointwise_initializer='glorot_uniform', bias_initializer='zeros', depthwise_regularizer=None, pointwise_regularizer=None, bias_regularizer=None, activity_regularizer=None, depthwise_constraint=None, pointwise_constraint=None, bias_constraint=None, **kwargs):
+        super(SeparableConv1D, self).__init__(rank=1, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, depth_multiplier=depth_multiplier, activation=activations.get(activation), use_bias=use_bias, depthwise_initializer=initializers.get(depthwise_initializer), pointwise_initializer=initializers.get(pointwise_initializer), bias_initializer=initializers.get(bias_initializer), depthwise_regularizer=regularizers.get(d
+...","SeparableConv1D
+================
+
+A separable convolutional layer for 1-dimensional inputs.
+
+This layer splits a standard convolution into two separate layers:
+one for depthwise convolution (filtering each channel independently)
+and another for pointwise convolution (applying a filter to each position in the spatial dimensions).
+The output of these two layers is then concatenated along the channels axis.
+
+Parameters
+----------
+    Number of filters to use.
+    Size of the depthwise kernel.
+    Stride size for both depthwise and pointwise convolutions. Defaults to 1.
+    Padding type. Can be 'valid' or 'causal'. Defaults to 'valid'.
+    Data format of the input. Can be 'channels_last' or 'channels_first'. Defaults to None.
+    Dilation rate for both depthwise and pointwise convolutions. Defaults to 1.
+    Depth multiplier for the pointwise convolution. Defaults to 1.
+    Activation function to apply after the pointwise convolution. Defaults to None.
+    Whether to add a bias term to the output of the pointwise convolution. Defaults to True.
+
+Returns
+-------
+    Output of the separable convolutional layer.
+
+Raises
+-----
+ValueError
+    If invalid padding type is specified.
+
+Examples
+--------
+>>> from tensorflow.keras.layers import SeparableConv1D
+
+# Create a separable convolutional layer with 64 filters, kernel size 3, and stride 2.
+layer = SeparableConv1D(64, 3, strides=2)
+
+# Apply the layer to an input tensor.
+input_tensor = tf.ones((32, 100))
+output = layer.call(input_tensor)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+29,"class AveragePooling2D(Pooling2D):
+    
+
+    def __init__(self, pool_size=(2, 2), strides=None, padding='valid', data_format=None, **kwargs):
+        super(AveragePooling2D, self).__init__(nn.avg_pool, pool_size=pool_size, strides=strides, padding=padding, data_format=data_format, **kwargs)","Initializes an AveragePooling2D object.
+
+This class inherits from Pooling2D and is used for average pooling in neural networks.
+Average pooling reduces the spatial dimensions of feature maps while retaining important information.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> avg_pool = AveragePooling2D(pool_size=(3, 3), strides=(2, 2))
+    >>> avg_pool","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+30,"class DepthwiseConv2D(Conv2D):
+    
+
+    def __init__(self, kernel_size, strides=(1, 1), padding='valid', depth_multiplier=1, data_format=None, dilation_rate=(1, 1), activation=None, use_bias=True, depthwise_initializer='glorot_uniform', bias_initializer='zeros', depthwise_regularizer=None, bias_regularizer=None, activity_regularizer=None, depthwise_constraint=None, bias_constraint=None, **kwargs):
+        super(DepthwiseConv2D, self).__init__(filters=None, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, activation=activation, use_bias=use_bias, bias_regularizer=bias_regularizer, activity_regularizer=activity_regularizer, bias_constraint=bias_constraint, **kwargs)
+        self.depth_multiplier = depth_multiplier
+        self.depthwise_initializer = initializers.get(depthwise_initializer)
+        self.depthwise_regularizer = regularizers.get(depthwise_regularizer)
+        self.depthwise_constraint = constraints.get(depthwi
+...","DepthwiseConv2D is a variant of Conv2D that applies a depthwise convolution operation.
+It reduces the dimensionality of the input data by only considering each channel separately,
+allowing for more efficient processing.
+
+Args:
+        depthwise convolution window size.
+        of the depthwise convolution. Defaults to (1, 1).
+        indicating the padding mode for the depthwise convolution.
+        output.
+        to use for the depthwise convolution.
+
+Returns:
+    The output tensor after applying the depthwise convolution operation.
+
+Raises:
+
+Examples:
+    ```python
+
+x = Input(shape=(28, 28, 1))
+conv = DepthwiseConv2D(kernel_size=3, padding='same', data_format='channels_last')(x)
+```","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+31,"class LabelBinarizer(TransformerMixin, BaseEstimator, auto_wrap_output_keys=None):
+    
+    _parameter_constraints: dict = {'neg_label': [Integral], 'pos_label': [Integral], 'sparse_output': ['boolean']}
+
+    def __init__(self, *, neg_label=0, pos_label=1, sparse_output=False):
+        self.neg_label = neg_label
+        self.pos_label = pos_label
+        self.sparse_output = sparse_output
+
+    @_fit_context(prefer_skip_nested_validation=True)
+    def fit(self, y):
+        
+        if self.neg_label >= self.pos_label:
+            raise ValueError(f'neg_label={self.neg_label} must be strictly less than pos_label={self.pos_label}.')
+        if self.sparse_output and (self.pos_label == 0 or self.neg_label != 0):
+            raise ValueError(f'Sparse binarization is only supported with non zero pos_label and zero neg_label, got pos_label={self.pos_label} and neg_label={self.neg_label}')
+        self.y_type_ = type_of_target(y, input_name='y')
+        if 'multioutput' in self.y_type_:
+      
+...","LabelBinarizer
+================
+
+Transforms labels into binary format.
+
+This class is used for transforming labels into a binary format, where each label is represented as either 0 or 1.
+It supports both sparse and dense input formats and can handle multi-class and multi-label problems.
+
+Parameters
+----------
+    The value to represent the negative label. Must be strictly less than pos_label.
+    The value to represent the positive label. Must be greater than neg_label.
+    Whether to output in sparse format.
+
+Returns
+-------
+    Fitted estimator.
+
+Raises
+------
+ValueError
+    If neg_label is not strictly less than pos_label, or if sparse binarization is supported with non-zero pos_label and zero neg_label.
+
+Examples
+--------
+>>> from sklearn.preprocessing import LabelBinarizer
+>>> lb = LabelBinarizer()
+>>> y = [1, 2, 3]
+>>> lb.fit_transform(y)
+array([[0., 1., 0.],
+       [0., 0., 1.],
+       [0., 0., 0.]])","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+32,"class Conv1DTranspose(Conv1D):
+    
+
+    def __init__(self, filters, kernel_size, strides=1, padding='valid', output_padding=None, data_format=None, dilation_rate=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, **kwargs):
+        super(Conv1DTranspose, self).__init__(filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, activation=activations.get(activation), use_bias=use_bias, kernel_initializer=initializers.get(kernel_initializer), bias_initializer=initializers.get(bias_initializer), kernel_regularizer=regularizers.get(kernel_regularizer), bias_regularizer=regularizers.get(bias_regularizer), activity_regularizer=regularizers.get(activity_regularizer), kernel_constraint=constraints.get(kernel_constraint), bias_constraint=constraints.get(bias_
+...","Conv1DTranspose is a convolutional transpose layer (also called a deconvolutional layer) on 1D inputs.
+
+It performs a transposed convolution operation, reversing the forward pass through a convolutional layer.
+This layer creates new feature maps in the output space that are spatially larger than the input features,
+by sampling from the input at multiple locations and combining these samples using learned weights.
+
+Args:
+        specification or saved weights.
+        The convention follows the data_format argument.
+        stride value != 1 is equivalent to setting up multiple learning steps.
+            the input.
+            even padding.
+        Added to each dimention of `input_shape` for both spatial dims.
+        valid values are ""channels_first"" and ""channels_last"".
+        the dilation rates for dilated convolution.
+        matrix.
+        matrix.
+        this layer (i.e., the input to the next layer).
+
+Returns:
+
+Raises:
+        be defined but found to be None, or if a stride value does not meet the requirements.
+
+Examples:
+
+    ```python
+    model = Sequential()
+    model.add(Conv1DTranspose(32, (2, 2), strides=2))
+    # ... add more layers ...
+    ```","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+33,"class Pooling2D(Layer):
+    
+
+    def __init__(self, pool_function, pool_size, strides, padding='valid', data_format=None, name=None, **kwargs):
+        super(Pooling2D, self).__init__(name=name, **kwargs)
+        if data_format is None:
+            data_format = backend.image_data_format()
+        if strides is None:
+            strides = pool_size
+        self.pool_function = pool_function
+        self.pool_size = conv_utils.normalize_tuple(pool_size, 2, 'pool_size')
+        self.strides = conv_utils.normalize_tuple(strides, 2, 'strides')
+        self.padding = conv_utils.normalize_padding(padding)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.input_spec = InputSpec(ndim=4)
+
+    def call(self, inputs):
+        if self.data_format == 'channels_last':
+            pool_shape = (1,) + self.pool_size + (1,)
+            strides = (1,) + self.strides + (1,)
+        else:
+            pool_shape = (1, 1) + self.pool_size
+            strides = (1, 1) + s
+...","Pooling2D Layer
+================
+
+A 2D pooling layer.
+
+Summary
+--------
+
+This layer performs a spatial reduction of the input data, selecting the maximum or average value across each window.
+
+Extended Description
+--------------------
+
+The Pooling2D layer can be used to downsample the spatial dimensions of the input data. It supports both max and average pooling, as well as multiple types of padding and strides.
+
+Args
+----
+
+
+Returns
+-------
+
+The output of the pooling operation, with a shape that is reduced in size compared to the input.
+
+Raises
+------
+
+
+Examples
+--------
+
+```python
+
+pool_layer = Pooling2D(pool_function='max', pool_size=(2, 2), strides=None, padding='valid')
+```
+
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+34,"class Conv(Layer):
+    
+
+    def __init__(self, rank, filters, kernel_size, strides=1, padding='valid', data_format=None, dilation_rate=1, groups=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, trainable=True, name=None, conv_op=None, **kwargs):
+        super(Conv, self).__init__(trainable=trainable, name=name, activity_regularizer=regularizers.get(activity_regularizer), **kwargs)
+        self.rank = rank
+        if isinstance(filters, float):
+            filters = int(filters)
+        if filters is not None and filters < 0:
+            raise ValueError(f'Received a negative value for `filters`.Was expecting a positive value, got {filters}.')
+        self.filters = filters
+        self.groups = groups or 1
+        self.kernel_size = conv_utils.normalize_tuple(kernel_size, rank, 'kernel_size')
+        self.strides = co
+...","Convolutional Layer.
+
+A convolutional layer is a type of neural network layer that applies filters to input data in order to extract relevant features.
+It can perform tasks such as image classification, object detection, and feature extraction.
+
+Args:
+
+Returns:
+    None
+
+Raises:
+
+Examples:
+
+    >>> conv = Conv(2, 32, (3, 3), activation='relu')
+    >>> inputs = Input(shape=(224, 224, 3))
+    >>> outputs = conv(inputs)
+""""""
+
+""""""
+The `build` method is used to build the convolutional layer's weights and biases.
+
+Args:
+
+Returns:
+    None
+
+Raises:
+
+Examples:
+
+    >>> conv = Conv(2, 32, (3, 3), activation='relu')
+    >>> inputs = Input(shape=(224, 224, 3))
+    >>> conv.build(inputs.shape)
+""""""
+
+""""""
+The `call` method is used to apply the convolutional layer to input data.
+
+Args:
+
+Returns:
+    The output of the convolutional layer.
+
+Raises:
+
+Examples:
+
+    >>> conv = Conv(2, 32, (3, 3), activation='relu')
+    >>> inputs = Input(shape=(224, 224, 3))
+    >>> outputs = conv(inputs)
+""""""
+
+""""""
+The `compute_output_shape` method is used to compute the shape of the output data.
+
+Args:
+
+Returns:
+    The shape of the output data.
+""""""
+
+""""""
+The `_spatial_output_shape` method is used to compute the spatial output shape of the convolutional layer.
+
+Args:
+
+Returns:
+    The spatial output shape of the convolutional layer.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+35,"class _BaseEncoder(TransformerMixin, BaseEstimator):
+    
+
+    def _check_X(self, X, force_all_finite=True):
+        
+        if not (hasattr(X, 'iloc') and getattr(X, 'ndim', 0) == 2):
+            X_temp = check_array(X, dtype=None, force_all_finite=force_all_finite)
+            if not hasattr(X, 'dtype') and np.issubdtype(X_temp.dtype, np.str_):
+                X = check_array(X, dtype=object, force_all_finite=force_all_finite)
+            else:
+                X = X_temp
+            needs_validation = False
+        else:
+            needs_validation = force_all_finite
+        n_samples, n_features = X.shape
+        X_columns = []
+        for i in range(n_features):
+            Xi = _safe_indexing(X, indices=i, axis=1)
+            Xi = check_array(Xi, ensure_2d=False, dtype=None, force_all_finite=needs_validation)
+            X_columns.append(Xi)
+        return (X_columns, n_samples, n_features)
+
+    def _fit(self, X, handle_unknown='error', force_all_finite=True, return_counts=False
+...","BaseEncoder class.
+
+This class is a base encoder for encoding categorical variables.
+It supports both numerical and categorical data types.
+The encoder can be used to encode both training and testing data.
+
+Parameters
+----------
+    The input data. Can be either a 2D NumPy array or a Pandas DataFrame.
+
+Attributes
+----------
+    The categories for each feature.
+    The indices of infrequent categories for each feature.
+    The mappings to use when defaulting to infrequent categories.
+
+Methods
+-------
+fit(X, handle_unknown='error', force_all_finite=True, return_counts=False, return_and_ignore_missing_for_infrequent=False)
+    Fits the encoder to the input data.
+transform(X, handle_unknown='error', force_all_finite=True, warn_on_unknown=False, ignore_category_indices=None)
+    Transforms the input data using the learned mappings.
+
+See Also
+--------
+BaseEncoder
+
+Examples
+--------
+>>> from sklearn.preprocessing import BaseEncoder
+>>> encoder = BaseEncoder()
+>>> encoder.fit(X)
+>>> transformed_X = encoder.transform(X)
+""""""
+
+""""""
+_check_X method.
+
+This method checks the input data for correctness.
+It ensures that the input is a 2D NumPy array or a Pandas DataFrame,
+and that it has the correct shape and data type.
+
+Parameters
+----------
+    The input data. Can be either a 2D NumPy array or a Pandas DataFrame.
+    Whether to check for all finite values in the input data.
+
+Returns
+-------
+    A tuple containing the columns of the input data,
+    the number of samples, and the number of features.
+
+Raises
+------
+ValueError
+    If the input data is not a 2D NumPy array or a Pandas DataFrame.
+""""""
+
+""""""
+_fit method.
+
+This method fits the encoder to the input data.
+It learns the mappings for each feature based on the input data,
+and stores them in the categories_ attribute.
+
+Parameters
+----------
+    The input data. Can be either a 2D NumPy array or a Pandas DataFrame.
+    How to handle unknown categories during fit.
+    Whether to check for all finite values in the input data.
+    Whether to return the counts of each category.
+    Whether to ignore missing categories when defaulting to infrequent categories.
+
+Returns
+-------
+    A dictionary containing the learned mappings and other metadata.
+
+Raises
+------
+ValueError
+    If there are unknown categories in the input data during fit.
+""""""
+
+""""""
+_transform method.
+
+This method transforms the input data using the learned mappings.
+It replaces each category with its corresponding numerical value,
+and returns the transformed data.
+
+Parameters
+----------
+    The input data. Can be either a 2D NumPy array or a Pandas DataFrame.
+    How to handle unknown categories during transform.
+    Whether to check for all finite values in the input data.
+    Whether to warn when there are unknown categories in the input data.
+
+Returns
+-------
+    A tuple containing the transformed data and a mask indicating which categories were not found in the training data.
+
+Raises
+------
+ValueError
+    If there are unknown categories in the input data during transform.
+""""""
+
+""""""
+infrequent_categories_ property.
+
+This property returns the indices of infrequent categories for each feature.
+It is computed by identifying the categories that appear less than a certain frequency threshold,
+and storing their indices in the infrequent_indices_ attribute.
+
+Returns
+-------
+    The indices of infrequent categories for each feature.
+""""""
+
+""""""
+_check_infrequent_enabled method.
+
+This method checks whether the infrequent category mapping is enabled.
+It does this by checking the values of the max_categories and min_frequency attributes,
+and setting the _infrequent_enabled attribute accordingly.
+
+Returns
+-------
+None
+
+Raises
+------
+ValueError
+    If both max_categories and min_frequency are None.
+""""""
+
+""""""
+_identify_infrequent method.
+
+This method identifies the categories that appear less than a certain frequency threshold.
+It does this by comparing each category count to the minimum frequency threshold,
+and returning the indices of the categories that meet this condition.
+
+Parameters
+----------
+    The counts of each category.
+    The number of samples in the input data.
+    The index of the current feature.
+
+Returns
+-------
+    A boolean mask indicating which categories are infrequent.
+""""""
+
+""""""
+_fit_infrequent_category_mapping method.
+
+This method fits the infrequent category mapping to the input data.
+It learns the mappings for each feature based on the input data,
+and stores them in the default_to_infrequent_mappings_ attribute.
+
+Parameters
+----------
+    The number of samples in the input data.
+    The counts of each category.
+    A dictionary indicating which categories are missing for each feature.
+
+Returns
+-------
+None
+
+Raises
+------
+ValueError
+    If there are unknown categories in the input data during fit.
+""""""
+
+""""""
+_map_infrequent_categories method.
+
+This method maps infrequent categories to their corresponding numerical values.
+It does this by replacing each category with its index in the default_to_infrequent_mappings_ attribute,
+and returns the transformed data.
+
+Parameters
+----------
+    The input data. Can be either a 2D NumPy array or a Pandas DataFrame.
+    A mask indicating which categories were not found in the training data.
+    A dictionary indicating which categories to ignore for each feature.
+
+Returns
+-------
+    A tuple containing the transformed data and a mask indicating which categories were not found in the training data.
+
+Raises
+------
+ValueError
+    If there are unknown categories in the input data during transform.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+36,"class ZeroPadding3D(Layer):
+    
+
+    def __init__(self, padding=(1, 1, 1), data_format=None, **kwargs):
+        super(ZeroPadding3D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        if isinstance(padding, int):
+            self.padding = ((padding, padding), (padding, padding), (padding, padding))
+        elif hasattr(padding, '__len__'):
+            if len(padding) != 3:
+                raise ValueError('`padding` should have 3 elements. Found: ' + str(padding))
+            dim1_padding = conv_utils.normalize_tuple(padding[0], 2, '1st entry of padding')
+            dim2_padding = conv_utils.normalize_tuple(padding[1], 2, '2nd entry of padding')
+            dim3_padding = conv_utils.normalize_tuple(padding[2], 2, '3rd entry of padding')
+            self.padding = (dim1_padding, dim2_padding, dim3_padding)
+        else:
+            raise ValueError('`padding` should be either an int, a tuple of 3 ints (symmetric_dim1_pad, symmetr
+...","ZeroPadding3D Layer
+====================
+
+A layer that applies 3D spatial padding to inputs.
+
+This layer creates a tensor with shape (batch_size, channels, input_depth, input_row, input_col)
+where `input_depth`, `input_row` and `input_col` are padded according to the provided `padding`
+argument. The padding can be specified either as an integer or as a tuple of three integers
+or tuples.
+
+Args:
+             symmetric_dim3_pad) or a tuple of three tuples of two integers
+             ((left_dim1_pad, right_dim1_pad), (left_dim2_pad, right_dim2_pad),
+              (left_dim3_pad, right_dim3_pad)) or an integer.
+        If an integer is provided, it is used for all dimensions.
+        The ordering of the dimensions in the inputs. 
+        channels_first corresponds to (batch_size, channels, depth, row, col)
+        and channels_last corresponds to (batch_size, depth, row, col, channels).
+
+Returns:
+    A tensor with shape (batch_size, channels, input_depth + padding[0][0] + padding[0][1],
+                         input_row + padding[1][0] + padding[1][1],
+                         input_col + padding[2][0] + padding[2][1]) if data_format='channels_first'
+    or (batch_size, input_depth + padding[0][0] + padding[0][1], input_row + padding[1][0]
+        + padding[1][1], input_col + padding[2][0] + padding[2][1], channels)
+
+Raises:
+                 or tuples, or if it contains invalid values.
+
+Examples:
+    >>> from keras.layers import ZeroPadding3D
+    >>> input_shape = (5, 10, 20)
+    >>> layer = ZeroPadding3D(padding=(1, 2, 3), data_format='channels_first')
+    >>> output_shape = layer.compute_output_shape(input_shape)
+    >>> print(output_shape)
+    (None, 10, 24, 26, 23)
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+37,"class Cropping3D(Layer):
+    
+
+    def __init__(self, cropping=((1, 1), (1, 1), (1, 1)), data_format=None, **kwargs):
+        super(Cropping3D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        if isinstance(cropping, int):
+            self.cropping = ((cropping, cropping), (cropping, cropping), (cropping, cropping))
+        elif hasattr(cropping, '__len__'):
+            if len(cropping) != 3:
+                raise ValueError('`cropping` should have 3 elements. Found: ' + str(cropping))
+            dim1_cropping = conv_utils.normalize_tuple(cropping[0], 2, '1st entry of cropping')
+            dim2_cropping = conv_utils.normalize_tuple(cropping[1], 2, '2nd entry of cropping')
+            dim3_cropping = conv_utils.normalize_tuple(cropping[2], 2, '3rd entry of cropping')
+            self.cropping = (dim1_cropping, dim2_cropping, dim3_cropping)
+        else:
+            raise ValueError('`cropping` should be either an int, a tuple of
+...","Cropping3D Layer
+================
+
+A 3D cropping layer for tensors.
+
+This layer crops a 5D tensor along its spatial dimensions.
+It can crop either symmetrically or asymmetrically along each dimension.
+
+Parameters
+----------
+    The amount to crop off at the beginning and end of each axis.
+    If an integer is provided, it will be used for all axes.
+    If a tuple of 3 integers is provided, they represent the cropping size for each axis.
+    If a tuple of three tuples of two integers is provided, they represent the left and right crop sizes for each axis.
+    The format of input data.
+
+Returns
+-------
+    The cropped tensor.
+
+Raises
+------
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+38,"class GlobalMaxPooling3D(GlobalPooling3D):
+    
+
+    def call(self, inputs):
+        if self.data_format == 'channels_last':
+            return backend.max(inputs, axis=[1, 2, 3], keepdims=self.keepdims)
+        else:
+            return backend.max(inputs, axis=[2, 3, 4], keepdims=self.keepdims)","Performs global max pooling on inputs.
+
+This method applies a 3D max-pooling operation to the input data.
+If the data format is 'channels_last', it pools along axes [1, 2, 3].
+Otherwise, it pools along axes [2, 3, 4].
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from keras.layers import MaxPooling3D
+    >>> pooling_layer = MaxPooling3D(pool_size=(2, 2, 2), strides=None, padding='valid')
+    >>> inputs = np.random.rand(1, 10, 10, 10)
+    >>> result = pooling_layer.call(inputs)
+""""""
+
+""""""
+Performs global max pooling on inputs.
+
+This method applies a 3D max-pooling operation to the input data.
+If the data format is 'channels_last', it pools along axes [1, 2, 3].
+Otherwise, it pools along axes [2, 3, 4].
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from keras.layers import MaxPooling3D
+    >>> pooling_layer = MaxPooling3D(pool_size=(2, 2, 2), strides=None, padding='valid')
+    >>> inputs = np.random.rand(1, 10, 10, 10)
+    >>> result = pooling_layer.call(inputs)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+39,"class GlobalMaxPooling2D(GlobalPooling2D):
+    
+
+    def call(self, inputs):
+        if self.data_format == 'channels_last':
+            return backend.max(inputs, axis=[1, 2], keepdims=self.keepdims)
+        else:
+            return backend.max(inputs, axis=[2, 3], keepdims=self.keepdims)","Performs global max pooling on input data.
+
+Global Max Pooling is a technique used in Convolutional Neural Networks (CNNs) to reduce spatial dimensions of feature maps while retaining the most important features.
+
+Args:
+
+Returns:
+    The result of global max pooling operation with the specified keepdims flag.
+
+Raises:
+    None
+
+Examples:
+    >>> from tensorflow.keras.layers import GlobalMaxPooling2D
+    >>> layer = GlobalMaxPooling2D(data_format='channels_last')
+    >>> output = layer.call(inputs=np.array([...]))
+""""""
+
+""""""
+Performs global max pooling on input data.
+
+Global Max Pooling is a technique used in Convolutional Neural Networks (CNNs) to reduce spatial dimensions of feature maps while retaining the most important features.
+
+Args:
+
+Returns:
+    The result of global max pooling operation with the specified keepdims flag.
+
+Raises:
+    None
+
+Examples:
+    >>> from tensorflow.keras.layers import GlobalMaxPooling2D
+    >>> layer = GlobalMaxPooling2D(data_format='channels_last')
+    >>> output = layer.call(inputs=np.array([...]))","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+40,"class GlobalAveragePooling3D(GlobalPooling3D):
+    
+
+    def call(self, inputs):
+        if self.data_format == 'channels_last':
+            return backend.mean(inputs, axis=[1, 2, 3], keepdims=self.keepdims)
+        else:
+            return backend.mean(inputs, axis=[2, 3, 4], keepdims=self.keepdims)","This class implements a Global Average Pooling layer for 3D inputs.
+
+The `call` method computes the global average pooling of 3D input data.
+
+Args:
+
+Returns:
+    A tensor representing the result of the global average pooling operation.
+
+Raises:
+
+Examples:
+    >>> layer = GlobalAveragePooling3D()
+    >>> inputs = tf.ones((1, 10, 10, 10))  # 4D tensor with shape (1, 10, 10, 10)
+    >>> output = layer.call(inputs)  # Apply global average pooling","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+41,"class RMSprop(optimizer_v2.OptimizerV2):
+    
+    _HAS_AGGREGATE_GRAD = True
+
+    def __init__(self, learning_rate=0.001, rho=0.9, momentum=0.0, epsilon=1e-07, centered=False, name='RMSprop', **kwargs):
+        
+        super(RMSprop, self).__init__(name, **kwargs)
+        self._set_hyper('learning_rate', kwargs.get('lr', learning_rate))
+        self._set_hyper('decay', self._initial_decay)
+        self._set_hyper('rho', rho)
+        self._momentum = False
+        if isinstance(momentum, tensor.Tensor) or callable(momentum) or momentum > 0:
+            self._momentum = True
+        if isinstance(momentum, (int, float)) and (momentum < 0 or momentum > 1):
+            raise ValueError('`momentum` must be between [0, 1].')
+        self._set_hyper('momentum', momentum)
+        self.epsilon = epsilon or backend_config.epsilon()
+        self.centered = centered
+
+    def _create_slots(self, var_list):
+        for var in var_list:
+            self.add_slot(var, 'rms')
+        if self._momentum
+...","RMSprop Optimizer
+
+This class implements the RMSprop optimizer algorithm.
+
+Summary:
+-----------
+
+The RMSprop (Root Mean Square Propagation) algorithm is a popular optimization algorithm used for training deep learning models.
+It adapts the learning rate for each parameter based on the magnitude of the gradient, which helps in avoiding oscillations and
+stabilizing the convergence process.
+
+Args:
+
+      to a Tensor internally. Defaults to 0.0.
+
+Returns:
+
+    * A `tf.keras.optimizers.Optimizer` instance.
+
+Raises:
+
+
+Examples:
+---------
+
+```python
+# Create an RMSprop optimizer with default parameters
+optimizer = tf.keras.optimizers.RMSprop()
+
+# Create an RMSprop optimizer with customized parameters
+optimizer = tf.keras.optimizers.RMSprop(learning_rate=0.01, rho=0.95, momentum=0.9)
+```
+
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+42,"class Conv3D(Conv):
+    
+
+    def __init__(self, filters, kernel_size, strides=(1, 1, 1), padding='valid', data_format=None, dilation_rate=(1, 1, 1), groups=1, activation=None, use_bias=True, kernel_initializer='glorot_uniform', bias_initializer='zeros', kernel_regularizer=None, bias_regularizer=None, activity_regularizer=None, kernel_constraint=None, bias_constraint=None, **kwargs):
+        super(Conv3D, self).__init__(rank=3, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, data_format=data_format, dilation_rate=dilation_rate, groups=groups, activation=activations.get(activation), use_bias=use_bias, kernel_initializer=initializers.get(kernel_initializer), bias_initializer=initializers.get(bias_initializer), kernel_regularizer=regularizers.get(kernel_regularizer), bias_regularizer=regularizers.get(bias_regularizer), activity_regularizer=regularizers.get(activity_regularizer), kernel_constraint=constraints.get(kernel_constraint), bias_constraint=constraints.g
+...","A 3D convolutional layer (Conv3D) is a type of neural network layer used for image classification, object detection, and segmentation tasks.
+
+This class inherits from the Conv class and extends its functionality to handle 3D data. It can be used as a building block in deep learning models that require spatial hierarchies of features.
+
+Args:
+
+Returns:
+    A 3D convolutional layer instance with the specified parameters.
+
+Raises:
+
+Examples:
+    >>> conv3d = Conv3D(32, (3, 3, 3), strides=(2, 2, 2))
+    >>> conv3d.build((1, 28, 28, 1))  # Build a 3D convolutional layer with the specified parameters.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+43,"class Kmeans(_BaseModel, _Cluster, _IterativeModel):
+    
+
+    def __init__(self, k, max_iter=10, convergence_tolerance=1e-05, random_seed=None, print_progress=0):
+        _BaseModel.__init__(self)
+        _Cluster.__init__(self)
+        _IterativeModel.__init__(self)
+        self.k = k
+        self.max_iter = max_iter
+        self.convergence_tolerance = convergence_tolerance
+        self.random_seed = random_seed
+        self.print_progress = print_progress
+        self._is_fitted = False
+
+    def _fit(self, X, init_params=True):
+        
+        n_samples = X.shape[0]
+        if init_params:
+            self.iterations_ = 0
+            rgen = np.random.RandomState(self.random_seed)
+            idx = rgen.choice(n_samples, self.k, replace=False)
+            self.centroids_ = X[idx]
+        for _ in range(self.max_iter):
+            self.clusters_ = {i: [] for i in range(self.k)}
+            for sample_idx, cluster_idx in enumerate(self._get_cluster_idx(X=X, centroids=self.centroids_)
+...","K-means clustering algorithm implementation.
+
+This class provides an interface for K-means clustering, a popular unsupervised machine learning algorithm.
+It allows users to perform clustering on high-dimensional data by finding centroids that minimize
+the sum of squared distances between each point and its nearest centroid.
+
+Parameters:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.datasets import make_blobs
+    >>> from sklearn.preprocessing import StandardScaler
+    >>> X, y = make_blobs(n_samples=100, centers=2, n_features=2)
+    >>> scaler = StandardScaler()
+    >>> X_scaled = scaler.fit_transform(X)
+    >>> kmeans = Kmeans(k=2)
+    >>> kmeans._fit(X_scaled, init_params=True)
+""""""
+
+""""""
+Fit the model to data.
+
+Perform K-means clustering on the input data. If `init_params` is True, initialize centroids randomly.
+Otherwise, use existing centroids if available.
+
+Parameters:
+
+Returns:
+
+Raises:
+""""""
+
+""""""
+Get cluster indices for each sample.
+
+Compute the index of the closest centroid to each sample, and yield it along with the corresponding
+centroid's index.
+
+Parameters:
+
+Yields:
+""""""
+
+""""""
+Predict cluster labels for input data.
+
+Use the trained K-means model to predict cluster labels for each sample in the input data.
+
+Parameters:
+
+Returns:","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+44,"class ZeroPadding1D(Layer):
+    
+
+    def __init__(self, padding=1, **kwargs):
+        super(ZeroPadding1D, self).__init__(**kwargs)
+        self.padding = conv_utils.normalize_tuple(padding, 2, 'padding')
+        self.input_spec = InputSpec(ndim=3)
+
+    def compute_output_shape(self, input_shape):
+        if input_shape[1] is not None:
+            length = input_shape[1] + self.padding[0] + self.padding[1]
+        else:
+            length = None
+        return tensor_shape.TensorShape([input_shape[0], length, input_shape[2]])
+
+    def call(self, inputs):
+        return backend.temporal_padding(inputs, padding=self.padding)
+
+    def get_config(self):
+        config = {'padding': self.padding}
+        base_config = super(ZeroPadding1D, self).get_config()
+        return dict(list(base_config.items()) + list(config.items()))","ZeroPadding1D Layer
+======================
+
+A layer for zero-padding 1D inputs.
+
+This layer pads the input along the time axis (axis=1) with zeros.
+The padding is applied to both sides of the input, and its length can be specified.
+
+Args:
+        of each dimension. If int, adds a single value to all dimensions.
+        If tuple, adds multiple values to different dimensions according to `axis`.
+        For this layer, it is expected that `padding` contains two elements,
+        which represent the padding length for the left and right sides respectively.
+
+Returns:
+    A tensor with shape `(batch_size, new_length, channels)` where
+        `new_length = input_shape[1] + 2 * padding`.
+
+Raises:
+
+Examples:
+    >>> from keras.layers import ZeroPadding1D
+    >>> layer = ZeroPadding1D(padding=(1, 2))
+    >>> inputs = Input(shape=(10,))
+    >>> outputs = layer(inputs)
+    >>> print(outputs.shape)  # (batch_size, 14, channels)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+45,"class PrincipalComponentAnalysis(_BaseModel):
+    
+
+    def __init__(self, n_components=None, solver='svd', whitening=False):
+        valid_solver = {'eigen', 'svd'}
+        if solver not in valid_solver:
+            raise AttributeError(f'Must be in {valid_solver}. Found {solver}')
+        self.solver = solver
+        if n_components is not None and n_components < 1:
+            raise AttributeError('n_components must be > 1 or None')
+        self.n_components = n_components
+        self._is_fitted = False
+        self.whitening = whitening
+
+    def fit(self, X, y=None):
+        
+        self._is_fitted = False
+        self._check_arrays(X=X)
+        self._fit(X=X)
+        self._is_fitted = True
+        return self
+
+    def _fit(self, X):
+        n_samples = X.shape[0]
+        n_features = X.shape[1]
+        if self.n_components is None or self.n_components > n_features:
+            n_components = n_features
+        else:
+            n_components = self.n_components
+        if self.so
+...","Principal Component Analysis (PCA) Model
+
+This class implements Principal Component Analysis, a dimensionality reduction technique.
+It is designed to be used as part of a larger machine learning pipeline.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> pca = PCA(n_components=2)
+    >>> data = [[1, 2], [3, 4]]
+    >>> transformed_data = pca.fit_transform(data)
+
+""""""
+""""""
+Fit the model to the training data.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> pca = PCA(n_components=2)
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca.fit(data)
+
+""""""
+""""""
+Fit the model to the training data using a more efficient method.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> pca = PCA(n_components=2)
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca._fit(data)
+
+""""""
+""""""
+Transform the input data using the fitted model.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> pca = PCA(n_components=2)
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca.fit(data)
+    >>> transformed_data = pca.transform([[5, 6]])
+
+""""""
+""""""
+Compute the covariance matrix of the input data.
+
+Args:
+
+Returns:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca._covariance_matrix(data)
+
+""""""
+""""""
+Compute the decomposition of the input matrix using a specified method.
+
+Args:
+
+Returns:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca._decomposition(data[0], len(data))
+
+""""""
+""""""
+Compute the loadings of the principal components.
+
+Returns:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca._loadings()
+
+""""""
+""""""
+Compute the projection matrix using the eigenvalues and eigenvectors.
+
+Args:
+
+Returns:
+
+Examples:
+    >>> from sklearn.decomposition import PCA
+    >>> data = [[1, 2], [3, 4]]
+    >>> pca._projection_matrix([[1, 0], [0, 1]], [[1, 0], [0, 1]], False, len(data[0]))","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+46,"@keras_export(['keras.Loss', 'keras.losses.Loss'])
+class Loss(KerasSaveable):
+    
+
+    def __init__(self, name=None, reduction='sum_over_batch_size', dtype=None):
+        self.name = name or auto_name(self.__class__.__name__)
+        self.reduction = standardize_reduction(reduction)
+        self._dtype_policy = dtype_policies.get(dtype or backend.floatx())
+        self._dtype = self._dtype_policy.compute_dtype
+
+    @property
+    def dtype(self):
+        return self._dtype
+
+    def __call__(self, y_true, y_pred, sample_weight=None):
+        in_mask = backend.get_keras_mask(y_pred)
+        with ops.name_scope(self.name):
+            y_pred = tree.map_structure(lambda x: ops.convert_to_tensor(x, dtype=self.dtype), y_pred)
+            y_true = tree.map_structure(lambda x: ops.convert_to_tensor(x, dtype=self.dtype), y_true)
+            losses = self.call(y_true, y_pred)
+            out_mask = backend.get_keras_mask(losses)
+            if in_mask is not None and out_mask is not None:
+      
+...","This class represents a loss function in Keras, which is used to measure the difference between true and predicted outputs.
+It inherits from `KerasSaveable` and provides methods for computing losses.
+
+
+
+
+*   A tuple containing the computed loss value and a mask indicating which elements are valid.
+
+
+
+
+```python
+loss = Loss(name='my_loss', reduction='mean')
+loss_value, mask = loss(y_true, y_pred)
+```
+
+This code snippet creates a loss function with the name 'my_loss' and computes the mean of the losses.
+""""""
+
+""""""
+The `__init__` method initializes the loss function with the given parameters.
+
+
+
+
+*   None
+
+""""""
+""""""
+The `__call__` method computes the loss value and a mask indicating which elements are valid.
+
+
+
+
+*   A tuple containing the computed loss value and a mask indicating which elements are valid.
+
+""""""
+""""""
+The `call` method computes the loss value for the given true and predicted output values.
+
+
+
+
+*   A tensor containing the computed loss value.
+
+
+
+""""""
+""""""
+The `get_config` method returns a dictionary containing the configuration of the loss function.
+
+
+*   None
+
+
+*   A dictionary containing the configuration of the loss function.
+""""""
+
+""""""
+The `_obj_type` method returns the type of the object.
+
+
+*   None
+
+
+*   The type of the object.","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+47,"class GlobalPooling2D(Layer):
+    
+
+    def __init__(self, data_format=None, keepdims=False, **kwargs):
+        super(GlobalPooling2D, self).__init__(**kwargs)
+        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.input_spec = InputSpec(ndim=4)
+        self.keepdims = keepdims
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tensor_shape.TensorShape(input_shape).as_list()
+        if self.data_format == 'channels_last':
+            if self.keepdims:
+                return tensor_shape.TensorShape([input_shape[0], 1, 1, input_shape[3]])
+            else:
+                return tensor_shape.TensorShape([input_shape[0], input_shape[3]])
+        elif self.keepdims:
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1], 1, 1])
+        else:
+            return tensor_shape.TensorShape([input_shape[0], input_shape[1]])
+
+    def call(self, inputs):
+        raise NotImplementedError
+
+    def get_config(self):
+        co
+...","GlobalPooling2D Layer
+======================
+
+A global pooling layer that pools input data along spatial dimensions.
+
+This layer is designed to reduce the spatial dimensions of input data, allowing for more efficient processing and representation learning.
+It can be used in conjunction with other layers to build complex neural networks.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from tensorflow.keras.layers import GlobalPooling2D
+    >>> global_pool = GlobalPooling2D(data_format='channels_last', keepdims=True)
+    >>> input_shape = (32, 32, 3)  # Example input shape
+    >>> output_shape = global_pool.compute_output_shape(input_shape)
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+48,"class OneHotEncoder(_BaseEncoder):
+    
+    _parameter_constraints: dict = {'categories': [StrOptions({'auto'}), list], 'drop': [StrOptions({'first', 'if_binary'}), 'array-like', None], 'dtype': 'no_validation', 'handle_unknown': [StrOptions({'error', 'ignore', 'infrequent_if_exist'})], 'max_categories': [Interval(Integral, 1, None, closed='left'), None], 'min_frequency': [Interval(Integral, 1, None, closed='left'), Interval(RealNotInt, 0, 1, closed='neither'), None], 'sparse_output': ['boolean'], 'feature_name_combiner': [StrOptions({'concat'}), callable]}
+
+    def __init__(self, *, categories='auto', drop=None, sparse_output=True, dtype=np.float64, handle_unknown='error', min_frequency=None, max_categories=None, feature_name_combiner='concat'):
+        self.categories = categories
+        self.sparse_output = sparse_output
+        self.dtype = dtype
+        self.handle_unknown = handle_unknown
+        self.drop = drop
+        self.min_frequency = min_frequency
+        self.max_catego
+...","OneHotEncoder
+-------------
+
+One-hot encoding is a technique used to transform categorical data into numerical data.
+
+Summary:
+    The OneHotEncoder class implements one-hot encoding for categorical data.
+    It transforms categorical features into a numeric format that can be processed by machine learning algorithms.
+
+Parameters:
+
+Returns:
+    An instance of OneHotEncoder.
+
+Raises:
+
+Examples:
+    >>> from sklearn.preprocessing import OneHotEncoder
+    >>> encoder = OneHotEncoder()
+    >>> encoder.fit(X)
+    >>> X_encoded = encoder.transform(X)
+
+Methods:
+
+Notes:
+    The OneHotEncoder class uses a dictionary to store the categories for each feature.
+    It also keeps track of the indices to be dropped and the handle_unknown parameter.
+""""""
+
+""""""
+Parameters
+-----------
+
+.. csv-table:: 
+   
+   
+   ""categories"", ""list"", ""List of categories for each feature. Default is 'auto'.""
+   
+   ""drop"", ""array-like"", ""Array-like object containing the indices to be dropped. If None, all categories are kept.""
+   
+   ""sparse_output"", ""bool"", ""Whether to output sparse matrices or dense arrays. Default is True.""
+   
+   ""dtype"", ""type"", ""Data type of the encoded features. Default is np.float64.""
+   
+   ""handle_unknown"", ""str"", ""How to handle unknown categories during encoding. Options are 'error', 'ignore' and 'infrequent_if_exist'. Default is 'error'.""
+   
+   ""min_frequency"", ""int or float"", ""Minimum frequency for a category to be considered frequent. If None, all categories are kept.""
+   
+   ""max_categories"", ""int"", ""Maximum number of categories allowed per feature. If None, all categories are kept.""
+   
+   ""feature_name_combiner"", ""str or callable"", ""How to combine the original feature name with the encoded categories.""
+
+Returns
+-------
+
+.. csv-table:: 
+   
+   
+   ""An instance of OneHotEncoder."", ""The fitted encoder object.""
+
+Raises
+------
+
+.. csv-table:: 
+   
+   
+   ""ValueError"", ""If the input data contains unknown categories and handle_unknown is 'error'.""
+
+Examples
+--------
+
+>>> from sklearn.preprocessing import OneHotEncoder
+>>> encoder = OneHotEncoder()
+>>> encoder.fit(X)
+>>> X_encoded = encoder.transform(X)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+49,"class SequentialFeatureSelector(_BaseXComposition, MetaEstimatorMixin):
+    
+
+    def __init__(self, estimator, k_features=1, forward=True, floating=False, verbose=0, scoring=None, cv=5, n_jobs=1, pre_dispatch='2*n_jobs', clone_estimator=True, fixed_features=None, feature_groups=None):
+        self.estimator = estimator
+        self.k_features = k_features
+        self.forward = forward
+        self.floating = floating
+        self.pre_dispatch = pre_dispatch
+        if isinstance(cv, types.GeneratorType):
+            err_msg = 'Input cv is a generator object, which is not supported. Instead please input an iterable yielding train, test splits. This can usually be done by passing a cross-validation generator to the built-in list function. I.e. cv=list(<cv-generator>)'
+            raise TypeError(err_msg)
+        self.cv = cv
+        self.n_jobs = n_jobs
+        self.verbose = verbose
+        self.clone_estimator = clone_estimator
+        if self.clone_estimator:
+            self.est_ =
+...","Sequential Feature Selector
+==========================
+
+A sequential feature selector that selects features based on their importance scores.
+
+Parameters
+----------
+
+    *   If int, specifies the number of top features to select.
+    *   If tuple, specifies the range of features to select (min, max).
+    *   If 'best', selects the best feature(s) based on their importance scores.
+    *   If 'parsimonious', selects a subset of the best features that are sufficient for predicting the target variable.
+    *   If True, performs forward selection (adding one feature at a time).
+    *   If False, performs backward elimination (removing one feature at a time).
+    *   If True, allows the model to select features that are not in the original list of features.
+    *   Controls the verbosity of the output. Higher values print more information.
+
+Methods
+-------
+
+
+Attributes
+----------
+
+    *   Stores the subsets of features selected by the selector, along with their corresponding importance scores.
+    *   Stores the indices of the top features selected by the selector.
+    *   Stores the average score of the top features selected by the selector.
+
+Notes
+-----
+
+*   The selector uses a sequential feature selection algorithm, which is an iterative process that adds or removes one feature at a time based on its importance scores.
+*   The `fit_transform` method combines the `fit` and `transform` methods into a single step, making it more efficient for large datasets.
+*   The `get_metric_dict` method returns a dictionary containing the average score and standard deviation of each subset, which can be used to evaluate the performance of the selector.
+
+Examples
+--------
+
+```python
+
+# Load the iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a sequential feature selector with 5 features
+selector = SequentialFeatureSelector(k_features=5)
+
+# Fit the selector to the training data
+selector.fit(X_train, y_train)
+
+# Transform the input data by selecting the top features
+X_transformed = selector.transform(X_test)
+
+# Evaluate the performance of the selector using cross-validation
+
+scores = cross_val_score(LogisticRegression(), X_transformed, y_test)
+print(scores.mean())
+
+# Get a dictionary containing the average score and standard deviation of each subset
+metric_dict = selector.get_metric_dict()
+print(metric_dict)
+```
+
+""""""
+
+""""""
+This class provides an implementation of the sequential feature selection algorithm.
+The algorithm iteratively adds or removes one feature at a time based on its importance scores.
+
+Attributes
+----------
+
+    *   Stores the subsets of features selected by the selector, along with their corresponding importance scores.
+    *   Stores the indices of the top features selected by the selector.
+    *   Stores the average score of the top features selected by the selector.
+
+Methods
+-------
+
+
+Notes
+-----
+
+*   The `_check_fitted` method checks if the selector has been fitted to the data, and raises an error if it hasn't.
+*   The `_calc_confidence` method calculates the confidence interval for a given array using the `scipy.stats.t.ppf` function.
+*   The `fit_transform` method combines the `fit` and `transform` methods into a single step, making it more efficient for large datasets.
+
+Examples
+--------
+
+```python
+
+# Load the iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a sequential feature selector with 5 features
+selector = SequentialFeatureSelector(k_features=5)
+
+# Fit the selector to the training data
+selector.fit(X_train, y_train)
+
+# Transform the input data by selecting the top features
+X_transformed = selector.transform(X_test)
+
+# Evaluate the performance of the selector using cross-validation
+
+scores = cross_val_score(LogisticRegression(), X_transformed, y_test)
+print(scores.mean())
+
+# Get a dictionary containing the average score and standard deviation of each subset
+metric_dict = selector.get_metric_dict()
+print(metric_dict)
+```
+
+""""""","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,
+50,"class AgglomerationTransform(TransformerMixin):
+    
+    __metadata_request__inverse_transform = {'Xt': metadata_routing.UNUSED}
+
+    def transform(self, X):
+        
+        check_is_fitted(self)
+        X = self._validate_data(X, reset=False)
+        if self.pooling_func == np.mean and (not issparse(X)):
+            size = np.bincount(self.labels_)
+            n_samples = X.shape[0]
+            nX = np.array([np.bincount(self.labels_, X[i, :]) / size for i in range(n_samples)])
+        else:
+            nX = [self.pooling_func(X[:, self.labels_ == l], axis=1) for l in np.unique(self.labels_)]
+            nX = np.array(nX).T
+        return nX
+
+    def inverse_transform(self, X=None, *, Xt=None):
+        
+        X = _deprecate_Xt_in_inverse_transform(X, Xt)
+        check_is_fitted(self)
+        unil, inverse = np.unique(self.labels_, return_inverse=True)
+        return X[..., inverse]","AgglomerationTransform is a class that performs dimensionality reduction on labeled data by aggregating features based on their labels.
+
+The transform method aggregates features for each unique label, applying a specified pooling function to compute the aggregated feature values. If the input data is not sparse and the pooling function is np.mean, it uses bincount to efficiently aggregate features.
+
+The inverse_transform method maps the aggregated feature values back to the original feature space using the provided labels.
+
+Args:
+
+Returns:
+
+Raises:
+
+Examples:
+    >>> from sklearn.base import TransformerMixin
+    >>> from sklearn.utils.validation import check_is_fitted
+    >>> from sklearn.preprocessing import LabelEncoder
+
+    # Create a sample dataset
+    X = np.array([[1, 2], [3, 4]])
+
+    # Fit and transform the data using AgglomerationTransform
+    agg_transform = AgglomerationTransform()
+    agg_transform.fit(X)
+    transformed_data = agg_transform.transform(X)
+
+    # Inverse transform the aggregated feature values back to the original feature space
+    inverse_transformed_data = agg_transform.inverse_transform(transformed_data)","Python Docstrings
+Last Updated :
+02 Aug, 2024
+Comments
+Improve
+Suggest changes
+Like Article
+Like
+Report
+When it comes to writing clean, well-documented code, Python developers have a secret weapon at their disposal – docstrings. Docstrings, short for documentation strings, are vital in conveying the purpose and functionality of
+Python
+functions, modules, and classes.
+What are the docstrings in Python?
+Python
+documentation strings (or docstrings) provide a convenient way of associating documentat...",,,

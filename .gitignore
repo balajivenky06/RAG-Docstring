@@ -48,6 +48,3 @@ Papers/
 check_data.py
 corpus_composition_table.md
 docs/.DS_Store
-results/
-evaluation/
-retrieval_evidence_audit.csv
