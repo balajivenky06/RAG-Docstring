@@ -18,7 +18,7 @@
     },
     "model_config": {
       "embedding_model": "all-MiniLM-L6-v2",
-      "generator_model": "deepseek-coder:6.7b",
+      "generator_model": "phi3:latest",
       "helper_model": "deepseek-r1:1.5b",
       "temperature": 0.5,
       "max_tokens": 2048,
