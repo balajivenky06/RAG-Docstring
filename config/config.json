@@ -148,7 +148,7 @@
     "https://www.tutorialspoint.com/python/python_docstrings.htm"
   ],
   "index_names": {
-    "simple": "simple-rag-docstring",
+    "simple": "rag-docstring",
     "code_aware": "code-aware-rag-docstring",
     "corrective": "corrective-rag-docstring",
     "fusion": "fusion-rag-docstring",
