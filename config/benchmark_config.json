@@ -33,8 +33,18 @@
       "chunk_overlap": 200
     },
     "evaluation_config": {
-      "rouge_weights": [0.25, 0.25, 0.25, 0.25],
-      "bleu_weights": [0.25, 0.25, 0.25, 0.25],
+      "rouge_weights": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "bleu_weights": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
       "bert_model": "bert-base-uncased",
       "bert_lang": "en",
       "pydocstyle_enabled": true,
