@@ -18,7 +18,7 @@
     },
     "model_config": {
       "embedding_model": "all-MiniLM-L6-v2",
-      "generator_model": "phi3:latest",
+      "generator_model": "qwen3:8b",
       "helper_model": "deepseek-r1:1.5b",
       "temperature": 0.5,
       "max_tokens": 2048,
