@@ -1,0 +1,2 @@
+Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
+CoTRAG,767.07,11.45,67,0.0,0.0,0.0,0.5,1.0
