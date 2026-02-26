@@ -43,6 +43,7 @@ class CoTRAG(SimpleRAG):
         try:
             response = self.ollama_client.chat(
                 model=self.model_config.generator_model,
+                messages=messages,
                 options={'temperature': self.model_config.temperature}
             )
             self.api_call_count += 1

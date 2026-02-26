@@ -188,50 +188,96 @@ class RAGEvaluator:
         return covered_exceptions / len(raised_exceptions) if raised_exceptions else 1.0
     
     
-    def calculate_faithfulness_score(self, generated_docstring: str, retrieved_context: str) -> float:
+    def _parse_faithfulness_score(self, text: str) -> float:
+        """Parse and normalize a faithfulness score from LLM response text.
+
+        Handles percentage-style scores (e.g. 'Score: 75' -> 0.75) and
+        clamps all values to the valid [0.0, 1.0] range.
+        """
+        match = re.search(r"Score:\s*(\d+(\.\d+)?)", text, re.IGNORECASE)
+        if match:
+            raw_score = float(match.group(1))
+            # Normalize percentage-style scores (e.g. "Score: 75" -> 0.75)
+            if raw_score > 1.0 and raw_score <= 100.0:
+                raw_score = raw_score / 100.0
+            return min(1.0, max(0.0, raw_score))
+        # Fallback: find any standalone decimal or 0/1 value
+        fallback = re.search(r"\b(0?\.\d+|1\.0|0\.0|0|1)\b", text)
+        if fallback:
+            return min(1.0, max(0.0, float(fallback.group(1))))
+        return 0.5
+
+    def calculate_faithfulness_score(self, generated_docstring: str, retrieved_context: str, code: str = "") -> float:
         """
         Calculate faithfulness using an LLM Judge.
         Scores 0.0 to 1.0 based on factual support using a detailed rubric.
+
+        When retrieved_context is available the judge evaluates the docstring
+        against that context.  When only source code is available (No RAG
+        strategies) the judge evaluates against the source code directly so
+        that the score is meaningful rather than a constant 0.5 default.
         """
-        if not retrieved_context or not generated_docstring:
-            return 0.5 # Neutral if no context or docstring
-            
+        if not generated_docstring:
+            return 0.5  # Cannot evaluate without a docstring
+
+        if not retrieved_context and not code:
+            return 0.5  # Cannot evaluate without any reference material
+
         try:
             import ollama
             from .config import config  # Import config to get helper model
-            
-            prompt = f"""You are a strict technical judge evaluating Python docstrings.
-            
-            Context from Knowledge Base:
-            {retrieved_context[:2000]}
-            
-            Generated Docstring:
-            {generated_docstring}
-            
-            Evaluation Rubric:
-            1. Hallucination Check: Does the docstring claim parameters/returns not present in the code or context?
-            2. Contradiction Check: Does it contradict the provided context logic?
-            3. Support Check: Is the description supported by the context or obvious code inference?
-            
-            Task:
-            Assign a Faithfulness Score from 0.0 to 1.0.
-            - 1.0: Fully supported by context/code, no hallucinations.
-            - 0.5: Partially supported, some generic descriptions.
-            - 0.0: Major hallucinations or contradictions.
-            
-            Return ONLY the numeric score in this format: Score: <number>
-            """
-            
-            # Use configured helper model
+
+            if retrieved_context:
+                # Standard path: evaluate against retrieved knowledge-base context
+                prompt = f"""You are a strict technical judge evaluating Python docstrings.
+
+Context from Knowledge Base:
+{retrieved_context[:2000]}
+
+Generated Docstring:
+{generated_docstring}
+
+Evaluation Rubric:
+1. Hallucination Check: Does the docstring claim parameters/returns not present in the code or context?
+2. Contradiction Check: Does it contradict the provided context logic?
+3. Support Check: Is the description supported by the context or obvious code inference?
+
+Task:
+Assign a Faithfulness Score from 0.0 to 1.0.
+- 1.0: Fully supported by context/code, no hallucinations.
+- 0.5: Partially supported, some generic descriptions.
+- 0.0: Major hallucinations or contradictions.
+
+Return ONLY the numeric score in this format: Score: <number>
+"""
+            else:
+                # No-RAG path: evaluate against source code only
+                prompt = f"""You are a strict technical judge evaluating Python docstrings.
+
+Source Code:
+{code[:2000]}
+
+Generated Docstring:
+{generated_docstring}
+
+Evaluation Rubric:
+1. Accuracy: Does the docstring accurately describe what the code does?
+2. Hallucination Check: Does the docstring mention parameters, return values, or exceptions not present in the code?
+3. Completeness: Are all significant parameters, return values, and raised exceptions documented?
+
+Task:
+Assign a Faithfulness Score from 0.0 to 1.0.
+- 1.0: Fully accurate, no hallucinations, all key elements documented.
+- 0.5: Partially accurate, some generic or missing descriptions.
+- 0.0: Inaccurate, contains hallucinations, or contradicts the code.
+
+Return ONLY the numeric score in this format: Score: <number>
+"""
+
             response = ollama.generate(model=config.model.helper_model, prompt=prompt)
             text = response.get('response', '')
-            
-            match = re.search(r"Score:\s*(\d+(\.\d+)?)", text)
-            if match:
-                return float(match.group(1))
-            else:
-                return 0.5
-                
+            return self._parse_faithfulness_score(text)
+
         except Exception as e:
             print(f"LLM Faithfulness calculation error: {e}")
             return 0.0
@@ -335,14 +381,14 @@ class RAGEvaluator:
             'parameter_coverage': self.calculate_parameter_coverage(code, generated_docstring),
             'return_coverage': self.calculate_return_coverage(code, generated_docstring),
             'exception_coverage': self.calculate_exception_coverage(code, generated_docstring),
-            'faithfulness_score': self.calculate_faithfulness_score(generated_docstring, retrieved_context),
+            'faithfulness_score': self.calculate_faithfulness_score(generated_docstring, retrieved_context, code),
             'pydocstyle_adherence': self.check_pydocstyle_adherence(code, generated_docstring)
         }
     
     def evaluate_dataset(self, results_df: pd.DataFrame) -> pd.DataFrame:
         """Evaluate entire dataset and return results with metrics."""
         evaluation_results = []
-        
+
         for idx, row in results_df.iterrows():
             # Handle different column name formats
             code = row.get('code', row.get('Code_without_comments', ''))
@@ -350,21 +396,90 @@ class RAGEvaluator:
             generated_docstring = row.get('generated_docstring', row.get('Generated_Docstring', ''))
             retrieved_context = row.get('retrieved_context', row.get('Retrieved_Context', ''))
             rag_method = row.get('rag_method', row.get('RAG_Method', ''))
-            
+
             metrics = self.evaluate_single_sample(
                 code=code,
                 ground_truth=ground_truth,
                 generated_docstring=generated_docstring,
                 retrieved_context=retrieved_context
             )
-            
+
             evaluation_results.append({
                 'index': idx,
                 'rag_method': rag_method,
                 **metrics
             })
-        
-        return pd.DataFrame(evaluation_results)
+
+        eval_df = pd.DataFrame(evaluation_results)
+        try:
+            self.generate_validation_report(eval_df)
+        except Exception as e:
+            print(f"Validation report generation failed: {e}")
+        return eval_df
+
+    def generate_validation_report(self, eval_df: pd.DataFrame) -> None:
+        """Print a data-quality validation report for an evaluated results DataFrame.
+
+        Checks for:
+        1. Out-of-bounds faithfulness scores (outside [0, 1])
+        2. Uniform/constant metric distributions (std == 0, e.g. all faithfulness = 0.5)
+        3. Low BERTScore strategies (mean < 0.4)
+        4. High zero-score rates (>20% of samples with BERTScore = 0)
+        """
+        print("\n" + "=" * 60)
+        print("DATA QUALITY VALIDATION REPORT")
+        print("=" * 60)
+
+        issues_found = 0
+
+        # 1. Out-of-bounds faithfulness
+        if 'faithfulness_score' in eval_df.columns:
+            oob = eval_df[eval_df['faithfulness_score'] > 1.0]
+            if len(oob) > 0:
+                issues_found += 1
+                print(f"\n[CRITICAL] {len(oob)} faithfulness score(s) exceed 1.0 (out-of-bounds):")
+                for _, row in oob.iterrows():
+                    print(f"  rag_method={row.get('rag_method','?')}  "
+                          f"index={row.get('index','?')}  "
+                          f"faithfulness={row['faithfulness_score']:.4f}")
+
+        # 2. Uniform metric distributions per strategy
+        numeric_cols = ['rouge_1_f1', 'bleu_score', 'bert_score', 'faithfulness_score']
+        avail = [c for c in numeric_cols if c in eval_df.columns]
+        if 'rag_method' in eval_df.columns:
+            for method, grp in eval_df.groupby('rag_method'):
+                for col in avail:
+                    if grp[col].std() == 0.0 and len(grp) > 1:
+                        issues_found += 1
+                        print(f"\n[WARNING] {method} — '{col}' is constant "
+                              f"(all={grp[col].mean():.4f}, n={len(grp)}). "
+                              f"Possible evaluation bug.")
+
+        # 3. Low BERTScore
+        if 'bert_score' in eval_df.columns and 'rag_method' in eval_df.columns:
+            method_bert = eval_df.groupby('rag_method')['bert_score'].mean()
+            low_bert = method_bert[method_bert < 0.4]
+            for method, val in low_bert.items():
+                issues_found += 1
+                print(f"\n[WARNING] {method} — mean BERTScore={val:.4f} is very low (<0.4). "
+                      f"Possible generation failure.")
+
+        # 4. Zero BERTScore rate
+        if 'bert_score' in eval_df.columns and 'rag_method' in eval_df.columns:
+            for method, grp in eval_df.groupby('rag_method'):
+                zero_rate = (grp['bert_score'] == 0).mean()
+                if zero_rate > 0.20:
+                    issues_found += 1
+                    print(f"\n[CRITICAL] {method} — {zero_rate*100:.1f}% of samples "
+                          f"have BERTScore=0 ({int(zero_rate*len(grp))}/{len(grp)}). "
+                          f"Strategy likely broken.")
+
+        if issues_found == 0:
+            print("\n[OK] No data quality issues detected.")
+        else:
+            print(f"\n{'=' * 60}")
+            print(f"Total issues found: {issues_found}")
+        print("=" * 60 + "\n")
     
     def generate_summary_report(self, results_df: pd.DataFrame, output_file: str) -> None:
         """Generate a comprehensive summary report of evaluation results."""

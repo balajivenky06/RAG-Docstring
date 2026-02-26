@@ -398,7 +398,14 @@ class BaseRAG(ABC):
             cleaned_lines.append(line)
         
         final_text_to_clean = '\n'.join(cleaned_lines).strip()
-        
+
+        if not final_text_to_clean and docstring_text.strip():
+            self.logger.warning(
+                f"_clean_docstring_output returned empty string. "
+                f"Input length: {len(docstring_text)}, "
+                f"Input preview: {docstring_text[:200]!r}"
+            )
+
         return final_text_to_clean
     
     def _track_cost_metrics(self, start_time: float, retrieval_time: float, generation_time: float, 
@@ -488,7 +495,10 @@ class BaseRAG(ABC):
             # Generate docstring
             docstring, cost_metrics = self.generate_docstring(user_code)
             
-            generated_docstrings.append(self._clean_docstring_output(docstring))
+            cleaned_docstring = self._clean_docstring_output(docstring)
+            if not cleaned_docstring or not cleaned_docstring.strip():
+                self.logger.warning(f"Sample {i+1}/{len(df)}: Empty docstring after cleaning")
+            generated_docstrings.append(cleaned_docstring)
             # Ensure faithfulness receives a string, not a list structure
             latest_ctx = getattr(self, 'retrieved_contexts', [''])[-1] if hasattr(self, 'retrieved_contexts') else ''
             if isinstance(latest_ctx, list):
@@ -526,7 +536,27 @@ class BaseRAG(ABC):
             else:
                 elapsed_time = time.time() - sample_start_time
                 self.logger.info(f"✅ Sample {i+1} completed in {elapsed_time:.2f}s")
-        
+
+        # Aggregate empty-docstring rate report
+        empty_count = sum(1 for d in generated_docstrings if not d or not d.strip())
+        total = len(generated_docstrings)
+        if empty_count > 0:
+            empty_rate = empty_count / total
+            if empty_rate > 0.50:
+                self.logger.error(
+                    f"CRITICAL: {self.__class__.__name__} has {empty_rate*100:.1f}% "
+                    f"empty generation rate ({empty_count}/{total}). Results unreliable."
+                )
+            elif empty_rate > 0.20:
+                self.logger.warning(
+                    f"HIGH FAILURE RATE: {self.__class__.__name__} has {empty_rate*100:.1f}% "
+                    f"empty generation rate ({empty_count}/{total})."
+                )
+            else:
+                self.logger.info(
+                    f"Empty generation rate: {empty_rate*100:.1f}% ({empty_count}/{total})"
+                )
+
         # Create results DataFrame
         results_df = df.copy()
         results_df["Generated_Docstring"] = generated_docstrings
