@@ -13,7 +13,7 @@ from rag_system.plain_llm import PlainLLM
 from rag_system.evaluator import RAGEvaluator
 from rag_system.config import config
 
-def generate_human_eval_sheet(num_samples=50):
+def generate_human_eval_sheet(num_samples=50, results_dir="results"):
     print("Initializing Human Evaluation Sheet Generation...")
     
     # Load dataset
@@ -34,8 +34,8 @@ def generate_human_eval_sheet(num_samples=50):
     # otherwise we generate fresh ones. 
     # To save time and API costs, let's try to load existing evaluated results first!
     
-    results_dir = os.path.join(config.paths.results_dir, "comparison_SimpleRAG")
-    eval_file = os.path.join(results_dir, "SimpleRAG_evaluated.pkl")
+    target_dir = os.path.join(results_dir, "comparison_SimpleRAG")
+    eval_file = os.path.join(target_dir, "SimpleRAG_evaluated.pkl")
     
     eval_data = []
     
@@ -92,7 +92,7 @@ def generate_human_eval_sheet(num_samples=50):
     eval_df = pd.DataFrame(eval_data)
     
     # Save to CSV and Excel
-    output_dir = "results/human_eval"
+    output_dir = os.path.join(results_dir, "human_eval")
     os.makedirs(output_dir, exist_ok=True)
     
     csv_path = os.path.join(output_dir, "human_eval_sheet.csv")
@@ -110,4 +110,8 @@ def generate_human_eval_sheet(num_samples=50):
     print("4. Save the file. We will use it later to generate the Human vs Judge Correlation chart.")
 
 if __name__ == "__main__":
-    generate_human_eval_sheet()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dir", default="results", help="Directory containing evaluated results (e.g. results/llama3_2_latest)")
+    args = parser.parse_args()
+    generate_human_eval_sheet(results_dir=args.dir)

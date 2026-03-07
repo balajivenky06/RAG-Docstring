@@ -20,7 +20,6 @@ def run_ablations(limit=None, model=None):
     if model:
         config.model.generator_model = model
         config.model.helper_model = model
-        config.model.embedding_model = model
         safe_model = model.replace(":", "_").replace(".", "_")
         output_dir = os.path.join("results", safe_model, "ablations")
     else:

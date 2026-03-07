@@ -55,16 +55,16 @@ echo "------------------------------------------"
 echo "4. ANALYSIS & VISUALIZATION SCRIPTS"
 echo "------------------------------------------"
 # Test Retrieval Ablations (Fast Run)
-python scripts/run_retrieval_ablations.py --limit 1
+python scripts/run_retrieval_ablations.py --model $MODEL --limit 1
 
 # Test Code Complexity Analyzer
 python scripts/analyze_complexity_traces.py --dir results
 
 # Test Human Evaluation Generation
-python scripts/generate_human_eval_sheet.py 
+python scripts/generate_human_eval_sheet.py --dir results/llama3_2_latest
 
 # Test New KPIs Charting
-python scripts/generate_paper_charts.py
+python scripts/generate_paper_charts.py --dir results/llama3_2_latest
 
 echo ""
 echo "=========================================="

@@ -40,7 +40,7 @@ python scripts/run_retrieval_ablations.py --model llama3.2:latest --limit 25 2>&
 # 4. Generate Human Evaluation Sheet
 echo ""
 echo "--- 4. Generating Human Evaluation Subset ---"
-python scripts/generate_human_eval_sheet.py 2>&1 | tee "logs/human_eval.log"
+python scripts/generate_human_eval_sheet.py --dir results/llama3_2_latest 2>&1 | tee "logs/human_eval.log"
 
 # 5. Complexity Breakdown Data
 echo ""

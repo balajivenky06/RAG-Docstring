@@ -225,7 +225,6 @@ if __name__ == "__main__":
         logger.info(f"Overriding model config to use: {args.model}")
         config.model.generator_model = args.model
         config.model.helper_model = args.model
-        config.model.embedding_model = args.model
         
         # Isolate results into a model-specific directory
         safe_model_name = args.model.replace(":", "_").replace(".", "_")

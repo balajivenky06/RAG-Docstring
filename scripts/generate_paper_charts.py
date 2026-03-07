@@ -285,7 +285,8 @@ def plot_nlp_metrics_comparison(df):
     plt.savefig(f"{OUTPUT_DIR}/nlp_metrics_comparison.png", dpi=300, bbox_inches='tight')
     plt.close()
 
-def plot_human_vs_judge_correlation(human_eval_path="results/human_eval/human_eval_sheet.xlsx"):
+def plot_human_vs_judge_correlation(results_dir="results"):
+    human_eval_path = os.path.join(results_dir, "human_eval", "human_eval_sheet.xlsx")
     if not os.path.exists(human_eval_path):
         print(f"Human eval sheet not found at {human_eval_path}. Skipping correlation chart.")
         return
@@ -429,7 +430,7 @@ if __name__ == "__main__":
     plot_efficiency_heatmap(df)
     
     print("Generating Chart 6: Human vs Judge Correlation...")
-    plot_human_vs_judge_correlation()
+    plot_human_vs_judge_correlation(args.dir)
     
     print("Generating Chart 7: Complexity Breakdown...")
     plot_performance_by_complexity(args.dir)
