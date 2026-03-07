@@ -448,12 +448,61 @@ class PromptManager:
         return self.templates.GOT_AGGREGATION_PROMPT.format(analyses=analyses, code=code)
 
     def format_prompt(self, template: str, **kwargs) -> str:
-        """Format a prompt template with given parameters."""
+        """Format a prompt template with given parameters.
+        
+        Args:
+            template: The prompt template string.
+            **kwargs: Parameters to format the template with.
+            
+        Returns:
+            Formatted prompt string.
+        """
         try:
             return template.format(**kwargs)
         except KeyError as e:
-            print(f"Missing parameter for prompt formatting: {e}")
+            # Handle missing kwargs by returning the unformatted or partially formatted string
+            # This is a safe fallback
             return template
+            
+    def get_few_shot_prompt(self, code: str) -> str:
+        few_shot_template = """You are a strict technical judge evaluating Python docstrings.
+Below are a few examples of high-quality Python docstrings followed by the code you need to document.
+
+Example 1:
+Code:
+def calculate_area(radius):
+    return 3.14159 * radius * radius
+    
+Docstring:
+\"\"\"
+Calculates the area of a circle.
+
+Args:
+    radius (float): The radius of the circle.
+
+Returns:
+    float: The calculated area.
+\"\"\"
+
+Example 2:
+Code:
+class DatabaseConnection:
+    def connect(self, db_url):
+        self.url = db_url
+
+Docstring:
+\"\"\"
+Manages a database connection.
+
+Methods:
+    connect(db_url): Establishes a connection to the given database URL.
+\"\"\"
+
+Now, document the following Python code using the exact same style:
+Code:
+{code}
+"""
+        return self.format_prompt(few_shot_template, code=code)
 
 # Global prompt manager instance
 prompt_manager = PromptManager()
@@ -506,10 +555,17 @@ def get_tot_generation_prompt(task: str, code: str, context: str = "") -> str:
     return prompt_manager.get_tot_generation_prompt(task, code, context)
 
 def get_tot_evaluation_prompt(candidate: str) -> str:
+    """Get ToT evaluation prompt."""
     return prompt_manager.get_tot_evaluation_prompt(candidate)
 
 def get_got_axis_analysis_prompt(axis: str, code: str) -> str:
+    """Get GoT axis analysis prompt."""
     return prompt_manager.get_got_axis_analysis_prompt(axis, code)
 
 def get_got_aggregation_prompt(analyses: str, code: str) -> str:
+    """Get GoT aggregation prompt."""
     return prompt_manager.get_got_aggregation_prompt(analyses, code)
+
+def get_few_shot_prompt(code: str) -> str:
+    """Get few-shot prompt."""
+    return prompt_manager.get_few_shot_prompt(code)

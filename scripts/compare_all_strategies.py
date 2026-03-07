@@ -19,7 +19,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from rag_system import (
     SimpleRAG, CoTRAG, ToTRAG, GoTRAG,
     SelfCorrectionRAG, CoTSelfCorrectionRAG, ToTSelfCorrectionRAG, GoTSelfCorrectionRAG,
-    PlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM,
+    PlainLLM, FewShotPlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM,
     RAGEvaluator, config
 )
 
@@ -31,6 +31,7 @@ logger = logging.getLogger(__name__)
 STRATEGY_MAP = {
     # Plain LLM
     "PlainLLM": PlainLLM,
+    "FewShotPlainLLM": FewShotPlainLLM,
     "CoTPlainLLM": CoTPlainLLM,
     "ToTPlainLLM": ToTPlainLLM,
     "GoTPlainLLM": GoTPlainLLM,
@@ -196,9 +197,17 @@ def run_comparison(strategies_to_run: list, sample_size: int = None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--group", choices=["all", "simple", "self", "plain"], default="all")
-    parser.add_argument("--structure", choices=["base", "cot", "tot", "got", "all"], default="all")
+    parser.add_argument("--structure", choices=["base", "fewshot", "cot", "tot", "got", "all"], default="all")
     parser.add_argument("--samples", type=int, default=None, help="Number of samples (default: all)")
+    parser.add_argument("--model", type=str, default=None, help="LLM to use (e.g., qwen2.5:8b, llama3)")
     args = parser.parse_args()
+    
+    # Update global config for model if specified
+    if args.model:
+        logger.info(f"Overriding model config to use: {args.model}")
+        config.model.generator_model = args.model
+        config.model.helper_model = args.model
+        config.model.embedding_model = args.model
     
     # Filter strategies
     selected_strategies = []
@@ -206,7 +215,7 @@ if __name__ == "__main__":
     groups = {
         "simple": ["SimpleRAG", "CoTRAG", "ToTRAG", "GoTRAG"],
         "self": ["SelfCorrectionRAG", "CoTSelfCorrectionRAG", "ToTSelfCorrectionRAG", "GoTSelfCorrectionRAG"],
-        "plain": ["PlainLLM", "CoTPlainLLM", "ToTPlainLLM", "GoTPlainLLM"]
+        "plain": ["PlainLLM", "FewShotPlainLLM", "CoTPlainLLM", "ToTPlainLLM", "GoTPlainLLM"]
     }
     
     target_groups = groups.keys() if args.group == "all" else [args.group]
@@ -215,7 +224,9 @@ if __name__ == "__main__":
         for s in groups[g]:
             if args.structure == "all":
                 selected_strategies.append(s)
-            elif args.structure == "base" and "CoT" not in s and "ToT" not in s and "GoT" not in s:
+            elif args.structure == "base" and "CoT" not in s and "ToT" not in s and "GoT" not in s and "FewShot" not in s:
+                selected_strategies.append(s)
+            elif args.structure == "fewshot" and "FewShot" in s:
                 selected_strategies.append(s)
             elif args.structure == "cot" and "CoT" in s:
                 selected_strategies.append(s)

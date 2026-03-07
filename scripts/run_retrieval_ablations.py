@@ -16,9 +16,9 @@ warnings.filterwarnings('ignore')
 
 def run_ablations(limit=None):
     print("Initializing Retrieval Ablations...")
-    
     # Ablation settings
     k_values = [1, 3, 5, 10]
+    chunk_sizes = [256, 512, 1024]
     
     # Load dataset (subset for speed if limit set)
     data_path = 'data/class_files_df.pkl'
@@ -33,80 +33,73 @@ def run_ablations(limit=None):
 
     evaluator = RAGEvaluator()
     results = []
-    
-    for k in k_values:
-        print(f"\n--- Running Ablation: Top-k = {k} ---")
-        
-        # Configure RAG with specific k
-        # We need to modify the config instance or pass custom config
-        # SimpleRAG reads from config, so we temporarily patch it or pass custom_config if supported
-        # Looking at SimpleRAG.__init__, it takes custom_config but reads self.top_k from common_config
-        
-        # Patching config global object is easiest for this script
-        original_top_k = config.rag_methods.common_config['top_k']
-        config.rag_methods.common_config['top_k'] = k
-        
-        # Re-init RAG to pick up new config
-        rag = SimpleRAG(index_name=config.index_names['simple'])
-        # Ensure the instance top_k is set (double check)
-        rag.top_k = k 
-        
-        print(f"RAG initialized with top_k={rag.top_k}")
-        
-        k_results = []
-        
-        for i, row in df.iterrows():
-            user_code = row['Code_without_comments']
+    for chunk in chunk_sizes:
+        for k in k_values:
+            print(f"\n--- Running Ablation: Top-k = {k}, Chunk Size = {chunk} ---")
             
-            # Generate
-            start_time = time.time()
-            docstring, cost = rag.generate_docstring(user_code)
-            latency = time.time() - start_time
+            original_top_k = config.rag_methods.common_config['top_k']
+            original_chunk_size = config.retrieval.chunk_size
             
-            # Get Context
-            contexts = rag.get_retrieved_contexts()
-            context = contexts[-1] if contexts else ""
-            retrieved_text = str(context)
+            config.rag_methods.common_config['top_k'] = k
+            config.retrieval.chunk_size = chunk
             
-            # Evaluate Faithfulness
-            faithfulness = evaluator.calculate_faithfulness_score(docstring, retrieved_text)
+            rag = SimpleRAG(index_name=config.pinecone.namespace)
+            rag.top_k = k 
             
-            k_results.append({
-                "k": k,
-                "Sample_ID": i,
-                "Latency": latency,
-                "Faithfulness": faithfulness,
-                "Docstring_Length": len(docstring),
-                "Context_Length": len(retrieved_text)
-            })
+            print(f"RAG initialized with top_k={rag.top_k}, chunk_size={chunk}")
             
-            if (i+1) % 5 == 0:
-                print(f"  Processed {i+1}/{len(df)} samples...")
+            k_results = []
+            
+            for i, row in df.iterrows():
+                user_code = row['Code_without_comments']
                 
-        # Restore config
-        config.rag_methods.common_config['top_k'] = original_top_k
-        
-        # Calculate mean for this k
-        df_k = pd.DataFrame(k_results)
-        print(f"  Result k={k}: Faithfulness={df_k['Faithfulness'].mean():.3f}, Latency={df_k['Latency'].mean():.2f}s")
-        results.extend(k_results)
-        
-    # Save detailed results
+                start_time = time.time()
+                docstring, cost = rag.generate_docstring(user_code)
+                latency = time.time() - start_time
+                
+                contexts = rag.get_retrieved_contexts()
+                context = contexts[-1] if contexts else ""
+                retrieved_text = str(context)
+                
+                faithfulness = evaluator.calculate_faithfulness_score(docstring, retrieved_text, user_code)
+                token_overlap = evaluator.calculate_token_overlap_faithfulness(docstring, retrieved_text)
+                
+                k_results.append({
+                    "k": k,
+                    "chunk_size": chunk,
+                    "Sample_ID": i,
+                    "Latency": latency,
+                    "LLM_Faithfulness": faithfulness,
+                    "Token_Faithfulness": token_overlap,
+                    "Docstring_Length": len(docstring),
+                    "Context_Length": len(retrieved_text)
+                })
+                
+                if (i+1) % 5 == 0:
+                    print(f"  Processed {i+1}/{len(df)} samples...")
+                    
+            config.rag_methods.common_config['top_k'] = original_top_k
+            config.retrieval.chunk_size = original_chunk_size
+            
+            df_k = pd.DataFrame(k_results)
+            print(f"  Result k={k}, chunk={chunk}: Faithfulness={df_k['LLM_Faithfulness'].mean():.3f}, Latency={df_k['Latency'].mean():.2f}s")
+            results.extend(k_results)
+            
     final_df = pd.DataFrame(results)
     output_dir = "results/ablations"
     os.makedirs(output_dir, exist_ok=True)
     
-    final_df.to_csv(os.path.join(output_dir, "retrieval_ablations_k.csv"), index=False)
+    final_df.to_csv(os.path.join(output_dir, "retrieval_ablations_full.csv"), index=False)
     
-    # Summary
-    summary = final_df.groupby('k').agg({
-        'Faithfulness': ['mean', 'std'],
+    summary = final_df.groupby(['chunk_size', 'k']).agg({
+        'LLM_Faithfulness': ['mean', 'std'],
+        'Token_Faithfulness': ['mean', 'std'],
         'Latency': ['mean', 'std'],
         'Context_Length': 'mean'
     }).round(3)
     
     print("\n=== Ablation Summary ===")
-    print(summary.to_markdown())
+    print(summary.to_string())
     
     with open(os.path.join(output_dir, "ablation_summary.md"), "w") as f:
         f.write(summary.to_markdown())

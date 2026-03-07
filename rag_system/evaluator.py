@@ -281,6 +281,35 @@ Return ONLY the numeric score in this format: Score: <number>
         except Exception as e:
             print(f"LLM Faithfulness calculation error: {e}")
             return 0.0
+
+    def calculate_token_overlap_faithfulness(self, generated_docstring: str, retrieved_context: str) -> float:
+        """
+        Calculate faithfulness using token overlap between the generated docstring
+        and the retrieved context. (As described in the paper appendix).
+        Returns a score from 0.0 to 1.0.
+        """
+        if not generated_docstring or not retrieved_context:
+            return 0.0
+            
+        try:
+            # Simple tokenization by alphanumeric words
+            doc_tokens = set(re.findall(r'\b\w+\b', generated_docstring.lower()))
+            ctx_tokens = set(re.findall(r'\b\w+\b', retrieved_context.lower()))
+            
+            # Remove common stopwords to focus on factual overlap
+            stopwords = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
+            doc_tokens = doc_tokens - stopwords
+            ctx_tokens = ctx_tokens - stopwords
+            
+            if not doc_tokens:
+                return 0.0
+                
+            overlap = doc_tokens.intersection(ctx_tokens)
+            return len(overlap) / len(doc_tokens)
+            
+        except Exception as e:
+            print(f"Token overlap calculation error: {e}")
+            return 0.0
     
     def check_pydocstyle_adherence(self, code: str, docstring_content: str) -> float:
         """Check adherence to PEP 257 using pydocstyle.
@@ -382,6 +411,7 @@ Return ONLY the numeric score in this format: Score: <number>
             'return_coverage': self.calculate_return_coverage(code, generated_docstring),
             'exception_coverage': self.calculate_exception_coverage(code, generated_docstring),
             'faithfulness_score': self.calculate_faithfulness_score(generated_docstring, retrieved_context, code),
+            'token_overlap_score': self.calculate_token_overlap_faithfulness(generated_docstring, retrieved_context),
             'pydocstyle_adherence': self.check_pydocstyle_adherence(code, generated_docstring)
         }
     

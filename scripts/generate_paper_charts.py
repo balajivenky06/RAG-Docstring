@@ -9,9 +9,12 @@ import numpy as np
 plt.style.use('seaborn-v0_8-paper')
 sns.set_context("paper", font_scale=1.5)
 sns.set_style("whitegrid")
-
 OUTPUT_DIR = "results/visualization/paper_charts"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# Define global color palettes for consistency
+PALETTE = {"RAG": "#2ecc71", "Plain LLM": "#95a5a6", "Self-Correction": "#e67e22"}
+MARKERS = {"Base": "o", "CoT": "^", "ToT": "X", "GoT": "s"}
 
 def load_data():
     files = {
@@ -41,7 +44,12 @@ def load_data():
     return full_df
 
 def plot_faithfulness_vs_latency(df):
-    plt.figure(figsize=(14, 9)) # Larger size
+    plt.figure(figsize=(14, 9))
+    
+    # Check if 'faithfulness_score' and 'Avg Time/Sample (s)' exist
+    if 'faithfulness_score' not in df.columns or 'Avg Time/Sample (s)' not in df.columns:
+        print("Required columns for Pareto Frontier not found. Skipping.")
+        return
     
     # Define custom palette for Families to make them distinct
     # RAG = High contrast Green (Winner)
@@ -161,6 +169,77 @@ def plot_faithfulness_bar(df):
     plt.savefig(f"{OUTPUT_DIR}/comparison_faithfulness_bar.png", dpi=300, bbox_inches='tight')
     plt.close()
 
+def plot_human_vs_judge_correlation(human_eval_path="results/human_eval/human_eval_sheet.xlsx"):
+    if not os.path.exists(human_eval_path):
+        print(f"Human eval sheet not found at {human_eval_path}. Skipping correlation chart.")
+        return
+        
+    df = pd.read_excel(human_eval_path)
+    
+    # Check if human scores are filled out
+    if 'HUMAN_Faithfulness_Score (0.0 to 1.0)' not in df.columns or df['HUMAN_Faithfulness_Score (0.0 to 1.0)'].isnull().all():
+        print("Human scores are not filled out yet. Skipping correlation chart.")
+        return
+        
+    # Drop rows where human hasn't scored yet
+    df = df.dropna(subset=['HUMAN_Faithfulness_Score (0.0 to 1.0)'])
+    
+    plt.figure(figsize=(8, 8))
+    sns.regplot(
+        data=df, 
+        x='LLM_Faithfulness_Score', 
+        y='HUMAN_Faithfulness_Score (0.0 to 1.0)',
+        scatter_kws={'alpha': 0.6, 's': 100, 'color': '#3498db'},
+        line_kws={'color': '#e74c3c', 'linewidth': 3, 'label': 'Trend Line'}
+    )
+    
+    # Calculate correlation coefficient
+    corr = df['LLM_Faithfulness_Score'].corr(df['HUMAN_Faithfulness_Score (0.0 to 1.0)'])
+    plt.annotate(f"Pearson r = {corr:.2f}", xy=(0.05, 0.95), xycoords='axes fraction', 
+                 fontsize=14, weight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.9))
+    
+    plt.title("LLM Judge vs Human Expert Correlation", fontsize=18, weight='bold', pad=20)
+    plt.xlabel("LLM Judge Faithfulness Score", fontsize=14)
+    plt.ylabel("Human Expert Faithfulness Score", fontsize=14)
+    plt.xlim(-0.05, 1.05)
+    plt.ylim(-0.05, 1.05)
+    plt.grid(True, linestyle='--', alpha=0.5)
+    
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/human_judge_correlation.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
+def plot_performance_by_complexity(results_dir="results"):
+    # We look for the evaluated file of SimpleRAG that was tagged with complexity
+    file_path = os.path.join(results_dir, "comparison_SimpleRAG", "SimpleRAG_evaluated.pkl")
+    if not os.path.exists(file_path):
+        print("Complexity data not found. Skipping complexity chart.")
+        return
+        
+    df = pd.read_pickle(file_path)
+    if 'OOP_Complexity' not in df.columns:
+        print("OOP_Complexity column not found in SimpleRAG_evaluated.pkl. Did you run analyze_complexity_traces.py?")
+        return
+        
+    plt.figure(figsize=(10, 6))
+    
+    order = ["Simple", "Moderate", "Complex"]
+    sns.boxplot(
+        data=df,
+        x="OOP_Complexity",
+        y="faithfulness_score",
+        order=order,
+        palette="Blues"
+    )
+    
+    plt.title("SimpleRAG Faithfulness by Code Complexity", fontsize=18, weight='bold', pad=20)
+    plt.xlabel("OOP Class Complexity", fontsize=14)
+    plt.ylabel("Faithfulness Score", fontsize=14)
+    
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/complexity_stratified_performance.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
 def plot_efficiency_heatmap(df):
     # Prepare pivot table for heatmap
     # Efficiency = Faithfulness / log(Time) ? Or just pure Faithfulness
@@ -208,5 +287,11 @@ if __name__ == "__main__":
     
     print("Generating Chart 3: Efficiency Dual Axis...")
     plot_efficiency_heatmap(df)
+    
+    print("Generating Chart 4: Human vs Judge Correlation...")
+    plot_human_vs_judge_correlation()
+    
+    print("Generating Chart 5: Complexity Breakdown...")
+    plot_performance_by_complexity()
     
     print(f"Done! Check {OUTPUT_DIR}")

@@ -7,7 +7,7 @@ Also supports Reasoning variants (CoT, ToT, GoT).
 import time
 from typing import Tuple
 from .base_rag import BaseRAG, CostMetrics
-from .prompts import get_final_generation_prompt, get_system_prompt
+from .prompts import get_final_generation_prompt, get_system_prompt, get_few_shot_prompt
 from .reasoning_mixins import CoTMixin, ToTMixin, GoTMixin
 from .config import get_index_name, get_index_namespace
 
@@ -119,3 +119,27 @@ class GoTPlainLLM(GoTMixin, PlainLLM):
     def __init__(self, index_name: str = None, custom_config: dict = None, namespace: str = None):
         PlainLLM.__init__(self, index_name, custom_config, namespace)
         GoTMixin.__init__(self)
+
+class FewShotPlainLLM(PlainLLM):
+    """Plain LLM utilizing Few-Shot prompt templates instead of bare system prompts."""
+    def _generate_final_docstring(self, context: str, user_code: str, rewritten_req: str) -> str:
+        """Generate the docstring using the few-shot template."""
+        messages = [
+            {'role': 'system', 'content': "You are an expert technical writer and Python developer. Follow the structure of the provided examples exactly."},
+            {'role': 'user', 'content': get_few_shot_prompt(user_code)}
+        ]
+        
+        try:
+            self.api_call_count += 1
+            response = self.ollama_client.chat(
+                model=self.model_config.generator_model,
+                messages=messages,
+                options={'temperature': self.model_config.temperature}
+            )
+            
+            generated_docstring = response.get('message', {}).get('content', '').strip()
+            return self._clean_docstring_output(generated_docstring)
+            
+        except Exception as e:
+            self.logger.error(f"Error communicating with Ollama: {e}")
+            return "# ERROR: Docstring generation failed."
