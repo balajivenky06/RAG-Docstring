@@ -48,3 +48,5 @@ Papers/
 check_data.py
 corpus_composition_table.md
 docs/.DS_Store
+# Test Results
+results/
