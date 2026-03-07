@@ -61,7 +61,7 @@ def generate_human_eval_sheet(num_samples=50):
     else:
         print("No existing evaluated results found. Generating fresh docstrings... This may take a while.")
         sample_df = df.sample(n=num_samples, random_state=42).reset_index(drop=True)
-        rag = SimpleRAG(index_name=config.pinecone.namespace)
+        rag = SimpleRAG(index_name=config.index_names.get('simple', 'rag-docstring'))
         evaluator = RAGEvaluator()
         
         for i, row in sample_df.iterrows():

@@ -30,10 +30,8 @@ def load_data():
         path = f"results/comparison_{strategy}/{strategy}_evaluated.xlsx"
         if os.path.exists(path):
             try:
-                df = pd.read_excel(path)
-                # We need the 'faithfulness_score' column. 
-                # Assuming the rows are in the same Sample Order (1..67). 
                 # To be safe, we should assume they are sorted by index/id but let's just grab the column.
+                df = pd.read_excel(path)
                 data[strategy] = df['faithfulness_score'].values
                 print(f"Loaded {strategy}: {len(data[strategy])} samples.")
             except Exception as e:
@@ -82,7 +80,7 @@ def analyze_significance(df):
         # Cohen's d (Effect Size)
         d = diff / np.std(df[winner] - df[strategy])
         
-        sig = "**" if p < 0.001 else ("*" if p < 0.05 else "ns")
+        sig = "***" if p < 0.001 else ("**" if p < 0.01 else ("*" if p < 0.05 else "ns"))
         
         row = {
             "Comparison": f"{winner} vs {strategy}",

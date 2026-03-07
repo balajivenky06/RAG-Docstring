@@ -30,6 +30,10 @@ def load_data():
             df['Family'] = family
             dfs.append(df)
             
+    if not dfs:
+        print("No strategy comparison reports found. Please run compare_all_strategies.py first.")
+        return pd.DataFrame()
+        
     full_df = pd.concat(dfs, ignore_index=True)
     
     # Normalize Method names for cleaner legend
@@ -176,25 +180,34 @@ def plot_human_vs_judge_correlation(human_eval_path="results/human_eval/human_ev
         
     df = pd.read_excel(human_eval_path)
     
-    # Check if human scores are filled out
-    if 'HUMAN_Faithfulness_Score (0.0 to 1.0)' not in df.columns or df['HUMAN_Faithfulness_Score (0.0 to 1.0)'].isnull().all():
+    # Support mapping the old categorical 'Faithfulness_Label' if the new column doesn't exist yet
+    target_col = 'HUMAN_Faithfulness_Score (0.0 to 1.0)'
+    if target_col not in df.columns:
+        if 'Faithfulness_Label' in df.columns:
+            print("Detected old categorical Faithfulness_Label in Human Eval Sheet. Converting 'Supported'/'Unsupported' to 1.0/0.0 for correlation...")
+            df[target_col] = df['Faithfulness_Label'].map({"Supported": 1.0, "Partially Supported": 0.5, "Unsupported": 0.0})
+        else:
+            print("Human scores are not filled out yet. Skipping correlation chart.")
+            return
+
+    if df[target_col].isnull().all():
         print("Human scores are not filled out yet. Skipping correlation chart.")
         return
         
     # Drop rows where human hasn't scored yet
-    df = df.dropna(subset=['HUMAN_Faithfulness_Score (0.0 to 1.0)'])
+    df = df.dropna(subset=[target_col])
     
     plt.figure(figsize=(8, 8))
     sns.regplot(
         data=df, 
         x='LLM_Faithfulness_Score', 
-        y='HUMAN_Faithfulness_Score (0.0 to 1.0)',
+        y=target_col,
         scatter_kws={'alpha': 0.6, 's': 100, 'color': '#3498db'},
         line_kws={'color': '#e74c3c', 'linewidth': 3, 'label': 'Trend Line'}
     )
     
     # Calculate correlation coefficient
-    corr = df['LLM_Faithfulness_Score'].corr(df['HUMAN_Faithfulness_Score (0.0 to 1.0)'])
+    corr = df['LLM_Faithfulness_Score'].corr(df[target_col])
     plt.annotate(f"Pearson r = {corr:.2f}", xy=(0.05, 0.95), xycoords='axes fraction', 
                  fontsize=14, weight='bold', bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.9))
     
