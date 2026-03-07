@@ -14,8 +14,18 @@ from rag_system.config import config
 
 warnings.filterwarnings('ignore')
 
-def run_ablations(limit=None):
+def run_ablations(limit=None, model=None):
     print("Initializing Retrieval Ablations...")
+    # Update config for model if provided
+    if model:
+        config.model.generator_model = model
+        config.model.helper_model = model
+        config.model.embedding_model = model
+        safe_model = model.replace(":", "_").replace(".", "_")
+        output_dir = os.path.join("results", safe_model, "ablations")
+    else:
+        output_dir = "results/ablations"
+
     # Ablation settings
     k_values = [1, 3, 5, 10]
     chunk_sizes = [256, 512, 1024]
@@ -86,7 +96,6 @@ def run_ablations(limit=None):
             results.extend(k_results)
             
     final_df = pd.DataFrame(results)
-    output_dir = "results/ablations"
     os.makedirs(output_dir, exist_ok=True)
     
     final_df.to_csv(os.path.join(output_dir, "retrieval_ablations_full.csv"), index=False)
@@ -107,6 +116,7 @@ def run_ablations(limit=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=None, help="Limit number of samples for quick test")
+    parser.add_argument("--model", type=str, default=None, help="LLM to use (e.g., qwen2.5:8b, llama3.2:latest)")
     args = parser.parse_args()
     
-    run_ablations(limit=args.limit)
+    run_ablations(limit=args.limit, model=args.model)

@@ -18,7 +18,7 @@ echo "=========================================="
 # 1. New Few-Shot Baseline Test
 echo ""
 echo "--- 1. Testing FewShotPlainLLM vs PlainLLM ---"
-python scripts/compare_all_strategies.py --group plain --structure fewshot --samples 250 2>&1 | tee "logs/fewshot_baseline.log"
+python scripts/compare_all_strategies.py --group plain --structure fewshot --model llama3.2:latest --samples 100 2>&1 | tee "logs/fewshot_baseline.log"
 
 # 2. Model Generalization (Qwen or DeepSeek)
 # User can comment/uncomment these depending on what they have pulled in Ollama
@@ -35,7 +35,7 @@ fi
 # 3. Retrieval Ablations
 echo ""
 echo "--- 3. Running Retrieval Ablations (k vs chunk size) ---"
-python scripts/run_retrieval_ablations.py --limit 100 2>&1 | tee "logs/retrieval_ablations.log"
+python scripts/run_retrieval_ablations.py --model llama3.2:latest --limit 25 2>&1 | tee "logs/retrieval_ablations.log"
 
 # 4. Generate Human Evaluation Sheet
 echo ""
@@ -50,7 +50,7 @@ python scripts/analyze_complexity_traces.py --dir results 2>&1 | tee "logs/compl
 # 6. Generate the New Beautiful KPI Charts
 echo ""
 echo "--- 6. Generating New KPI Charts ---"
-python scripts/generate_paper_charts.py 2>&1 | tee "logs/charting.log"
+python scripts/generate_paper_charts.py --dir results/llama3_2_latest 2>&1 | tee "logs/charting.log"
 
 echo ""
 echo "=========================================="

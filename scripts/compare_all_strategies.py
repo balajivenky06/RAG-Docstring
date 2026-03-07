@@ -226,6 +226,11 @@ if __name__ == "__main__":
         config.model.generator_model = args.model
         config.model.helper_model = args.model
         config.model.embedding_model = args.model
+        
+        # Isolate results into a model-specific directory
+        safe_model_name = args.model.replace(":", "_").replace(".", "_")
+        config.paths.results_dir = os.path.join(config.paths.results_dir, safe_model_name)
+        os.makedirs(config.paths.results_dir, exist_ok=True)
     
     # Filter strategies
     selected_strategies = []

@@ -9,18 +9,18 @@ import numpy as np
 plt.style.use('seaborn-v0_8-paper')
 sns.set_context("paper", font_scale=1.5)
 sns.set_style("whitegrid")
-OUTPUT_DIR = "results/visualization/paper_charts"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# OUTPUT_DIR will be set at runtime based on the target folder
+OUTPUT_DIR = ""
 
 # Define global color palettes for consistency
 PALETTE = {"RAG": "#2ecc71", "Plain LLM": "#95a5a6", "Self-Correction": "#e67e22"}
 MARKERS = {"Base": "o", "CoT": "^", "ToT": "X", "GoT": "s"}
 
-def load_data():
+def load_data(results_dir="results"):
     files = {
-        "Plain LLM": "results/comprehensive_plain_comparison_report.csv",
-        "RAG": "results/comprehensive_rag_comparison_report.csv",
-        "Self-Correction": "results/comprehensive_selfcorrectiverag_comparison_report.csv"
+        "Plain LLM": os.path.join(results_dir, "comprehensive_plain_comparison_report.csv"),
+        "RAG": os.path.join(results_dir, "comprehensive_rag_comparison_report.csv"),
+        "Self-Correction": os.path.join(results_dir, "comprehensive_selfcorrectiverag_comparison_report.csv")
     }
     
     dfs = []
@@ -399,10 +399,19 @@ def plot_efficiency_heatmap(df):
     plt.close()
 
 if __name__ == "__main__":
-    print("Loading data...")
-    df = load_data()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dir", default="results", help="Directory containing model results (e.g. results/llama3_latest)")
+    args = parser.parse_args()
+    
+    OUTPUT_DIR = os.path.join(args.dir, "visualization/paper_charts")
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    
+    print(f"Loading data from {args.dir}...")
+    df = load_data(args.dir)
     print(f"Data Loaded: {len(df)} strategies.")
-    print(df[['Method', 'Family', 'Reasoning Mode', 'faithfulness_score', 'Avg Time/Sample (s)']])
+    if len(df) > 0:
+        print(df[['Method', 'Family', 'Reasoning Mode', 'faithfulness_score', 'Avg Time/Sample (s)']])
     
     print("Generating Chart 1: Trade-off Scatter (Latency)...")
     plot_faithfulness_vs_latency(df)
@@ -423,6 +432,6 @@ if __name__ == "__main__":
     plot_human_vs_judge_correlation()
     
     print("Generating Chart 7: Complexity Breakdown...")
-    plot_performance_by_complexity()
+    plot_performance_by_complexity(args.dir)
     
     print(f"Done! Check {OUTPUT_DIR}")
