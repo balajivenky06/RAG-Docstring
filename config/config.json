@@ -1,8 +1,8 @@
 {
   "model": {
     "embedding_model": "all-MiniLM-L6-v2",
-    "generator_model": "phi3:3.8b",
-    "helper_model": "deepseek-r1:1.5b",
+    "generator_model": "llama3.2:latest",
+    "helper_model": "llama3.2:latest",
     "temperature": 0.5,
     "max_tokens": 2048,
     "top_p": 0.9

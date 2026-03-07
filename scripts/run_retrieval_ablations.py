@@ -43,7 +43,7 @@ def run_ablations(limit=None):
             config.rag_methods.common_config['top_k'] = k
             config.retrieval.chunk_size = chunk
             
-            rag = SimpleRAG(index_name=config.pinecone.namespace)
+            rag = SimpleRAG(index_name="rag-docstring", namespace=config.pinecone.namespace)
             rag.top_k = k 
             
             print(f"RAG initialized with top_k={rag.top_k}, chunk_size={chunk}")

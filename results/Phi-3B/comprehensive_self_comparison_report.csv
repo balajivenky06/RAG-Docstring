@@ -1,5 +1,0 @@
-Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
-SelfCorrectionRAG,2508.9,37.45,67,0.1835,0.0017,0.5596,0.5828,3.4
-CoTSelfCorrectionRAG,1713.88,25.58,67,0.0859,0.0001,0.418,0.6381,3.5
-ToTSelfCorrectionRAG,4877.64,72.8,67,0.0727,0.0002,0.3748,0.5716,3.7
-GoTSelfCorrectionRAG,2951.61,44.05,67,0.079,0.0,0.3834,0.6015,3.6

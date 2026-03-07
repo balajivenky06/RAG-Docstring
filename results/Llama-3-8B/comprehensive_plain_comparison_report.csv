@@ -1,5 +1,0 @@
-Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
-PlainLLM,500.23,7.47,67,0.1904,0.01,0.5952,0.5,1.0
-CoTPlainLLM,473.69,7.07,67,0.1914,0.0066,0.6017,0.5,1.0
-ToTPlainLLM,4991.79,74.5,67,0.2095,0.0123,0.5806,0.5,1.0
-GoTPlainLLM,1470.67,21.95,67,0.2115,0.0106,0.5806,0.5,1.0

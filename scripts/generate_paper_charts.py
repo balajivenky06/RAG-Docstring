@@ -142,6 +142,69 @@ def plot_faithfulness_vs_latency(df):
     plt.savefig(f"{OUTPUT_DIR}/tradeoff_faithfulness_latency_refined.png", dpi=300, bbox_inches='tight')
     plt.close()
 
+def plot_faithfulness_vs_api_calls(df):
+    plt.figure(figsize=(14, 9))
+    
+    if 'faithfulness_score' not in df.columns or 'Avg API Calls' not in df.columns:
+        print("Required columns for API calls Chart not found. Skipping.")
+        return
+    
+    palette = {"RAG": "#2ecc71", "Plain LLM": "#95a5a6", "Self-Correction": "#e67e22"}
+    markers = {"Base": "o", "CoT": "^", "ToT": "X", "GoT": "s"}
+    
+    ax = sns.scatterplot(
+        data=df,
+        x="Avg API Calls",
+        y="faithfulness_score",
+        hue="Family",
+        style="Reasoning Mode",
+        markers=markers,
+        palette=palette,
+        s=400,
+        alpha=0.9,
+        edgecolor="black",
+        linewidth=1.5
+    )
+    
+    ax.grid(True, which="both", ls="-", alpha=0.15)
+    
+    offset_map = {
+        "SimpleRAG": (0.2, 0.01),      
+        "CoTRAG": (0.2, -0.01),        
+        "ToTRAG": (0.2, 0.01),          
+        "GoTRAG": (0.2, 0.01),          
+        "PlainLLM": (-0.2, -0.015),    
+        "CoTPlainLLM": (-0.2, 0.015),  
+        "ToTPlainLLM": (0.2, 0.01),     
+        "GoTPlainLLM": (0.2, 0.01),     
+        "SelfCorrectionRAG": (0.2, 0.01),     
+        "CoTSelfCorrectionRAG": (0.2, -0.01), 
+        "ToTSelfCorrectionRAG": (0.2, 0.01),   
+        "GoTSelfCorrectionRAG": (0.2, 0.01),   
+    }
+
+    for i, row in df.iterrows():
+        label = row['Method']
+        x = row['Avg API Calls']
+        y = row['faithfulness_score']
+        
+        x_add, y_add = offset_map.get(label, (0.2, 0.01))
+        
+        if "SimpleRAG" in label:
+            label = "★ " + label
+            
+        plt.text(x + 0.1 + x_add, y + y_add, label, fontsize=10, weight='bold', alpha=0.9)
+
+    plt.title("Computational Cost: Faithfulness vs. API Calls", fontsize=20, weight='bold', pad=20)
+    plt.xlabel("Average Number of API Calls per Sample", fontsize=15)
+    plt.ylabel("Faithfulness Score (LLM-Judge)", fontsize=15)
+    
+    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0, title="Strategy Group", frameon=True, shadow=True, fontsize=12, title_fontsize=13)
+    
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/tradeoff_faithfulness_api_calls.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
 def plot_faithfulness_bar(df):
     plt.figure(figsize=(12, 6))
     
@@ -171,6 +234,55 @@ def plot_faithfulness_bar(df):
     
     plt.tight_layout()
     plt.savefig(f"{OUTPUT_DIR}/comparison_faithfulness_bar.png", dpi=300, bbox_inches='tight')
+    plt.close()
+
+def plot_nlp_metrics_comparison(df):
+    metrics = ['rouge_1_f1', 'bert_score', 'faithfulness_score']
+    available_metrics = [m for m in metrics if m in df.columns]
+    
+    if not available_metrics:
+        print("Required columns for NLP metrics comparison not found.")
+        return
+        
+    df_melted = df.melt(id_vars=['Method', 'Family'], value_vars=available_metrics, var_name='Metric', value_name='Score')
+    
+    metric_map = {
+        'rouge_1_f1': 'ROUGE-1 (F1)',
+        'bert_score': 'BERTScore',
+        'faithfulness_score': 'Faithfulness'
+    }
+    df_melted['Metric'] = df_melted['Metric'].map(metric_map)
+    
+    # Select baseline architectures to keep chart clean
+    base_methods = ['PlainLLM', 'SimpleRAG', 'SelfCorrectionRAG']
+    df_base = df_melted[df_melted['Method'].isin(base_methods)].copy()
+    
+    if df_base.empty:
+        return
+        
+    df_base['Method'] = pd.Categorical(df_base['Method'], categories=base_methods, ordered=True)
+    
+    plt.figure(figsize=(12, 6))
+    
+    g = sns.barplot(
+        data=df_base,
+        x="Method",
+        y="Score",
+        hue="Metric",
+        palette="mako"
+    )
+    
+    for container in g.containers:
+        g.bar_label(container, fmt='%.3f', padding=3)
+
+    plt.title("NLP Evaluation Metrics Across Baseline Architectures", fontsize=16, weight='bold', pad=20)
+    plt.ylabel("Score (0.0 - 1.0)", fontsize=12)
+    plt.xlabel("Architecture", fontsize=12)
+    plt.ylim(0, 1.0)
+    plt.legend(title="Metric", bbox_to_anchor=(1.01, 1), loc='upper left')
+    
+    plt.tight_layout()
+    plt.savefig(f"{OUTPUT_DIR}/nlp_metrics_comparison.png", dpi=300, bbox_inches='tight')
     plt.close()
 
 def plot_human_vs_judge_correlation(human_eval_path="results/human_eval/human_eval_sheet.xlsx"):
@@ -292,19 +404,25 @@ if __name__ == "__main__":
     print(f"Data Loaded: {len(df)} strategies.")
     print(df[['Method', 'Family', 'Reasoning Mode', 'faithfulness_score', 'Avg Time/Sample (s)']])
     
-    print("Generating Chart 1: Trade-off Scatter...")
+    print("Generating Chart 1: Trade-off Scatter (Latency)...")
     plot_faithfulness_vs_latency(df)
     
-    print("Generating Chart 2: Comparative Bar...")
+    print("Generating Chart 2: Trade-off Scatter (API Calls)...")
+    plot_faithfulness_vs_api_calls(df)
+    
+    print("Generating Chart 3: Comparative Bar (Faithfulness)...")
     plot_faithfulness_bar(df)
     
-    print("Generating Chart 3: Efficiency Dual Axis...")
+    print("Generating Chart 4: NLP Metrics Comparison...")
+    plot_nlp_metrics_comparison(df)
+    
+    print("Generating Chart 5: Efficiency Dual Axis...")
     plot_efficiency_heatmap(df)
     
-    print("Generating Chart 4: Human vs Judge Correlation...")
+    print("Generating Chart 6: Human vs Judge Correlation...")
     plot_human_vs_judge_correlation()
     
-    print("Generating Chart 5: Complexity Breakdown...")
+    print("Generating Chart 7: Complexity Breakdown...")
     plot_performance_by_complexity()
     
     print(f"Done! Check {OUTPUT_DIR}")

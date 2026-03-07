@@ -1,2 +1,0 @@
-Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
-SimpleRAG,1889.66,28.2,67,0.2088,0.0074,0.6118,0.6858,0.0

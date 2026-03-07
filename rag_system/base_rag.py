@@ -181,6 +181,10 @@ class BaseRAG(ABC):
     
     def _initialize_pinecone_index(self):
         """Initialize or connect to Pinecone index."""
+        if not self.semantic_enabled or self.pinecone_client is None:
+            self.logger.warning("Semantic search is disabled. Skipping Pinecone index initialization.")
+            return
+
         try:
             existing_indexes = [index_info["name"] for index_info in self.pinecone_client.list_indexes()]
             
@@ -215,6 +219,10 @@ class BaseRAG(ABC):
     
     def _load_data_into_pinecone(self):
         """Load knowledge base data into Pinecone index."""
+        if not self.semantic_enabled or self.pinecone_index is None:
+            self.logger.warning("Semantic search is disabled. Skipping data loading into Pinecone.")
+            return
+            
         index_stats = self.pinecone_index.describe_index_stats()
         
         if index_stats.total_vector_count == 0:

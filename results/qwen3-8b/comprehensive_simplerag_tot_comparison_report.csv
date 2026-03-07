@@ -1,2 +1,0 @@
-Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
-ToTRAG,12339.19,184.17,67,0.2158,0.0137,0.5989,0.6836,20.0

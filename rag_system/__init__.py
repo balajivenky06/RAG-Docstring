@@ -10,7 +10,7 @@ from .simple_rag import SimpleRAG
 from .self_rag import SelfCorrectionRAG
 SelfRAG = SelfCorrectionRAG
 from .advanced_rag import CoTRAG, ToTRAG, GoTRAG
-from .plain_llm import PlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM
+from .plain_llm import PlainLLM, FewShotPlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM
 from .evaluator import RAGEvaluator
 from .cost_analyzer import CostAnalyzer
 from .visualizer import RAGVisualizer
@@ -40,15 +40,12 @@ __all__ = [
     # Core RAG classes
     "BaseRAG",
     "SimpleRAG", 
-
-    "SelfCorrectionRAG",
-    "SelfRAG",
     "CostMetrics",
     
     # Evaluation and analysis
     "RAGEvaluator",
     "CostAnalyzer",
-    "RAGVisualizer",
+    "RAGVisualizer", 
     
     # Configuration classes
     "config",
@@ -64,13 +61,38 @@ __all__ = [
     "RAGMethodConfig",
     
     # Prompt management
+    "prompt_manager",
+    "PromptTemplates",
+    "PromptManager",
+
+    # RAG Methods
     "CoTRAG",
     "ToTRAG",
     "GoTRAG",
+    
+    # Advanced Combinations
+    "SelfCorrectionRAG",
+    "SelfRAG", # Alias for SelfCorrectionRAG
+    
+    # Plain LLMs
     "PlainLLM",
+    "FewShotPlainLLM", # Added FewShotPlainLLM
     "CoTPlainLLM",
     "ToTPlainLLM",
     "GoTPlainLLM",
+
+    # Prompt getters
+    "get_context_query",
+    "get_initial_generation_prompt",
+    "get_rewrite_prompt",
+    "get_critique_prompt",
+    "get_relevance_evaluation_prompt",
+    "get_web_search_query",
+    "get_final_generation_prompt",
+    "get_context_inclusion_prompt",
+    "get_system_prompt",
+    
+    # Specific prompts for advanced RAG methods (if needed, these are not in the convenience imports)
     "get_cot_prompt", 
     "get_tot_decomposition_prompt", 
     "get_tot_generation_prompt", 

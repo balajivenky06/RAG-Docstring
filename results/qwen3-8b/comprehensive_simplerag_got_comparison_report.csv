@@ -1,2 +1,0 @@
-Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,Avg API Calls
-GoTRAG,3827.44,57.13,67,0.1985,0.004,0.5852,0.7639,5.0
