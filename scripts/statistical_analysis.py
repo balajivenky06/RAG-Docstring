@@ -43,7 +43,10 @@ def load_data(results_dir="results"):
 
 def analyze_significance(df):
     metrics = df.columns.tolist()
-    winner = "SimpleRAG"
+    
+    # Dynamically identify the overall winner by highest mean score
+    winner = df.mean().idxmax()
+    print(f"Dynamically identified overall winner: {winner} (Mean: {df[winner].mean():.5f})")
     
     if winner not in df.columns:
         print(f"Critical: Winner {winner} not in data.")

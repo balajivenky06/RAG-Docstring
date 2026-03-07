@@ -229,7 +229,7 @@ def plot_faithfulness_bar(df):
     plt.title("Faithfulness Score by Strategy & Reasoning Mode", fontsize=16, weight='bold', pad=20)
     plt.ylabel("Faithfulness Score", fontsize=12)
     plt.xlabel("Architecture Family", fontsize=12)
-    plt.ylim(0.4, 0.8) # Zoom in on the relevant range
+    plt.ylim(0.3, 1.0) # Zoom in to show all potential values cleanly
     plt.legend(title="Reasoning Variant", bbox_to_anchor=(1.01, 1), loc='upper left')
     
     plt.tight_layout()
