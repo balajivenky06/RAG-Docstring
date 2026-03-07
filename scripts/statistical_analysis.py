@@ -4,7 +4,7 @@ import numpy as np
 from scipy import stats
 import os
 
-def load_data():
+def load_data(results_dir="results"):
     files = {
         "Plain LLM": "results/comprehensive_plain_comparison_report.csv",
         "RAG": "results/comprehensive_rag_comparison_report.csv",
@@ -26,8 +26,8 @@ def load_data():
     
     print("\n--- Loading Per-Sample Data ---")
     for strategy in strategies:
-        # Construct path: results/comparison_{Strategy}/{Strategy}_evaluated.xlsx
-        path = f"results/comparison_{strategy}/{strategy}_evaluated.xlsx"
+        # Construct path: results_dir/comparison_{strategy}/{strategy}_evaluated.xlsx
+        path = os.path.join(results_dir, f"comparison_{strategy}", f"{strategy}_evaluated.xlsx")
         if os.path.exists(path):
             try:
                 # To be safe, we should assume they are sorted by index/id but let's just grab the column.
@@ -107,6 +107,11 @@ def analyze_significance(df):
     print("-" * 60)
 
 if __name__ == "__main__":
-    df = load_data()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dir", default="results", help="Directory containing evaluated results (e.g. results/llama3_2_latest)")
+    args = parser.parse_args()
+    
+    df = load_data(args.dir)
     if not df.empty:
         analyze_significance(df)

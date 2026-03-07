@@ -53,7 +53,12 @@ echo "--- 6. Generating New KPI Charts ---"
 python scripts/generate_paper_charts.py --dir results/llama3_2_latest 2>&1 | tee "logs/charting.log"
 
 echo ""
+echo "--- 7. Running Statistical Significance Tests ---"
+python scripts/statistical_analysis.py --dir results/llama3_2_latest 2>&1 | tee "logs/statistical_analysis.log"
+
+echo ""
 echo "=========================================="
 echo "Revision Tests Complete! Check results/visualization/paper_charts for new plots!"
+echo "Statistical significance details printed to logs/statistical_analysis.log"
 echo "NOTE: If you haven't filled out the human_eval_sheet.xlsx yet, the correlation plot will be skipped."
 echo "=========================================="
