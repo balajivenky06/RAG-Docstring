@@ -51,7 +51,7 @@ STRATEGY_MAP = {
     "GoTSelfCorrectionRAG": GoTSelfCorrectionRAG,
 }
 
-def run_comparison(strategies_to_run: list, sample_size: int = None):
+def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size: int = None):
     """Run comparison for specified strategies."""
     
     # Load dataset
@@ -186,8 +186,26 @@ def run_comparison(strategies_to_run: list, sample_size: int = None):
     # Save Report
     if all_metrics:
         comparison_df = pd.DataFrame(all_metrics)
-        report_path = os.path.join(config.paths.results_dir, "comprehensive_rag_comparison_report.csv")
-        # Append to existing if exists? No, overwrite for clean run.
+        
+        # Determine file name
+        if group_name == "plain":
+            file_name = "comprehensive_plain_comparison_report.csv"
+        elif group_name == "self":
+            file_name = "comprehensive_selfcorrectiverag_comparison_report.csv"
+        else:
+            file_name = "comprehensive_rag_comparison_report.csv"
+            
+        report_path = os.path.join(config.paths.results_dir, file_name)
+        
+        # Append to existing if exists, avoiding duplicates
+        if os.path.exists(report_path):
+            try:
+                existing_df = pd.read_csv(report_path)
+                existing_df = existing_df[~existing_df['Method'].isin(comparison_df['Method'])]
+                comparison_df = pd.concat([existing_df, comparison_df], ignore_index=True)
+            except Exception as e:
+                logger.error(f"Error merging with existing report: {e}")
+                
         comparison_df.to_csv(report_path, index=False)
         
         print("\n=== Comprehensive Comparison Report ===")
@@ -221,6 +239,7 @@ if __name__ == "__main__":
     target_groups = groups.keys() if args.group == "all" else [args.group]
     
     for g in target_groups:
+        selected_strategies = []
         for s in groups[g]:
             if args.structure == "all":
                 selected_strategies.append(s)
@@ -235,8 +254,8 @@ if __name__ == "__main__":
             elif args.structure == "got" and "GoT" in s:
                 selected_strategies.append(s)
                 
-    print(f"Running strategies: {selected_strategies}")
-    if not selected_strategies:
-        print("No strategies matched selection.")
-    else:
-        run_comparison(selected_strategies, sample_size=args.samples)
+        print(f"Running strategies for group '{g}': {selected_strategies}")
+        if not selected_strategies:
+            print(f"No strategies matched selection for group '{g}'.")
+        else:
+            run_comparison(selected_strategies, group_name=g, sample_size=args.samples)
