@@ -1,0 +1,2 @@
+Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,token_overlap_score,Avg API Calls
+SimpleRAG,338.45,5.05,67,0.1412,0.0022,0.5636,0.6968,0.3619,0.0
