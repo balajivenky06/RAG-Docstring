@@ -224,7 +224,7 @@ if __name__ == "__main__":
     if args.model:
         logger.info(f"Overriding model config to use: {args.model}")
         config.model.generator_model = args.model
-        config.model.helper_model = args.model
+        config.model.helper_model = "deepseek-coder:6.7b"
         
         # Isolate results into a model-specific directory
         safe_model_name = args.model.replace(":", "_").replace(".", "_")

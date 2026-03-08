@@ -2,7 +2,7 @@
   "model": {
     "embedding_model": "all-MiniLM-L6-v2",
     "generator_model": "llama3.2:latest",
-    "helper_model": "llama3.2:latest",
+    "helper_model": "deepseek-coder:6.7b",
     "temperature": 0.5,
     "max_tokens": 2048,
     "top_p": 0.9

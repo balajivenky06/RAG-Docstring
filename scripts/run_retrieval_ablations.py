@@ -19,7 +19,7 @@ def run_ablations(limit=None, model=None):
     # Update config for model if provided
     if model:
         config.model.generator_model = model
-        config.model.helper_model = model
+        config.model.helper_model = "deepseek-coder:6.7b"
         safe_model = model.replace(":", "_").replace(".", "_")
         output_dir = os.path.join("results", safe_model, "ablations")
     else:
