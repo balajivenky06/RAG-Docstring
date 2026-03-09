@@ -238,18 +238,34 @@ class SelfCorrectionRAG(BaseRAG):
                     
                     web_query = get_web_search_query(context_query, code_first_line)
                     search_urls = []
-                    try:
-                        import itertools as _it
-                        # Limit Google search results (generator might hang)
-                        search_urls = list(_it.islice(google_search_func(web_query, lang="en"), self.web_search_max_results))
-                    except TypeError:
-                        # Fallback for older versions that accept 'num' parameter
+                    # Safe backoff mechanism for Google Search scraping
+                    max_retries = 3
+                    base_delay = 5
+                    
+                    for attempt in range(max_retries):
                         try:
-                            search_urls = list(google_search_func(web_query, lang="en", num=self.web_search_max_results))
-                        except Exception:
-                            pass
-                    except Exception as gs_err:
-                        self.logger.warning(f"Error during Google Search: {gs_err}")
+                            import itertools as _it
+                            search_urls = list(_it.islice(google_search_func(web_query, lang="en"), self.web_search_max_results))
+                            break # Success
+                        except TypeError:
+                            try:
+                                search_urls = list(google_search_func(web_query, lang="en", num=self.web_search_max_results))
+                                break
+                            except Exception as e:
+                                if "429" in str(e):
+                                    if attempt < max_retries - 1:
+                                        time.sleep(base_delay * (2 ** attempt))
+                                        continue
+                                break
+                        except Exception as gs_err:
+                            if "429" in str(gs_err) and attempt < max_retries - 1:
+                                delay = base_delay * (2 ** attempt)
+                                self.logger.warning(f"Google 429 Too Many Requests. Retrying in {delay}s...")
+                                time.sleep(delay)
+                                continue
+                            else:
+                                self.logger.warning(f"Error during Google Search: {gs_err}")
+                                break
                     
                     if search_urls:
                         for i, url in enumerate(search_urls[:self.web_search_max_results]):
