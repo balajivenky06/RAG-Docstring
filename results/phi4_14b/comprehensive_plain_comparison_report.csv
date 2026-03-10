@@ -2,3 +2,4 @@ Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_sco
 FewShotPlainLLM,482.81,7.21,67,0.1339,0.0025,0.5308,0.7613,0.0,1.0
 PlainLLM,636.84,9.51,67,0.2012,0.012,0.6099,0.7618,0.0,1.0
 CoTPlainLLM,787.26,11.75,67,0.1641,0.0041,0.6001,0.7338,0.0,1.0
+ToTPlainLLM,2464.65,36.79,67,0.0222,0.0019,0.3639,0.0,0.0,2.0
