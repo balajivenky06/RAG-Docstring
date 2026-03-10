@@ -2,3 +2,4 @@ Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_sco
 SelfCorrectionRAG,1518.98,22.67,67,0.1941,0.006,0.5849,0.7547,0.2671,3.1
 CoTSelfCorrectionRAG,3390.9,50.61,67,0.1819,0.0104,0.5738,0.7545,0.2027,2.8
 ToTSelfCorrectionRAG,7956.49,118.75,67,0.1909,0.0124,0.5787,0.7598,0.1897,2.8
+GoTSelfCorrectionRAG,3666.22,54.72,67,0.195,0.0122,0.571,0.7475,0.2767,3.1
