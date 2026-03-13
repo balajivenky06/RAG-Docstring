@@ -7425,3 +7425,37 @@ time=2026-03-13T01:03:47.778Z level=INFO source=download.go:179 msg="downloading
 [GIN] 2026/03/13 - 01:04:01 | 200 | 30.078520906s |       127.0.0.1 | POST     "/api/pull"
 [GIN] 2026/03/13 - 01:04:01 | 200 |      29.154µs |       127.0.0.1 | HEAD     "/"
 [GIN] 2026/03/13 - 01:04:01 | 200 |     566.479µs |       127.0.0.1 | GET      "/api/tags"
+Couldn't find '/root/.ollama/id_ed25519'. Generating new private key.
+Your new public key is: 
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAKlM880DebJQj/9qPiEqeMnvt5jbW7La5bcIK4gDBK0
+
+time=2026-03-13T12:52:52.866Z level=INFO source=routes.go:1658 msg="server config" env="map[CUDA_VISIBLE_DEVICES: GGML_VK_VISIBLE_DEVICES: GPU_DEVICE_ORDINAL: HIP_VISIBLE_DEVICES: HSA_OVERRIDE_GFX_VERSION: HTTPS_PROXY: HTTP_PROXY: NO_PROXY: OLLAMA_CONTEXT_LENGTH:0 OLLAMA_DEBUG:INFO OLLAMA_EDITOR: OLLAMA_FLASH_ATTENTION:false OLLAMA_GPU_OVERHEAD:0 OLLAMA_HOST:http://127.0.0.1:11434 OLLAMA_KEEP_ALIVE:5m0s OLLAMA_KV_CACHE_TYPE: OLLAMA_LLM_LIBRARY: OLLAMA_LOAD_TIMEOUT:5m0s OLLAMA_MAX_LOADED_MODELS:0 OLLAMA_MAX_QUEUE:512 OLLAMA_MODELS:/root/.ollama/models OLLAMA_MULTIUSER_CACHE:false OLLAMA_NEW_ENGINE:false OLLAMA_NOHISTORY:false OLLAMA_NOPRUNE:false OLLAMA_NO_CLOUD:false OLLAMA_NUM_PARALLEL:1 OLLAMA_ORIGINS:[http://localhost https://localhost http://localhost:* https://localhost:* http://127.0.0.1 https://127.0.0.1 http://127.0.0.1:* https://127.0.0.1:* http://0.0.0.0 https://0.0.0.0 http://0.0.0.0:* https://0.0.0.0:* app://* file://* tauri://* vscode-webview://* vscode-file://*] OLLAMA_REMOTES:[ollama.com] OLLAMA_SCHED_SPREAD:false OLLAMA_VULKAN:false ROCR_VISIBLE_DEVICES: http_proxy: https_proxy: no_proxy:]"
+time=2026-03-13T12:52:52.866Z level=INFO source=routes.go:1660 msg="Ollama cloud disabled: false"
+time=2026-03-13T12:52:52.866Z level=INFO source=images.go:477 msg="total blobs: 0"
+time=2026-03-13T12:52:52.866Z level=INFO source=images.go:484 msg="total unused blobs removed: 0"
+time=2026-03-13T12:52:52.866Z level=INFO source=routes.go:1713 msg="Listening on 127.0.0.1:11434 (version 0.17.7)"
+time=2026-03-13T12:52:52.867Z level=INFO source=runner.go:67 msg="discovering available GPUs..."
+time=2026-03-13T12:52:52.868Z level=INFO source=server.go:430 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 33387"
+time=2026-03-13T12:52:53.136Z level=INFO source=server.go:430 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 38723"
+time=2026-03-13T12:52:53.346Z level=INFO source=runner.go:106 msg="experimental Vulkan support disabled.  To enable, set OLLAMA_VULKAN=1"
+time=2026-03-13T12:52:53.346Z level=INFO source=server.go:430 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 35097"
+time=2026-03-13T12:52:53.346Z level=INFO source=server.go:430 msg="starting runner" cmd="/usr/local/bin/ollama runner --ollama-engine --port 45061"
+time=2026-03-13T12:52:53.562Z level=INFO source=types.go:42 msg="inference compute" id=GPU-97e75d19-1eff-e9f4-f0f4-53f367c330b0 filter_id="" library=CUDA compute=8.0 name=CUDA0 description="NVIDIA A100-SXM4-40GB" libdirs=ollama,cuda_v13 driver=13.0 pci_id=0000:00:04.0 type=discrete total="40.0 GiB" available="39.5 GiB"
+time=2026-03-13T12:52:53.562Z level=INFO source=routes.go:1763 msg="vram-based default context" total_vram="40.0 GiB" default_num_ctx=32768
+[GIN] 2026/03/13 - 12:52:53 | 200 |     109.916µs |       127.0.0.1 | HEAD     "/"
+time=2026-03-13T12:52:55.015Z level=INFO source=download.go:179 msg="downloading a3de86cd1c13 in 16 326 MB part(s)"
+time=2026-03-13T12:53:10.596Z level=INFO source=download.go:179 msg="downloading ae370d884f10 in 1 1.7 KB part(s)"
+time=2026-03-13T12:53:12.266Z level=INFO source=download.go:179 msg="downloading d18a5cc71b84 in 1 11 KB part(s)"
+time=2026-03-13T12:53:13.812Z level=INFO source=download.go:179 msg="downloading cff3f395ef37 in 1 120 B part(s)"
+time=2026-03-13T12:53:15.380Z level=INFO source=download.go:179 msg="downloading 05a61d37b084 in 1 487 B part(s)"
+[GIN] 2026/03/13 - 12:53:33 | 200 | 39.740538372s |       127.0.0.1 | POST     "/api/pull"
+[GIN] 2026/03/13 - 12:53:33 | 200 |      66.712µs |       127.0.0.1 | HEAD     "/"
+time=2026-03-13T12:53:34.618Z level=INFO source=download.go:179 msg="downloading 59bb50d8116b in 16 239 MB part(s)"
+time=2026-03-13T12:53:46.156Z level=INFO source=download.go:179 msg="downloading a3a0e9449cb6 in 1 13 KB part(s)"
+time=2026-03-13T12:53:47.734Z level=INFO source=download.go:179 msg="downloading 8893e08fa9f9 in 1 59 B part(s)"
+time=2026-03-13T12:53:49.303Z level=INFO source=download.go:179 msg="downloading 8972a96b8ff1 in 1 297 B part(s)"
+time=2026-03-13T12:53:50.873Z level=INFO source=download.go:179 msg="downloading 772f510b9558 in 1 483 B part(s)"
+[GIN] 2026/03/13 - 12:54:04 | 200 | 30.927236188s |       127.0.0.1 | POST     "/api/pull"
+[GIN] 2026/03/13 - 12:54:04 | 200 |      27.734µs |       127.0.0.1 | HEAD     "/"
+[GIN] 2026/03/13 - 12:54:04 | 200 |      564.61µs |       127.0.0.1 | GET      "/api/tags"
