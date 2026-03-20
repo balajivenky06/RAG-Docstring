@@ -484,16 +484,34 @@ class BaseRAG(ABC):
         df = pd.read_pickle(dataset_path)
         self.logger.info(f"Loaded dataset with {len(df)} samples")
         
+        checkpoint_file = os.path.join(output_dir, f"{self.__class__.__name__}_checkpoint.pkl")
+        
         generated_docstrings = []
         retrieved_contexts = []
         cost_metrics_list = []
+        start_idx = 0
         
+        if os.path.exists(checkpoint_file):
+            try:
+                with open(checkpoint_file, 'rb') as f:
+                    checkpoint = pickle.load(f)
+                generated_docstrings = checkpoint.get('generated_docstrings', [])
+                retrieved_contexts = checkpoint.get('retrieved_contexts', [])
+                cost_metrics_list = checkpoint.get('cost_metrics_list', [])
+                start_idx = len(generated_docstrings)
+                self.logger.info(f"Resuming from checkpoint. {start_idx} samples already processed.")
+            except Exception as e:
+                self.logger.warning(f"Failed to load checkpoint: {e}. Starting from scratch.")
+
         # Start timing for progress tracking
         start_time = time.time()
         
-        for i, row in df.iterrows():
+        for count, (i, row) in enumerate(df.iterrows()):
+            if count < start_idx:
+                continue
+                
             sample_start_time = time.time()
-            self.logger.info(f"Processing sample {i+1}/{len(df)}")
+            self.logger.info(f"Processing sample {count+1}/{len(df)}")
             
             user_code = row["Code_without_comments"]
             
@@ -519,19 +537,32 @@ class BaseRAG(ABC):
             retrieved_contexts.append(latest_ctx_text)
             cost_metrics_list.append(cost_metrics)
             
+            # Save checkpoint
+            try:
+                with open(checkpoint_file, 'wb') as f:
+                    pickle.dump({
+                        'generated_docstrings': generated_docstrings,
+                        'retrieved_contexts': retrieved_contexts,
+                        'cost_metrics_list': cost_metrics_list
+                    }, f)
+            except Exception as e:
+                self.logger.warning(f"Failed to save checkpoint: {e}")
+            
             # Progress logging every 5 samples
-            if (i + 1) % 5 == 0:
+            samples_processed = count + 1
+            if samples_processed % 5 == 0:
                 elapsed_time = time.time() - sample_start_time
+                samples_processed_this_run = samples_processed - start_idx
                 total_elapsed = time.time() - start_time
-                avg_time_per_sample = total_elapsed / (i + 1)
-                remaining_samples = len(df) - (i + 1)
+                avg_time_per_sample = total_elapsed / samples_processed_this_run if samples_processed_this_run > 0 else 0
+                remaining_samples = len(df) - samples_processed
                 estimated_remaining_time = remaining_samples * avg_time_per_sample
                 
-                self.logger.info(f"📊 PROGRESS UPDATE - Sample {i+1}/{len(df)}")
+                self.logger.info(f"📊 PROGRESS UPDATE - Sample {samples_processed}/{len(df)}")
                 self.logger.info(f"   ⏱️  Current sample time: {elapsed_time:.2f}s")
                 self.logger.info(f"   📈 Average time per sample: {avg_time_per_sample:.2f}s")
                 self.logger.info(f"   ⏳ Estimated remaining time: {estimated_remaining_time/60:.1f} minutes")
-                self.logger.info(f"   📊 Progress: {((i+1)/len(df)*100):.1f}%")
+                self.logger.info(f"   📊 Progress: {(samples_processed/len(df)*100):.1f}%")
                 self.logger.info(f"   🎯 Generated docstring length: {len(docstring)} chars")
                 
                 # Log cost metrics for this batch
@@ -543,7 +574,7 @@ class BaseRAG(ABC):
             # Additional logging for every sample (less verbose)
             else:
                 elapsed_time = time.time() - sample_start_time
-                self.logger.info(f"✅ Sample {i+1} completed in {elapsed_time:.2f}s")
+                self.logger.info(f"✅ Sample {samples_processed} completed in {elapsed_time:.2f}s")
 
         # Aggregate empty-docstring rate report
         empty_count = sum(1 for d in generated_docstrings if not d or not d.strip())
