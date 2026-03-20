@@ -549,9 +549,9 @@ class BaseRAG(ABC):
             except Exception as e:
                 self.logger.warning(f"Failed to save checkpoint: {e}")
             
-            # Progress logging every 5 samples
+            # Progress logging every 3 samples
             samples_processed = count + 1
-            if samples_processed % 5 == 0:
+            if samples_processed % 3 == 0:
                 elapsed_time = time.time() - sample_start_time
                 samples_processed_this_run = samples_processed - start_idx
                 total_elapsed = time.time() - start_time
@@ -576,19 +576,24 @@ class BaseRAG(ABC):
                 try:
                     self.logger.info("   🔄 Auto-backing up to Git...")
                     
-                    # Attempt Colab token extraction
+                    # Attempt Colab token or env var extraction
                     repo_url = None
+                    github_token = os.environ.get("GITHUB_PAT")
+                    github_user = os.environ.get("GITHUB_USERNAME", "balajivenky06")
+                    
                     try:
                         import google.colab.userdata as userdata
-                        github_token = userdata.get('github_token')
-                        if github_token:
-                            repo_url = f"https://balajivenky06:{github_token}@github.com/balajivenky06/RAG-Docstring.git"
+                        if not github_token:
+                            github_token = userdata.get('github_token')
                     except Exception:
                         pass
                         
+                    if github_token:
+                        repo_url = f"https://{github_user}:{github_token}@github.com/{github_user}/RAG-Docstring.git"
+                        
                     # Set config to avoid username/email prompt blocks
-                    subprocess.run(["git", "config", "user.email", "balajivenky06@gmail.com"], capture_output=True)
-                    subprocess.run(["git", "config", "user.name", "balajivenky06"], capture_output=True)
+                    subprocess.run(["git", "config", "user.email", f"{github_user}@example.com"], capture_output=True)
+                    subprocess.run(["git", "config", "user.name", github_user], capture_output=True)
                     
                     subprocess.run(["git", "add", output_dir], check=True, capture_output=True)
                     
