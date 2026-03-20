@@ -7,6 +7,7 @@ import psutil
 import os
 import uuid
 import pickle
+import subprocess
 import pandas as pd
 import re
 from abc import ABC, abstractmethod
@@ -570,6 +571,16 @@ class BaseRAG(ABC):
                     self.logger.info(f"   💰 Cost metrics - Execution: {cost_metrics.execution_time:.2f}s, "
                                    f"Memory: {cost_metrics.memory_usage_mb:.1f}MB, "
                                    f"API Calls: {cost_metrics.api_calls}")
+                
+                # Auto-backup to Git
+                try:
+                    self.logger.info("   🔄 Auto-backing up to Git...")
+                    subprocess.run(["git", "add", output_dir], check=True, capture_output=True)
+                    subprocess.run(["git", "commit", "-m", f"Auto-checkpoint: {self.__class__.__name__} sample {samples_processed}"], capture_output=True)
+                    subprocess.run(["git", "push"], check=True, capture_output=True)
+                    self.logger.info("   ✅ Git backup successful")
+                except Exception as git_err:
+                    self.logger.warning(f"   ⚠️ Git backup failed (continuing anyway): {git_err}")
             
             # Additional logging for every sample (less verbose)
             else:
