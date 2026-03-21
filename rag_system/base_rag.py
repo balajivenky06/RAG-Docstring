@@ -576,31 +576,31 @@ class BaseRAG(ABC):
                 if auto_push:
                     try:
                         self.logger.info("   🔄 Auto-backing up to Git...")
-                    
-                    # Attempt Colab token or env var extraction
-                    repo_url = None
-                    github_token = os.environ.get("GITHUB_PAT")
-                    github_user = os.environ.get("GITHUB_USERNAME", "balajivenky06")
-                    
-                    try:
-                        import google.colab.userdata as userdata
-                        if not github_token:
-                            github_token = userdata.get('github_token')
-                    except Exception:
-                        pass
                         
-                    if github_token:
-                        repo_url = f"https://{github_user}:{github_token}@github.com/{github_user}/RAG-Docstring.git"
+                        # Attempt Colab token or env var extraction
+                        repo_url = None
+                        github_token = os.environ.get("GITHUB_PAT")
+                        github_user = os.environ.get("GITHUB_USERNAME", "balajivenky06")
                         
-                    # Set config to avoid username/email prompt blocks
-                    subprocess.run(["git", "config", "user.email", f"{github_user}@example.com"], capture_output=True)
-                    subprocess.run(["git", "config", "user.name", github_user], capture_output=True)
-                    
-                    subprocess.run(["git", "add", output_dir], check=True, capture_output=True)
-                    
-                    commit_msg = f"Auto-checkpoint: {self.__class__.__name__} sample {samples_processed}"
-                    subprocess.run(["git", "commit", "-m", commit_msg], capture_output=True)
-                    
+                        try:
+                            import google.colab.userdata as userdata
+                            if not github_token:
+                                github_token = userdata.get('github_token')
+                        except Exception:
+                            pass
+                            
+                        if github_token:
+                            repo_url = f"https://{github_user}:{github_token}@github.com/{github_user}/RAG-Docstring.git"
+                            
+                        # Set config to avoid username/email prompt blocks
+                        subprocess.run(["git", "config", "user.email", f"{github_user}@example.com"], capture_output=True)
+                        subprocess.run(["git", "config", "user.name", github_user], capture_output=True)
+                        
+                        subprocess.run(["git", "add", output_dir], check=True, capture_output=True)
+                        
+                        commit_msg = f"Auto-checkpoint: {self.__class__.__name__} sample {samples_processed}"
+                        subprocess.run(["git", "commit", "-m", commit_msg], capture_output=True)
+                        
                         if repo_url:
                             subprocess.run(["git", "push", repo_url, "main"], check=True, capture_output=True)
                         else:
