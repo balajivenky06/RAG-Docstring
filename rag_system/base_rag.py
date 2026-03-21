@@ -465,7 +465,7 @@ class BaseRAG(ABC):
         """
         pass
     
-    def process_dataset(self, dataset_path: str, output_dir: str = None) -> str:
+    def process_dataset(self, dataset_path: str, output_dir: str = None, auto_push: bool = False) -> str:
         """
         Process a dataset of code samples and generate docstrings.
         
@@ -573,8 +573,9 @@ class BaseRAG(ABC):
                                    f"API Calls: {cost_metrics.api_calls}")
                 
                 # Auto-backup to Git
-                try:
-                    self.logger.info("   🔄 Auto-backing up to Git...")
+                if auto_push:
+                    try:
+                        self.logger.info("   🔄 Auto-backing up to Git...")
                     
                     # Attempt Colab token or env var extraction
                     repo_url = None
@@ -600,14 +601,14 @@ class BaseRAG(ABC):
                     commit_msg = f"Auto-checkpoint: {self.__class__.__name__} sample {samples_processed}"
                     subprocess.run(["git", "commit", "-m", commit_msg], capture_output=True)
                     
-                    if repo_url:
-                        subprocess.run(["git", "push", repo_url, "main"], check=True, capture_output=True)
-                    else:
-                        subprocess.run(["git", "push"], check=True, capture_output=True)
-                        
-                    self.logger.info("   ✅ Git backup successful")
-                except Exception as git_err:
-                    self.logger.warning(f"   ⚠️ Git backup failed (continuing anyway): {git_err}")
+                        if repo_url:
+                            subprocess.run(["git", "push", repo_url, "main"], check=True, capture_output=True)
+                        else:
+                            subprocess.run(["git", "push"], check=True, capture_output=True)
+                            
+                        self.logger.info("   ✅ Git backup successful")
+                    except Exception as git_err:
+                        self.logger.warning(f"   ⚠️ Git backup failed (continuing anyway): {git_err}")
             
             # Additional logging for every sample (less verbose)
             else:

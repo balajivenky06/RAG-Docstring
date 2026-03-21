@@ -51,7 +51,7 @@ STRATEGY_MAP = {
     "GoTSelfCorrectionRAG": GoTSelfCorrectionRAG,
 }
 
-def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size: int = None):
+def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size: int = None, auto_push: bool = False):
     """Run comparison for specified strategies."""
     
     # Load dataset
@@ -109,7 +109,7 @@ def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size
             start_time = time.time()
             try:
                 # Capture results in case it returns early/crashes
-                results_file = rag_system.process_dataset(dataset_path=current_dataset_path, output_dir=output_dir)
+                results_file = rag_system.process_dataset(dataset_path=current_dataset_path, output_dir=output_dir, auto_push=auto_push)
                 total_time = time.time() - start_time
             except Exception as process_err:
                 logger.error(f"Error processing dataset for {name}: {process_err}")
@@ -218,6 +218,7 @@ if __name__ == "__main__":
     parser.add_argument("--structure", choices=["base", "fewshot", "cot", "tot", "got", "all"], default="all")
     parser.add_argument("--samples", type=int, default=None, help="Number of samples (default: all)")
     parser.add_argument("--model", type=str, default=None, help="LLM to use (e.g., qwen2.5:8b, llama3)")
+    parser.add_argument("--auto_push", action="store_true", help="Enable auto-pushing to Git every 3 samples (Default: False)")
     args = parser.parse_args()
     
     # Update global config for model if specified
@@ -262,4 +263,4 @@ if __name__ == "__main__":
         if not selected_strategies:
             print(f"No strategies matched selection for group '{g}'.")
         else:
-            run_comparison(selected_strategies, group_name=g, sample_size=args.samples)
+            run_comparison(selected_strategies, group_name=g, sample_size=args.samples, auto_push=args.auto_push)
