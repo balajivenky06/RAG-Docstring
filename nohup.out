@@ -7526,3 +7526,4 @@ time=2026-03-25T09:14:35.869Z level=INFO source=download.go:179 msg="downloading
 [GIN] 2026/03/25 - 09:14:49 | 200 | 30.061927591s |       127.0.0.1 | POST     "/api/pull"
 [GIN] 2026/03/25 - 09:14:49 | 200 |      27.836µs |       127.0.0.1 | HEAD     "/"
 [GIN] 2026/03/25 - 09:14:49 | 200 |     530.996µs |       127.0.0.1 | GET      "/api/tags"
+Error: listen tcp 127.0.0.1:11434: bind: address already in use
