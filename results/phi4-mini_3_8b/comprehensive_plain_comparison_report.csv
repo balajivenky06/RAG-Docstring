@@ -1,2 +1,3 @@
 Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,token_overlap_score,Avg API Calls
 FewShotPlainLLM,360.96,5.39,67,0.1607,0.0019,0.5429,0.7978,0.0,1.0
+PlainLLM,385.04,5.75,67,0.2393,0.0065,0.6094,0.7827,0.0,1.0
