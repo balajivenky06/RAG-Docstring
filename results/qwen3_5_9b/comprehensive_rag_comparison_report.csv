@@ -1,5 +1,5 @@
 Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,token_overlap_score,Avg API Calls
-CoTRAG,92.74,1.38,67,0.0015,0.0,0.3516,0.5846,0.2,0.0
 ToTRAG,268.91,4.01,67,0.0015,0.0,0.3396,0.597,0.0,1.0
 GoTRAG,2937.56,43.84,67,0.0015,0.0,0.3348,0.5884,0.25,4.0
 SimpleRAG,5828.48,86.99,67,0.2104,0.0057,0.5973,0.7103,0.3084,0.0
+CoTRAG,1707.37,25.48,67,0.2153,0.0114,0.6081,0.8173,0.2903,1.0
