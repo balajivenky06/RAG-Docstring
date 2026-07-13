@@ -45,7 +45,7 @@ def find_result_files(results_root: str, model_dirs):
 
 
 def rejudge_file(evaluator, model_dir, strategy, path, judge, out_dir,
-                 with_context_secondary=False, limit=None):
+                 with_context_secondary=False, limit=None, draws=1):
     out_path = os.path.join(out_dir, f"{model_dir}__{strategy}__{judge.replace(':', '_').replace('.', '_')}.csv")
     if os.path.exists(out_path):
         print(f"  [skip] {model_dir}/{strategy} ({judge}) already done")
@@ -62,16 +62,23 @@ def rejudge_file(evaluator, model_dir, strategy, path, judge, out_dir,
         docstring = row.get('Generated_Docstring') or ''
         context = row.get('Retrieved_Context') or ''
 
-        score = evaluator.calculate_faithfulness_score(
+        # LLM-judge scores have high draw-to-draw variance at default sampling
+        # temperature; averaging k independent draws yields a reliable
+        # per-sample score (single draws are only meaningful in aggregate).
+        draw_scores = [evaluator.calculate_faithfulness_score(
             docstring, retrieved_context='', code=code, judge_model=judge)
+            for _ in range(draws)]
 
         record = {
             'model_dir': model_dir,
             'strategy': strategy,
             'sample_index': i,
             'judge': judge,
-            'faithfulness_code_ref': score,
+            'faithfulness_code_ref': sum(draw_scores) / len(draw_scores),
+            'n_draws': draws,
         }
+        for d, s in enumerate(draw_scores, 1):
+            record[f'draw_{d}'] = s
         if with_context_secondary and context:
             record['faithfulness_context_ref'] = evaluator.calculate_context_faithfulness_score(
                 docstring, context, judge_model=judge)
@@ -102,10 +109,12 @@ def main():
                         help="Also compute secondary context-referenced score for RAG rows")
     parser.add_argument("--strategies", nargs="+", default=None,
                         help="Restrict to these strategy names (e.g. PlainLLM SimpleRAG)")
+    parser.add_argument("--draws", type=int, default=1,
+                        help="Independent judge draws per sample (mean reported); use >=3 for reliable per-sample scores")
     parser.add_argument("--limit", type=int, default=None, help="Samples per strategy (smoke test)")
     args = parser.parse_args()
 
-    out_dir = os.path.join(args.results_root, "rejudged")
+    out_dir = os.path.join(args.results_root, "rejudged" if args.draws == 1 else f"rejudged_k{args.draws}")
     os.makedirs(out_dir, exist_ok=True)
 
     evaluator = RAGEvaluator()
@@ -118,7 +127,8 @@ def main():
     for judge in args.judges:
         for model_dir, strategy, path in files:
             rejudge_file(evaluator, model_dir, strategy, path, judge, out_dir,
-                         with_context_secondary=args.with_context_secondary, limit=args.limit)
+                         with_context_secondary=args.with_context_secondary, limit=args.limit,
+                         draws=args.draws)
 
     # Consolidate
     parts = [pd.read_csv(p) for p in glob.glob(os.path.join(out_dir, "*__*.csv"))]

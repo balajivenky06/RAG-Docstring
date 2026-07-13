@@ -1,0 +1,52 @@
+Item_ID,Sample_ID,Model,Strategy
+1,1,Llama 3.2 8B,Plain LLM (Base)
+2,2,Llama 3.2 8B,Plain LLM (Base)
+3,3,Llama 3.2 8B,Plain LLM (Base)
+4,4,Llama 3.2 8B,Plain LLM (Base)
+5,5,Llama 3.2 8B,Simple RAG (Base)
+6,6,Llama 3.2 8B,Simple RAG (Base)
+7,7,Llama 3.2 8B,Simple RAG (Base)
+8,8,Llama 3.2 8B,Simple RAG (Base)
+9,9,Llama 3.2 8B,Iterative Critique RAG
+10,10,Llama 3.2 8B,Iterative Critique RAG
+11,11,Llama 3.2 8B,Iterative Critique RAG
+12,12,Llama 3.2 8B,Plain LLM + GoT
+13,13,Llama 3.2 8B,Plain LLM + GoT
+14,14,Llama 3.2 8B,Plain LLM + GoT
+15,15,Llama 3.2 8B,Plain LLM + CoT
+16,16,Llama 3.2 8B,Plain LLM + CoT
+17,17,Llama 3.2 8B,Plain LLM + CoT
+18,18,Phi-4 14B,Plain LLM (Base)
+19,19,Phi-4 14B,Plain LLM (Base)
+20,20,Phi-4 14B,Plain LLM (Base)
+21,21,Phi-4 14B,Plain LLM (Base)
+22,22,Phi-4 14B,Simple RAG (Base)
+23,23,Phi-4 14B,Simple RAG (Base)
+24,24,Phi-4 14B,Simple RAG (Base)
+25,25,Phi-4 14B,Simple RAG (Base)
+26,26,Phi-4 14B,Iterative Critique RAG
+27,27,Phi-4 14B,Iterative Critique RAG
+28,28,Phi-4 14B,Iterative Critique RAG
+29,29,Phi-4 14B,Plain LLM + GoT
+30,30,Phi-4 14B,Plain LLM + GoT
+31,31,Phi-4 14B,Plain LLM + GoT
+32,32,Phi-4 14B,Plain LLM + CoT
+33,33,Phi-4 14B,Plain LLM + CoT
+34,34,Phi-4 14B,Plain LLM + CoT
+35,35,Qwen3 8B,Plain LLM (Base)
+36,36,Qwen3 8B,Plain LLM (Base)
+37,37,Qwen3 8B,Plain LLM (Base)
+38,38,Qwen3 8B,Plain LLM (Base)
+39,39,Qwen3 8B,Simple RAG (Base)
+40,40,Qwen3 8B,Simple RAG (Base)
+41,41,Qwen3 8B,Simple RAG (Base)
+42,42,Qwen3 8B,Simple RAG (Base)
+43,43,Qwen3 8B,Iterative Critique RAG
+44,44,Qwen3 8B,Iterative Critique RAG
+45,45,Qwen3 8B,Iterative Critique RAG
+46,46,Qwen3 8B,Plain LLM + GoT
+47,47,Qwen3 8B,Plain LLM + GoT
+48,48,Qwen3 8B,Plain LLM + GoT
+49,49,Qwen3 8B,Plain LLM + CoT
+50,50,Qwen3 8B,Plain LLM + CoT
+51,51,Qwen3 8B,Plain LLM + CoT
