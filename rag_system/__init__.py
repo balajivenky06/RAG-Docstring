@@ -10,7 +10,8 @@ from .simple_rag import SimpleRAG
 from .self_rag import SelfCorrectionRAG
 SelfRAG = SelfCorrectionRAG
 from .advanced_rag import CoTRAG, ToTRAG, GoTRAG
-from .plain_llm import PlainLLM, FewShotPlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM
+from .plain_llm import (PlainLLM, FewShotPlainLLM, FixedFewShotPlainLLM,
+                        DynamicFewShotPlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM)
 from .evaluator import RAGEvaluator
 from .cost_analyzer import CostAnalyzer
 from .visualizer import RAGVisualizer
@@ -77,6 +78,8 @@ __all__ = [
     # Plain LLMs
     "PlainLLM",
     "FewShotPlainLLM", # Added FewShotPlainLLM
+    "FixedFewShotPlainLLM",   # persona-fixed static few-shot (revision ablation)
+    "DynamicFewShotPlainLLM", # retrieved structurally-matched exemplars (R2.8)
     "CoTPlainLLM",
     "ToTPlainLLM",
     "GoTPlainLLM",

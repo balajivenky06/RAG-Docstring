@@ -19,7 +19,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from rag_system import (
     SimpleRAG, CoTRAG, ToTRAG, GoTRAG,
     SelfCorrectionRAG, CoTSelfCorrectionRAG, ToTSelfCorrectionRAG, GoTSelfCorrectionRAG,
-    PlainLLM, FewShotPlainLLM, CoTPlainLLM, ToTPlainLLM, GoTPlainLLM,
+    PlainLLM, FewShotPlainLLM, FixedFewShotPlainLLM, DynamicFewShotPlainLLM,
+    CoTPlainLLM, ToTPlainLLM, GoTPlainLLM,
     RAGEvaluator, config
 )
 
@@ -32,6 +33,8 @@ STRATEGY_MAP = {
     # Plain LLM
     "PlainLLM": PlainLLM,
     "FewShotPlainLLM": FewShotPlainLLM,
+    "FixedFewShotPlainLLM": FixedFewShotPlainLLM,
+    "DynamicFewShotPlainLLM": DynamicFewShotPlainLLM,
     "CoTPlainLLM": CoTPlainLLM,
     "ToTPlainLLM": ToTPlainLLM,
     "GoTPlainLLM": GoTPlainLLM,
@@ -214,7 +217,7 @@ def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--group", choices=["all", "simple", "self", "plain"], default="all")
+    parser.add_argument("--group", choices=["all", "simple", "self", "plain", "fewshot_ablation"], default="all")
     parser.add_argument("--structure", choices=["base", "fewshot", "cot", "tot", "got", "all"], default="all")
     parser.add_argument("--samples", type=int, default=None, help="Number of samples (default: all)")
     parser.add_argument("--model", type=str, default=None, help="LLM to use (e.g., qwen2.5:8b, llama3)")
@@ -238,7 +241,8 @@ if __name__ == "__main__":
     groups = {
         "simple": ["SimpleRAG", "CoTRAG", "ToTRAG", "GoTRAG"],
         "self": ["SelfCorrectionRAG", "CoTSelfCorrectionRAG", "ToTSelfCorrectionRAG", "GoTSelfCorrectionRAG"],
-        "plain": ["PlainLLM", "FewShotPlainLLM", "CoTPlainLLM", "ToTPlainLLM", "GoTPlainLLM"]
+        "plain": ["PlainLLM", "FewShotPlainLLM", "CoTPlainLLM", "ToTPlainLLM", "GoTPlainLLM"],
+        "fewshot_ablation": ["FixedFewShotPlainLLM", "DynamicFewShotPlainLLM"]
     }
     
     target_groups = groups.keys() if args.group == "all" else [args.group]

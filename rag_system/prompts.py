@@ -504,6 +504,76 @@ Code:
 """
         return self.format_prompt(few_shot_template, code=code)
 
+    def get_few_shot_prompt_fixed(self, code: str) -> str:
+        """Static few-shot prompt with the generator persona (revision ablation).
+
+        Identical exemplars to get_few_shot_prompt, but with the erroneous
+        judge persona replaced by a technical-writer persona, isolating the
+        persona-conflict confound from the exemplar-choice effect.
+        """
+        few_shot_template = """You are an expert technical writer specializing in Python documentation.
+Below are examples of high-quality Python docstrings. Study their structure, then write a docstring for the target code.
+
+Example 1:
+Code:
+def calculate_area(radius):
+    return 3.14159 * radius * radius
+
+Docstring:
+\"\"\"
+Calculates the area of a circle.
+
+Args:
+    radius (float): The radius of the circle.
+
+Returns:
+    float: The calculated area.
+\"\"\"
+
+Example 2:
+Code:
+class DatabaseConnection:
+    def connect(self, db_url):
+        self.url = db_url
+
+Docstring:
+\"\"\"
+Manages a database connection.
+
+Methods:
+    connect(db_url): Establishes a connection to the given database URL.
+\"\"\"
+
+Now write a complete PEP-257 style docstring for the following Python code. Document its purpose, parameters, attributes, return values, and raised exceptions as applicable. Return ONLY the docstring.
+Code:
+{code}
+"""
+        return self.format_prompt(few_shot_template, code=code)
+
+    def get_dynamic_few_shot_prompt(self, code: str, exemplars: list) -> str:
+        """Few-shot prompt with dynamically retrieved, structurally matched exemplars.
+
+        exemplars: list of (example_code, example_docstring) tuples.
+        """
+        parts = ["""You are an expert technical writer specializing in Python documentation.
+Below are examples of Python classes with high-quality docstrings, chosen for structural similarity to the target code. Study their structure, then write a docstring for the target code.
+"""]
+        for i, (ex_code, ex_doc) in enumerate(exemplars, 1):
+            parts.append(f"""
+Example {i}:
+Code:
+{ex_code}
+
+Docstring:
+{ex_doc}
+""")
+        parts.append(f"""
+Now write a complete PEP-257 style docstring for the following Python code. Document its purpose, parameters, attributes, return values, and raised exceptions as applicable. Return ONLY the docstring.
+Code:
+{code}
+""")
+        return "".join(parts)
+
 # Global prompt manager instance
 prompt_manager = PromptManager()
 
@@ -569,3 +639,11 @@ def get_got_aggregation_prompt(analyses: str, code: str) -> str:
 def get_few_shot_prompt(code: str) -> str:
     """Get few-shot prompt."""
     return prompt_manager.get_few_shot_prompt(code)
+
+def get_few_shot_prompt_fixed(code: str) -> str:
+    """Get persona-fixed static few-shot prompt (revision ablation)."""
+    return prompt_manager.get_few_shot_prompt_fixed(code)
+
+def get_dynamic_few_shot_prompt(code: str, exemplars: list) -> str:
+    """Get dynamic few-shot prompt with retrieved exemplars."""
+    return prompt_manager.get_dynamic_few_shot_prompt(code, exemplars)

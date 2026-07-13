@@ -207,52 +207,33 @@ class RAGEvaluator:
             return min(1.0, max(0.0, float(fallback.group(1))))
         return 0.5
 
-    def calculate_faithfulness_score(self, generated_docstring: str, retrieved_context: str, code: str = "") -> float:
+    def calculate_faithfulness_score(self, generated_docstring: str, retrieved_context: str, code: str = "",
+                                     judge_model: str = None) -> float:
         """
         Calculate faithfulness using an LLM Judge.
         Scores 0.0 to 1.0 based on factual support using a detailed rubric.
 
-        When retrieved_context is available the judge evaluates the docstring
-        against that context.  When only source code is available (No RAG
-        strategies) the judge evaluates against the source code directly so
-        that the score is meaningful rather than a constant 0.5 default.
+        The judge always evaluates the docstring against the SOURCE CODE as the
+        single reference, so scores are commensurable across RAG and No-RAG
+        strategies.  Retrieved context is NOT used as the primary reference;
+        use calculate_context_faithfulness_score for the secondary
+        context-grounding metric.
         """
         if not generated_docstring:
             return 0.5  # Cannot evaluate without a docstring
 
-        if not retrieved_context and not code:
+        if not code:
+            # Fall back to context-referenced judging only when no code exists
+            if retrieved_context:
+                return self.calculate_context_faithfulness_score(generated_docstring, retrieved_context,
+                                                                 judge_model=judge_model)
             return 0.5  # Cannot evaluate without any reference material
 
         try:
             import ollama
             from .config import config  # Import config to get helper model
 
-            if retrieved_context:
-                # Standard path: evaluate against retrieved knowledge-base context
-                prompt = f"""You are a strict technical judge evaluating Python docstrings.
-
-Context from Knowledge Base:
-{retrieved_context[:2000]}
-
-Generated Docstring:
-{generated_docstring}
-
-Evaluation Rubric:
-1. Hallucination Check: Does the docstring claim parameters/returns not present in the code or context?
-2. Contradiction Check: Does it contradict the provided context logic?
-3. Support Check: Is the description supported by the context or obvious code inference?
-
-Task:
-Assign a Faithfulness Score from 0.0 to 1.0.
-- 1.0: Fully supported by context/code, no hallucinations.
-- 0.5: Partially supported, some generic descriptions.
-- 0.0: Major hallucinations or contradictions.
-
-Return ONLY the numeric score in this format: Score: <number>
-"""
-            else:
-                # No-RAG path: evaluate against source code only
-                prompt = f"""You are a strict technical judge evaluating Python docstrings.
+            prompt = f"""You are a strict technical judge evaluating Python docstrings.
 
 Source Code:
 {code[:2000]}
@@ -274,12 +255,59 @@ Assign a Faithfulness Score from 0.0 to 1.0.
 Return ONLY the numeric score in this format: Score: <number>
 """
 
-            response = ollama.generate(model=config.model.helper_model, prompt=prompt)
+            model_name = judge_model or config.model.helper_model
+            response = ollama.generate(model=model_name, prompt=prompt)
             text = response.get('response', '')
             return self._parse_faithfulness_score(text)
 
         except Exception as e:
             print(f"LLM Faithfulness calculation error: {e}")
+            return 0.0
+
+    def calculate_context_faithfulness_score(self, generated_docstring: str, retrieved_context: str,
+                                             judge_model: str = None) -> float:
+        """
+        SECONDARY metric: judge the docstring against the retrieved context.
+        This was the pre-revision primary path for RAG strategies; it is kept
+        only for supplementary context-grounding analysis and must not be
+        compared against code-referenced scores.
+        """
+        if not generated_docstring or not retrieved_context:
+            return 0.5
+
+        try:
+            import ollama
+            from .config import config
+
+            prompt = f"""You are a strict technical judge evaluating Python docstrings.
+
+Context from Knowledge Base:
+{retrieved_context[:2000]}
+
+Generated Docstring:
+{generated_docstring}
+
+Evaluation Rubric:
+1. Hallucination Check: Does the docstring claim parameters/returns not present in the code or context?
+2. Contradiction Check: Does it contradict the provided context logic?
+3. Support Check: Is the description supported by the context or obvious code inference?
+
+Task:
+Assign a Faithfulness Score from 0.0 to 1.0.
+- 1.0: Fully supported by context/code, no hallucinations.
+- 0.5: Partially supported, some generic descriptions.
+- 0.0: Major hallucinations or contradictions.
+
+Return ONLY the numeric score in this format: Score: <number>
+"""
+
+            model_name = judge_model or config.model.helper_model
+            response = ollama.generate(model=model_name, prompt=prompt)
+            text = response.get('response', '')
+            return self._parse_faithfulness_score(text)
+
+        except Exception as e:
+            print(f"LLM Context-Faithfulness calculation error: {e}")
             return 0.0
 
     def calculate_token_overlap_faithfulness(self, generated_docstring: str, retrieved_context: str) -> float:

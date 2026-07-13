@@ -4,10 +4,12 @@ Generates docstrings using only the LLM's internal knowledge base, without retri
 Also supports Reasoning variants (CoT, ToT, GoT).
 """
 
+import os
 import time
 from typing import Tuple
 from .base_rag import BaseRAG, CostMetrics
-from .prompts import get_final_generation_prompt, get_system_prompt, get_few_shot_prompt
+from .prompts import (get_final_generation_prompt, get_system_prompt, get_few_shot_prompt,
+                      get_few_shot_prompt_fixed, get_dynamic_few_shot_prompt)
 from .reasoning_mixins import CoTMixin, ToTMixin, GoTMixin
 from .config import get_index_name, get_index_namespace
 
@@ -128,7 +130,7 @@ class FewShotPlainLLM(PlainLLM):
             {'role': 'system', 'content': "You are an expert technical writer and Python developer. Follow the structure of the provided examples exactly."},
             {'role': 'user', 'content': get_few_shot_prompt(user_code)}
         ]
-        
+
         try:
             self.api_call_count += 1
             response = self.ollama_client.chat(
@@ -136,10 +138,124 @@ class FewShotPlainLLM(PlainLLM):
                 messages=messages,
                 options={'temperature': self.model_config.temperature}
             )
-            
+
             generated_docstring = response.get('message', {}).get('content', '').strip()
             return self._clean_docstring_output(generated_docstring)
-            
+
+        except Exception as e:
+            self.logger.error(f"Error communicating with Ollama: {e}")
+            return "# ERROR: Docstring generation failed."
+
+
+class FixedFewShotPlainLLM(FewShotPlainLLM):
+    """Static few-shot with the corrected generator persona (revision ablation).
+
+    Same two static exemplars as FewShotPlainLLM, but without the judge-persona
+    prompt bug, isolating the persona-conflict confound.
+    """
+    def _generate_final_docstring(self, context: str, user_code: str, rewritten_req: str) -> str:
+        messages = [
+            {'role': 'system', 'content': "You are an expert technical writer and Python developer."},
+            {'role': 'user', 'content': get_few_shot_prompt_fixed(user_code)}
+        ]
+
+        try:
+            self.api_call_count += 1
+            response = self.ollama_client.chat(
+                model=self.model_config.generator_model,
+                messages=messages,
+                options={'temperature': self.model_config.temperature}
+            )
+            generated_docstring = response.get('message', {}).get('content', '').strip()
+            return self._clean_docstring_output(generated_docstring)
+        except Exception as e:
+            self.logger.error(f"Error communicating with Ollama: {e}")
+            return "# ERROR: Docstring generation failed."
+
+
+class DynamicFewShotPlainLLM(FewShotPlainLLM):
+    """Few-shot with dynamically retrieved, structurally matched exemplars (R2.8).
+
+    Exemplars are the most similar OTHER classes from the benchmark corpus
+    (leave-one-out), paired with their human-written reference docstrings, so
+    the demonstration matches the target's structural profile.
+    """
+
+    NUM_EXEMPLARS = 2
+    MAX_EXEMPLAR_CODE_CHARS = 1500
+    MAX_EXEMPLAR_DOC_CHARS = 800
+
+    def __init__(self, index_name: str = None, custom_config: dict = None, namespace: str = None,
+                 exemplar_pool_path: str = None):
+        super().__init__(index_name, custom_config, namespace)
+        self._pool_path = exemplar_pool_path or os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "class_files_df.pkl")
+        self._pool_codes = None
+        self._pool_docs = None
+        self._pool_embeddings = None
+
+    def _ensure_exemplar_pool(self):
+        if self._pool_embeddings is not None:
+            return
+        import pandas as pd
+        from sentence_transformers import SentenceTransformer
+
+        pool = pd.read_pickle(self._pool_path)
+        self._pool_codes = pool['Code_without_comments'].fillna('').astype(str).tolist()
+        self._pool_docs = pool['Comments'].fillna('').astype(str).tolist()
+
+        cache_folder = os.path.join(os.path.dirname(self._pool_path), os.pardir, "models", "all-MiniLM-L6-v2")
+        try:
+            encoder = SentenceTransformer(self.model_config.embedding_model, cache_folder=cache_folder)
+        except Exception:
+            encoder = SentenceTransformer(self.model_config.embedding_model)
+        self._encoder = encoder
+        self._pool_embeddings = encoder.encode(self._pool_codes, normalize_embeddings=True,
+                                               show_progress_bar=False)
+        self.logger.info(f"Dynamic few-shot exemplar pool ready: {len(self._pool_codes)} classes")
+
+    def _select_exemplars(self, user_code: str):
+        self._ensure_exemplar_pool()
+        query = self._encoder.encode([user_code], normalize_embeddings=True, show_progress_bar=False)[0]
+        sims = self._pool_embeddings @ query
+
+        ranked = sims.argsort()[::-1]
+        exemplars = []
+        target_norm = " ".join(user_code.split())
+        for idx in ranked:
+            cand_norm = " ".join(self._pool_codes[idx].split())
+            # leave-one-out: skip the target class itself
+            if cand_norm == target_norm or cand_norm in target_norm or target_norm in cand_norm:
+                continue
+            if not self._pool_docs[idx].strip():
+                continue
+            exemplars.append((self._pool_codes[idx][:self.MAX_EXEMPLAR_CODE_CHARS],
+                              self._pool_docs[idx][:self.MAX_EXEMPLAR_DOC_CHARS]))
+            if len(exemplars) == self.NUM_EXEMPLARS:
+                break
+        return exemplars
+
+    def _generate_final_docstring(self, context: str, user_code: str, rewritten_req: str) -> str:
+        try:
+            exemplars = self._select_exemplars(user_code)
+        except Exception as e:
+            self.logger.error(f"Exemplar selection failed, falling back to static examples: {e}")
+            return super()._generate_final_docstring(context, user_code, rewritten_req)
+
+        messages = [
+            {'role': 'system', 'content': "You are an expert technical writer and Python developer."},
+            {'role': 'user', 'content': get_dynamic_few_shot_prompt(user_code, exemplars)}
+        ]
+
+        try:
+            self.api_call_count += 1
+            response = self.ollama_client.chat(
+                model=self.model_config.generator_model,
+                messages=messages,
+                options={'temperature': self.model_config.temperature}
+            )
+            generated_docstring = response.get('message', {}).get('content', '').strip()
+            return self._clean_docstring_output(generated_docstring)
         except Exception as e:
             self.logger.error(f"Error communicating with Ollama: {e}")
             return "# ERROR: Docstring generation failed."

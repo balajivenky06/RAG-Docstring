@@ -188,16 +188,49 @@ class SelfCorrectionRAG(BaseRAG):
                     options={'temperature': self.critique_temperature}
                 )
                 
-                critique_result = response.get('response', '').strip().upper()
-                
-                if "GOOD" not in critique_result:
+                critique_result = response.get('response', '').strip()
+                verdict = self._parse_critique_verdict(critique_result)
+                self.logger.info(f"Critique verdict parsed: {verdict}")
+
+                # Only an explicit EXCELLENT verdict bypasses retrieval;
+                # GOOD, NEEDS_IMPROVEMENT, or an unparseable response trigger it.
+                if verdict != "EXCELLENT":
                     needs_improvement = True
-                    
+
             except Exception as e:
                 self.logger.error(f"Error during self-critique: {e}")
                 needs_improvement = True
-        
+
         return needs_improvement
+
+    @staticmethod
+    def _parse_critique_verdict(text: str) -> str:
+        """Extract the critique verdict label robustly.
+
+        Ignores echoes of the label list from the prompt (e.g.
+        "Assessment (EXCELLENT/GOOD/NEEDS_IMPROVEMENT):") and negated
+        phrasings like "not good"; prefers a label on the Assessment line,
+        falling back to the last standalone label in the response.
+        Returns EXCELLENT, GOOD, NEEDS_IMPROVEMENT, or UNKNOWN.
+        """
+        cleaned = re.sub(r'EXCELLENT\s*/\s*GOOD\s*/\s*NEEDS[_ ]IMPROVEMENT', '', text, flags=re.IGNORECASE)
+
+        assessment_line = re.search(
+            r'ASSESSMENT[^\n]*?:\s*\**\s*(EXCELLENT|GOOD|NEEDS[_ ]IMPROVEMENT)',
+            cleaned, flags=re.IGNORECASE)
+        if assessment_line:
+            return assessment_line.group(1).upper().replace(' ', '_')
+
+        labels = re.findall(r'(?<![A-Z])(?:(NOT\s+)?(EXCELLENT|GOOD)|(NEEDS[_ ]IMPROVEMENT))(?![A-Z])',
+                            cleaned, flags=re.IGNORECASE)
+        for negation, label, needs in reversed(labels):
+            if needs:
+                return "NEEDS_IMPROVEMENT"
+            if label and not negation:
+                return label.upper()
+            if label and negation:
+                return "NEEDS_IMPROVEMENT"
+        return "UNKNOWN"
     
     def _self_RAG_retrieval(self, context_query: str, user_code: str, needs_improvement: bool) -> str:
         """Perform RAG retrieval when initial generation needs improvement."""
