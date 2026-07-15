@@ -49,3 +49,8 @@ check_data.py
 corpus_composition_table.md
 docs/.DS_Store
 # Test Results
+
+# HF model caches must never be committed
+models/all-MiniLM-L6-v2/
+.mplcache/
+*.lock
