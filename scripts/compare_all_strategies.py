@@ -218,6 +218,8 @@ def run_comparison(strategies_to_run: list, group_name: str = "rag", sample_size
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--group", choices=["all", "simple", "self", "plain", "fewshot_ablation"], default="all")
+    parser.add_argument("--run_tag", type=str, default=None,
+                        help="Suffix for the results directory (e.g. 'gatefix', 'run2') so reruns never overwrite originals")
     parser.add_argument("--structure", choices=["base", "fewshot", "cot", "tot", "got", "all"], default="all")
     parser.add_argument("--samples", type=int, default=None, help="Number of samples (default: all)")
     parser.add_argument("--model", type=str, default=None, help="LLM to use (e.g., qwen2.5:8b, llama3)")
@@ -232,6 +234,8 @@ if __name__ == "__main__":
         
         # Isolate results into a model-specific directory
         safe_model_name = args.model.replace(":", "_").replace(".", "_")
+        if args.run_tag:
+            safe_model_name = f"{safe_model_name}__{args.run_tag}"
         config.paths.results_dir = os.path.join(config.paths.results_dir, safe_model_name)
         os.makedirs(config.paths.results_dir, exist_ok=True)
     
