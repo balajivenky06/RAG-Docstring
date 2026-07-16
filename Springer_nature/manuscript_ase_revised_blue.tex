@@ -100,7 +100,7 @@ Collectively, these findings indicate that for Python class-level docstring gene
 
 \subsection{Automated Code Documentation}
 Automated code documentation, including summaries and docstrings, has been widely studied to improve software maintainability and developer productivity. Neural approaches to code summarization demonstrate that models trained jointly on code and natural language can generate fluent descriptions of program behavior. Recent efforts have demonstrated the utility of lightweight transformers, such as CodeT5, fine-tuned on synthetic datasets to automate function-level Python code summarization~\cite{Kharidu2025AutomatedFL}. While these specialized methods achieve strong performance on traditional token-overlap metrics, their capacity to generalize beyond their specific training distributions remains constrained. Similarly, Tao et al.~\cite{Tao2025RetrievalAugmentedCG} propose a retrieval-augmented summarization mechanism that integrates code semantics with dense representations, reflecting the evolution toward dynamic context retrieval. {\color{blue}
-Reasoning-oriented prompting has also been applied directly to summarization: rethinking-based generation with a chain of comments progressively refines summaries through intermediate comment structures~\cite{chainofcomments2025}. %% [[BIB: add COLING 2025 chain-of-comments entry]]
+Reasoning-oriented prompting has also been applied directly to summarization: rethinking-based generation with a chain of comments progressively refines summaries through intermediate comment structures~\cite{chainofcomments2025}.
 
 }
 However, recent studies show that even strong code-specialized models frequently hallucinate undocumented parameters or behaviors when relying solely on parametric knowledge~\cite{CanDR,gireesh}. These findings motivate architectures that ground generation in external structural context---and raise the question of whether model pretraining quality alone may be sufficient for high-fidelity documentation tasks.
@@ -125,7 +125,7 @@ Our study evaluates three exemplar-selection regimes---static generic exemplars,
 
 \subsection{Evaluation of Code Summarization and LLM Outputs}
 Standard n-gram metrics such as BLEU and ROUGE have historically been used to evaluate generated summaries, but correlate imperfectly with human judgments of documentation quality for generative LLMs that paraphrase rather than reproduce references~\cite{Sun2023AutomaticCS}. The LLM-as-a-Judge paradigm has emerged as a scalable alternative to human annotation~\cite{li-etal-2025-generation,bavaresco-etal-2025-llms}, yet its reliability varies substantially across task types and model families~\cite{bavaresco-etal-2025-llms}, {\color{blue}
-and recent work shows that language models are poorly calibrated when assessing code summaries~\cite{calibrationcodesumm2025}. %% [[BIB: add PACMSE 2025 calibration entry]]
+and recent work shows that language models are poorly calibrated when assessing code summaries~\cite{calibrationcodesumm2025}.
 Our study contributes direct evidence on this question: we quantify the per-sample draw variance of small LLM judges, test two judge families against a strictly blind two-annotator human study, and find that reference-based metrics---not LLM judges---align with human faithfulness judgment for this task (Section~\ref{sec:results}). This complements reported concerns about judge reliability with a task-specific validation protocol that other benchmark builders can reuse.
 }
 
@@ -678,7 +678,7 @@ Representative strategies were repeated three times end-to-end at the study's sa
 \midrule
 Plain LLM   & 0.6028 (0.0015) & 0.198 (0.005) & 0.604 (0.041) \\
 Simple RAG  & 0.5935 (0.0017) & 0.190 (0.002) & 0.469 (0.036) \\
-Plain + GoT & [[TBD: run 3 completing]] & & \\
+Plain + GoT & 0.5808 (0.0049) & 0.223 (0.004) & 0.521 (0.037) \\
 \bottomrule
 \end{tabular}
 \end{table}
