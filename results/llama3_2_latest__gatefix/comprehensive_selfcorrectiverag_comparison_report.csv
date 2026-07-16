@@ -1,2 +1,2 @@
 Method,Total Time (s),Avg Time/Sample (s),Samples,rouge_1_f1,bleu_score,bert_score,faithfulness_score,token_overlap_score,Avg API Calls
-SelfCorrectionRAG,573.83,8.56,67,0.0015,0.0,0.3471,0.777,0.2537,4.0
+SelfCorrectionRAG,10891.07,162.55,67,0.1763,0.0057,0.5748,0.745,0.1788,2.8
