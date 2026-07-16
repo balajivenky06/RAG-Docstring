@@ -8,6 +8,7 @@
 
 \newcommand{\rcomment}[1]{\begin{quote}\itshape\color{black!70}#1\end{quote}}
 \newcommand{\resp}{\noindent\textbf{Response:} }
+\newcommand{\excerpt}[1]{\begin{quote}\small\color{blue!70!black}#1\end{quote}}
 \setlength{\parskip}{4pt}
 
 \title{Point-by-Point Response to the Editor and Reviewers\\
@@ -19,6 +20,16 @@
 
 \begin{document}
 \maketitle
+
+\noindent Dear Editor and Reviewers,
+
+We would like to express our sincere gratitude for the time and effort you dedicated to reviewing our manuscript. The comments were constructive, precise, and valuable, and they have materially improved both the rigor and the honesty of this work. We have studied every comment carefully and made detailed revisions, summarized below and answered point by point. For easy cross-referencing, all changed or added material in the marked-up manuscript copy is set in blue font.
+
+\textit{Notation.} Comments are tagged R1.$n$/R2.$n$/R3.$n$ for the $n$-th comment of each reviewer, in the order raised. Where the revised manuscript is quoted, excerpts appear in indented blue text so changes can be verified without flipping back to the paper.
+
+\medskip
+\noindent Best regards,\\
+The Authors
 
 \section*{To the Editor}
 
@@ -33,6 +44,29 @@ We thank the editor and all three reviewers for their careful and demanding revi
 \end{itemize}
 
 A marked-up copy of the revised manuscript with all changed or added material in blue is provided in the related-files section.
+
+\section*{Summary of Changes: Consolidated Issue Map}
+
+\begin{center}
+\small
+\begin{tabular}{p{0.4cm}p{3.6cm}p{2.4cm}p{7.6cm}}
+\toprule
+\# & \textbf{Issue} & \textbf{Sources} & \textbf{What we did} \\
+\midrule
+A & Model identities and reporting accuracy & R1.1, R2.1, Editor & Execution-log audit; all models corrected (Llama~3.2~\textbf{3B}, tag \texttt{llama3.2:latest}); benchmark scale corrected to the executed 67 classes / 2{,}613 generations; exact tags, composition, and hardware stated (\S4). Capacity finding re-verified and strengthened. \\
+B & Commensurable faithfulness + correct unit of analysis & R2.2, R2.3 & All 2{,}613 outputs re-judged against source code ($k{=}3$ draws); all inference re-derived from mixed-effects models with class as random effect ($N{=}2{,}613$; ICC up to 0.28). New Table~5 replaces the Kruskal--Wallis/Mann--Whitney apparatus. \\
+C & Judge validity and human validation & R1.4, R2.4, R2.6, R2 minors & Strictly blind two-annotator re-annotation (ICC $=0.63$); original $r{=}0.925$ withdrawn as anchoring artifact; second cross-family judge added; both judges fail blind validation ($r\le0.05$) while agreeing with each other ($\rho=0.979$); metric hierarchy rebuilt on validated metrics (new \S5.1). \\
+D & Few-shot baseline strength & R2.8 & Three-arm exemplar ablation on all three models; dynamic matched exemplars beat zero-shot everywhere ($+0.04$ to $+0.09$); ``Few-Shot is harmful'' withdrawn; prompt defect disclosed (\S3.3, \S5.5). \\
+E & Retrieval corpus fairness & R3.1 & Library-specific corpus ablation, all three models; corpus relevance matters directionally but gains stay $\le +0.012$ over zero-shot (\S5.3). \\
+F & Quantization confound & R2.5 & FP16 vs.\ Q4 ablation; deltas $\le 0.01$, an order below effects of interest (\S5.4). \\
+G & Critique-gate robustness & R1.2 & Gate description corrected; robust parser implemented (unit-tested); rerun on all three models; no conclusion depends on the gate (\S3.3, \S5.7, App.~H). \\
+H & Scoping: title, reasoning labels, capacity claims & R2.7, R2.9, R3.3, R3.4 & Title adopts R2's wording; modes renamed ``reasoning-mode prompt variants'' with scope statement; capacity/training-quality framing with explicit design limitation; contributions sharpened (\S1, \S2.6, \S3.4, \S7.2). \\
+I & Reasoning Tax mechanisms & R3.2 & New mechanism section: hallucination-by-inference, capacity-dependent format failures (all 5 runaway generations on the 3B), judge fluency bias (\S6.1). \\
+J & Presentation: hardware framing, style, spelling & R1.3, R1.5, R3.5, R2 minors & ``Local server-side inference'' framing; Springer figure-reference style; run-to-run variance appendix; full proofread. \\
+K & Related work additions & R1.6 & Two suggested papers added with substantive discussion; two respectfully declined as out of scope (rationale under R1.6). \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \section{Summary of Additional Experiments}
 \label{sec:newexp}
@@ -79,7 +113,7 @@ A marked-up copy of the revised manuscript with all changed or added material in
 
 \subsection*{R2.1 --- Model identities}
 \rcomment{Meta's Llama 3.2 release contains no 8B model\dots misidentifying one of the two compared models is disqualifying as written.}
-\resp The reviewer is correct, and we are grateful for the catch. Auditing our execution logs established that the served model was \texttt{llama3.2:latest}, i.e., \textbf{Llama~3.2~3B}. All references are corrected; the study's true capacity range is \textbf{3B--14B}. The capacity finding was re-verified for the models actually used and \emph{strengthens} under the correction: under the revised mixed-effects analysis, Phi-4~14B and Qwen3~8B outperform Llama~3.2~3B on commensurable faithfulness by $+0.047$ and $+0.064$ respectively (both $p<0.001$) and on BERTScore by $+0.024$ and $+0.015$ (both $p<0.001$). The abstract's ``Qwen2.5'' is likewise corrected (see R1.1). We have additionally corrected the reported benchmark scale (see our note to the editor): the executed benchmark is 67 classes / 2{,}613 core generations, and all tables and statistics in the revision reflect the executed data.
+\resp The reviewer is correct, and we apologise for the error. Auditing our execution logs established that the served model was \texttt{llama3.2:latest}, i.e., \textbf{Llama~3.2~3B}. All references are corrected; the study's true capacity range is \textbf{3B--14B}. The capacity finding was re-verified for the models actually used and \emph{strengthens} under the correction: under the revised mixed-effects analysis, Phi-4~14B and Qwen3~8B outperform Llama~3.2~3B on commensurable faithfulness by $+0.047$ and $+0.064$ respectively (both $p<0.001$) and on BERTScore by $+0.024$ and $+0.015$ (both $p<0.001$). The abstract's ``Qwen2.5'' is likewise corrected (see R1.1). We have additionally corrected the reported benchmark scale (see our note to the editor): the executed benchmark is 67 classes / 2{,}613 core generations, and all tables and statistics in the revision reflect the executed data.
 
 \subsection*{R2.2 --- Faithfulness not commensurable across families}
 \rcomment{Faithfulness should be judged against a single reference (the source code) for all strategies\dots}
@@ -87,7 +121,8 @@ A marked-up copy of the revised manuscript with all changed or added material in
 
 \subsection*{R2.3 --- Unit of analysis}
 \rcomment{A mixed-effects model with class as a random effect\dots is the appropriate framework.}
-\resp Fully accepted and implemented exactly as proposed. All inferential claims now derive from linear mixed-effects models over the $N{=}2{,}613$ per-class observations (class random intercept; family, mode, and model fixed effects; REML). The class ICC (up to 0.28) confirms the dependence structure the reviewer identified. Final estimates (revised Table~5): BERTScore --- Few-Shot $-0.080^{***}$, Iterative Critique $-0.034^{***}$, Simple RAG $-0.006$ ($p{=}.052$), GoT $-0.009^{*}$, Qwen3 $+0.015^{***}$, Phi-4 $+0.024^{***}$; faithfulness --- GoT $+0.032^{**}$, Qwen3 $+0.064^{***}$, Phi-4 $+0.047^{***}$, all family effects ns. Several aggregate-level contrasts from the submitted version did not survive and the text has been revised accordingly; the prior Kruskal--Wallis/Mann--Whitney apparatus is removed.
+\resp Fully accepted and implemented exactly as proposed. All inferential claims now derive from linear mixed-effects models over the $N{=}2{,}613$ per-class observations (class random intercept; family, mode, and model fixed effects; REML). The class ICC (up to 0.28) confirms the dependence structure the reviewer identified. Final estimates (revised Table~5): BERTScore --- Few-Shot $-0.080^{***}$, Iterative Critique $-0.034^{***}$, Simple RAG $-0.006$ ($p{=}.052$), GoT $-0.009^{*}$, Qwen3 $+0.015^{***}$, Phi-4 $+0.024^{***}$; faithfulness --- GoT $+0.032^{**}$, Qwen3 $+0.064^{***}$, Phi-4 $+0.047^{***}$, all family effects ns. Several aggregate-level contrasts from the submitted version did not survive and the text has been revised accordingly; the prior Kruskal--Wallis/Mann--Whitney apparatus is removed. From the revised \S3.7:
+\excerpt{Because all 67 benchmark classes are evaluated under every model--strategy condition, per-condition scores are not independent across conditions. All inferential claims therefore derive from linear mixed-effects models fitted on the per-class observations ($N{=}2{,}613$ per metric), with the benchmark class as a random intercept and architecture family, reasoning mode, and model as fixed effects\ldots The class random intercept is substantial (ICC $=0.28$ for BERTScore), confirming that class identity induces the dependence this design accounts for.}
 
 \subsection*{R2.4 --- Headlining a metric the paper discredits}
 \resp Accepted. The revised paper leads with a metric-validation section (\S5.1) and rests all claims on human-validated metrics. BERTScore was additionally recomputed with \texttt{roberta-large} and baseline rescaling (R2 minor): strategy orderings are backbone-robust, and the rescaled absolute values (near zero) confirm the reviewer's point that the original absolute values were difficult to interpret. The GoT/BERTScore result is no longer headlined; it appears with its honest per-class effect size ($-0.009$).
@@ -99,14 +134,16 @@ A marked-up copy of the revised manuscript with all changed or added material in
 \subsection*{R2.6 --- Human validation contradicts the main results}
 \label{resp:r26}
 \rcomment{The claim that ``human evaluation confirms our automated rankings'' is not supported by the numbers beneath it and must be reconciled or withdrawn.}
-\resp The reviewer identified a real inconsistency whose root cause proved deeper than the reference mismatch of R2.2. Investigating it, we found (a) per-sample LLM-judge scores at sampling temperature have near-zero test--retest reliability (identical inputs score 0.5--1.0 across draws), which is mathematically incompatible with the reported $r=0.925$ human agreement; and (b) the original annotation sheet displayed the judge's scores beside the entry field. A strictly blind re-annotation of the same 51 items by two annotators (metric values hidden, order shuffled per annotator, key sealed) correlates only $r=0.16$ with the original ratings and $r=0.13$ with the original judge scores, indicating the original ratings were anchored. We have withdrawn the $r=0.925$ claim and the ``human evaluation confirms our automated rankings'' statement, replaced Section~3.6/Table~6/Fig.~9 with the blind study (inter-rater ICC $=0.63$), and rebuilt the paper's metric hierarchy on it (revised \S3.6, \S5.1, \S7.1). The blind study also reverses the specific ordering the reviewer questioned: blind humans rank Plain+GoT highest (0.71) and Simple RAG fourth (0.57). We report the full episode in Threats to Validity as a caution for LLM-as-judge methodology.
+\resp The reviewer identified a real inconsistency whose root cause proved deeper than the reference mismatch of R2.2. Investigating it, we found (a) per-sample LLM-judge scores at sampling temperature have near-zero test--retest reliability (identical inputs score 0.5--1.0 across draws), which is mathematically incompatible with the reported $r=0.925$ human agreement; and (b) the original annotation sheet displayed the judge's scores beside the entry field. A strictly blind re-annotation of the same 51 items by two annotators (metric values hidden, order shuffled per annotator, key sealed) correlates only $r=0.16$ with the original ratings and $r=0.13$ with the original judge scores, indicating the original ratings were anchored. We have withdrawn the $r=0.925$ claim and the ``human evaluation confirms our automated rankings'' statement, replaced Section~3.6/Table~6/Fig.~9 with the blind study (inter-rater ICC $=0.63$), and rebuilt the paper's metric hierarchy on it (revised \S3.6, \S5.1, \S7.1). The blind study also reverses the specific ordering the reviewer questioned: blind humans rank Plain+GoT highest (0.71) and Simple RAG fourth (0.57). We report the full episode in Threats to Validity as a caution for LLM-as-judge methodology. From the revised \S7.1:
+\excerpt{\ldots a strictly blind re-annotation of the same 51 items by two annotators correlates only weakly with those original ratings ($r=0.16$) and with the judge ($r=0.13$), indicating the original ratings were anchored to the visible scores. We therefore withdrew the original validation and rebuilt all human-referenced claims on the blind study. We report this experience as a caution for the growing LLM-as-judge literature: agreement estimates obtained under non-blind protocols can be arbitrarily inflated, and per-sample judge scores at sampling temperature are draw-noise unless averaged.}
 
 \subsection*{R2.7 --- Canonical ToT/GoT vs.\ implemented variants}
 \resp Accepted. The modes are now described as \emph{single-pass, prompt-level adaptations} (``Reasoning-Mode Prompt Variants,'' revised \S3.4) with an explicit scoping statement; labels are retained to indicate lineage, and all conclusions are scoped to the implemented variants.
 
 \subsection*{R2.8 --- Few-Shot baseline too weak}
 \rcomment{Dynamic or structurally matched exemplar retrieval is the standard baseline and should be included before ``Few-Shot is harmful'' is stated as a general finding.}
-\resp Accepted and implemented, with an additional disclosure: code review found the static few-shot prompt contained a conflicting evaluator persona, which we disclose in \S3.3. The revision reports a three-arm ablation on all three models: original static, persona-corrected static, and dynamically retrieved structurally matched exemplars (leave-one-out nearest neighbors with human reference docstrings). The result overturns our own submitted finding: \textbf{dynamic exemplars outperform the zero-shot baseline on every model} ($+0.041$ to $+0.087$ BERTScore; ROUGE-1 roughly doubles), producing the strongest condition in the study, while the persona correction alone interacts with capacity (rescuing Phi-4, further degrading the 3B model). ``Few-Shot is harmful'' is withdrawn and replaced by: static, structurally mismatched exemplars are harmful; matched exemplar retrieval is the study's most effective intervention (revised \S5.5, \S6.2).
+\resp Accepted and implemented, with an additional disclosure: code review found the static few-shot prompt contained a conflicting evaluator persona, which we disclose in \S3.3. The revision reports a three-arm ablation on all three models: original static, persona-corrected static, and dynamically retrieved structurally matched exemplars (leave-one-out nearest neighbors with human reference docstrings). The result overturns our own submitted finding: \textbf{dynamic exemplars outperform the zero-shot baseline on every model} ($+0.041$ to $+0.087$ BERTScore; ROUGE-1 roughly doubles), producing the strongest condition in the study, while the persona correction alone interacts with capacity (rescuing Phi-4, further degrading the 3B model). ``Few-Shot is harmful'' is withdrawn and replaced by: static, structurally mismatched exemplars are harmful; matched exemplar retrieval is the study's most effective intervention (revised \S5.5, \S6.2). From the revised \S6.2:
+\excerpt{This reframes the practical question for retrieval-augmented documentation tooling from ``should we add RAG?'' to ``what should the index contain?''---and our evidence says: exemplar pairs, not style guides.}
 
 \subsection*{R2.9 --- ``Scaling'' framing}
 \resp Accepted; we adopt the reviewer's own wording. The title is now ``\emph{Capacity} vs.\ Architecture\dots'', and the text attributes model effects to capacity \emph{and} training quality, noting explicitly that a three-vendor design cannot separate the two (revised \S5.2, \S7.2).
@@ -133,5 +170,8 @@ A marked-up copy of the revised manuscript with all changed or added material in
 
 \subsection*{R3.5 --- Spelling and grammar}
 \resp A full proofreading pass was performed on the revised manuscript.
+
+\bigskip
+\noindent Thank you again for the time and care invested in this manuscript. The review process materially improved this work---several of the revision's strongest results exist because the reviewers insisted on them. We are happy to provide additional clarifications, supplementary analyses, or annotated artifacts that would assist the second-round review.
 
 \end{document}
