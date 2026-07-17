@@ -55,3 +55,12 @@ models/all-MiniLM-L6-v2/
 .mplcache/
 *.lock
 data/corpus_sources/
+
+# manuscript sources stay out of the public artifact repo
+Springer_nature/*.tex
+Springer_nature/*.bib
+Springer_nature/*.md
+Springer_nature/*.pdf
+Springer_nature/*.docx
+Springer_nature/*.ipynb
+Springer_nature/*.zip
