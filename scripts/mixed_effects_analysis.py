@@ -83,7 +83,9 @@ def load_long_dataframe(results_root: str) -> pd.DataFrame:
 
 
 def merge_rejudged(long_df: pd.DataFrame, results_root: str) -> pd.DataFrame:
-    path = os.path.join(results_root, "rejudged", "rejudged_all.csv")
+    path = os.path.join(results_root, "rejudged_k3", "rejudged_all.csv")
+    if not os.path.exists(path):
+        path = os.path.join(results_root, "rejudged", "rejudged_all.csv")
     if not os.path.exists(path):
         print("  [info] no rejudged scores found; skipping faithfulness_code_ref")
         return long_df

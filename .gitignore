@@ -54,3 +54,4 @@ docs/.DS_Store
 models/all-MiniLM-L6-v2/
 .mplcache/
 *.lock
+data/corpus_sources/
